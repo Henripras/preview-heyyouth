@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hey Youth! - Empowering Communities Through Education</title>
+    <meta name="description" content="Bergabunglah bersama Hey Youth! dalam gerakan sosial untuk menyediakan akses pendidikan yang setara bagi pemuda di seluruh pelosok negeri.">
+    
+    <!-- Library Eksternal (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- Konfigurasi Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1D4ED8',
+                        primaryDark: '#1e40af',
+                        accent: '#F59E0B',
+                        bg: '#F8FAFC',
+                        heading: '#0F172A',
+                        body: '#475569',
+                        surface: '#EFF6FF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Tambahan */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #1D4ED8;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        html {
+            scroll-padding-top: 80px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* --- ANIMASI FAQ (Accordion) --- */
+        .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        .faq-content.open {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-inner {
+            overflow: hidden;
+        }
+
+        .faq-item.active {
+            border-color: #1D4ED8;
+            background-color: #EFF6FF;
+            box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.1), 0 2px 4px -1px rgba(29, 78, 216, 0.06);
+        }
+
+        .faq-item.active .faq-header-text {
+            color: #1D4ED8;
+            font-weight: 700;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+            background-color: #1D4ED8;
+            color: #ffffff;
+        }
+
+        #map {
+            position: relative; 
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* --- CSS UNTUK PIN PETA KUSTOM (LEAFLET) --- */
+        .custom-div-icon {
+            background: transparent;
+            position: relative;
+        }
+
+        .marker-pin-container {
+            position: relative;
+            width: 40px;
+            height: 50px;
+        }
+
+        .marker-pin-body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1D4ED8;
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
+        .marker-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .marker-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: #F59E0B;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            z-index: 3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="bg-bg text-body font-sans antialiased selection:bg-primary selection:text-white">
+
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#" class="flex-shrink-0 flex items-center gap-2 group">
+                    <img src="img/NEW HEY YOUTH Sep 2025.png" alt="Hey Youth Logo" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" class="nav-link text-heading font-medium hover:text-primary transition-colors">Home</a>
+                    <a href="About us.html" class="nav-link text-body hover:text-primary transition-colors">About us</a>
+                    <a href="Activities.html" class="nav-link text-body hover:text-primary transition-colors">Activities</a>
+                    <a href="Partner.html" class="nav-link text-body hover:text-primary transition-colors">Partners</a>
+                    <a href="Donation.html" class="nav-link text-body hover:text-primary transition-colors">Donation</a>
+                </div>
+
+                <!-- CTA Button Desktop -->
+                <div class="hidden md:flex">
+                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Join Us!
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-heading hover:text-primary focus:outline-none p-2" aria-label="Toggle menu">
+                        <svg id="icon-menu" class="h-6 w-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="icon-close" class="h-6 w-6 hidden transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl transform transition-all duration-300 origin-top">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="#" class="block px-4 py-3 rounded-xl text-base font-medium text-heading bg-primary/10">Home</a>
+                <a href="About us.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">About us</a>
+                <a href="Activities.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Activities</a>
+                <a href="Partner.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Partners</a>
+                <a href="Donation.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Donation</a>
+                <div class="pt-4 border-t border-gray-100 mt-4">
+                    <a href="https://bit.ly/HYOprec" class="block w-full text-center bg-accent text-white px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors shadow-md">
+                        Join Us Now!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="pt-20">
+
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24 bg-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                    
+                    <!-- Left Side: Text Content -->
+                    <div class="max-w-2xl animate-fade-in-up">
+                        <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-primary text-sm font-semibold mb-8 border border-blue-100 shadow-sm">
+                            <span class="flex h-2 w-2 relative mr-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                            </span>
+                            Membangun Masa Depan Pendidikan
+                        </div>
+                        <h1 class="text-5xl lg:text-7xl font-bold text-heading leading-[1.1] mb-8 tracking-tight">
+                            Empowering Communities <span class="text-primary relative inline-block">
+                                Through Education
+                                <svg class="absolute w-full h-3 -bottom-1 left-0 text-yellow-400 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                                    <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none" />
+                                </svg>
+                            </span>
+                        </h1>
+                        <p class="text-lg lg:text-xl text-body mb-10 leading-relaxed max-w-lg">
+                            Bergabunglah bersama kami dalam gerakan sosial untuk menyediakan akses pendidikan yang setara bagi pemuda di seluruh pelosok negeri.
+                        </p>
+                        
+                        <!-- Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="https://bit.ly/HYOprec" class="inline-flex justify-center items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white bg-accent hover:bg-yellow-500 transition-all shadow-lg hover:shadow-orange-200 hover:-translate-y-1 focus:ring-4 focus:ring-orange-200">
+                                Join Movement
+                                <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                            </a>
+                            <a href="About us.html" class="inline-flex justify-center items-center px-8 py-4 border-2 border-gray-200 text-base font-semibold rounded-xl text-heading hover:border-primary hover:text-primary bg-white transition-all hover:bg-gray-50">
+                                Learn More
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Image & Floating Stats -->
+                    <div class="relative lg:h-auto min-h-[450px] flex items-center justify-center lg:justify-end animate-fade-in-up" style="animation-delay: 0.2s;">
+                        <!-- Decorative background blob -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100 to-yellow-50 rounded-full blur-3xl -z-10 opacity-70"></div>
+
+                        <!-- Main Image Container -->
+                        <div class="relative w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform rotate-2 hover:rotate-0 transition-all duration-500 group">
+                            <img src="img/Donation.jpeg" alt="Hey Youth Community Activities" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                        </div>
+
+                        <!-- Floating Stats Card 1 (Volunteers) -->
+                        <div class="lg:absolute -bottom-6 -left-6 sm:-left-12 bg-white p-5 rounded-2xl shadow-xl border border-gray-100 z-10 max-w-xs animate-fade-in-up hover:scale-105 transition-transform duration-300" style="animation-delay: 0.4s;">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-blue-100 p-3 rounded-full text-primary">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-bold text-heading">1k+</p>
+                                    <p class="text-sm text-gray-500 font-medium">Relawan</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Stats Card 2 (Years) -->
+                        <div class="lg:absolute -top-4 -right-4 sm:-right-8 bg-surface border border-blue-100 p-5 rounded-2xl shadow-lg z-10 animate-fade-in-up hover:scale-105 transition-transform duration-300" style="animation-delay: 0.5s;">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white p-3 rounded-full text-accent shadow-sm">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-heading">7+ Tahun</p>
+                                    <p class="text-sm text-gray-500 font-medium">Pengalaman</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Impact Section -->
+        <section id="about" class="py-20 bg-white relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 max-w-3xl mx-auto">
+                    <h2 class="text-base text-accent font-bold tracking-wide uppercase mb-2">Why Join Us?</h2>
+                    <p class="text-3xl lg:text-4xl font-extrabold text-heading">
+                        Mengapa Bergabung Bersama Kami?
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-bg p-8 rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 group">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-heading mb-3">Meaningful Impact</h3>
+                        <p class="text-body text-sm leading-relaxed">Melalui edukasi, kami berdampak langsung pada kehidupan anak-anak yang kurang mampu untuk masa depan yang lebih cerah.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-bg p-8 rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 group">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-accent group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-heading mb-3">Global Network</h3>
+                        <p class="text-body text-sm leading-relaxed">Terhubung dengan ribuan relawan dan mentor dari seluruh dunia yang memiliki visi yang sama.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-bg p-8 rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100 hover:-translate-y-2 group">
+                        <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-green-600 group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-heading mb-3">Skills Development</h3>
+                        <p class="text-body text-sm leading-relaxed">Kembangkan kemampuan kepemimpinan dan manajemen proyek Anda melalui pengalaman langsung.</p>
+                    </div>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="mt-20 bg-gradient-to-r from-primary to-blue-700 rounded-3xl p-10 text-white shadow-2xl relative overflow-hidden">
+                    <!-- Background decorations -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-20 -mt-20"></div>
+                    <div class="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-5 rounded-full -ml-10 -mb-10"></div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center relative z-10">
+                        <div>
+                            <div class="text-4xl lg:text-5xl font-bold mb-1">1000+</div>
+                            <div class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Volunteers</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl lg:text-5xl font-bold mb-1">500+</div>
+                            <div class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Activities</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl lg:text-5xl font-bold mb-1">20+</div>
+                            <div class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Countries</div>
+                        </div>
+                        <div>
+                            <div class="text-4xl lg:text-5xl font-bold mb-1">7+</div>
+                            <div class="text-blue-200 text-sm uppercase tracking-wider font-semibold">Years</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="partners" class="py-20 bg-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-base text-primary font-bold tracking-wide uppercase mb-2">Community Feedback</h2>
+                    <p class="text-3xl lg:text-4xl font-bold text-heading">
+                        What Our Community Says
+                    </p>
+                </div>
+
+                <!-- External Testimonials -->
+                <div class="mb-16">
+                    <h3 class="text-xl font-bold text-heading mb-6 border-l-4 border-accent pl-4">From Externals</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        
+                        <!-- Testimonial 1 -->
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
+                            <p class="text-body italic mb-6 flex-grow">"Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami."</p>
+                            <!-- Updated Container with Flex Wrap -->
+                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <img src="img/Testi/p1.jpg" alt="Rifki Zamzam" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow min-w-[120px]">
+                                    <h4 class="font-bold text-heading text-sm leading-tight">Mr. Rifki Zamzam</h4>
+                                    <p class="text-xs text-primary font-semibold leading-tight mt-0.5">Co-Founder, Qatar HR Forum</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Testimonial 2 -->
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
+                            <p class="text-body italic mb-6 flex-grow">"Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan."</p>
+                            <!-- Updated Container with Flex Wrap -->
+                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <img src="img/Testi/p2.jpg" alt="Rina Nurutami" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow min-w-[120px]">
+                                    <h4 class="font-bold text-heading text-sm leading-tight">Ms. Rina Nurutami, S.Psi</h4>
+                                    <p class="text-xs text-primary font-semibold leading-tight mt-0.5">Vice Principal, Daarut Tauhid</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 3 -->
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
+                            <p class="text-body italic mb-6 flex-grow">"Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata."</p>
+                            <!-- Updated Container with Flex Wrap -->
+                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <img src="img/Testi/p3.jpg" alt="Yiwen Xu" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow min-w-[120px]">
+                                    <h4 class="font-bold text-heading text-sm leading-tight">Yiwen Xu</h4>
+                                    <p class="text-xs text-primary font-semibold leading-tight mt-0.5">Student, Univ. of Edinburgh</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internal Testimonials -->
+                <div>
+                    <h3 class="text-xl font-bold text-heading mb-6 border-l-4 border-primary pl-4">From Internals</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        
+                        <!-- Internal 1 - ALYA -->
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">
+                            <p class="text-body italic mb-6 flex-grow">"Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari."</p>
+                            <!-- Updated Container with Flex Wrap -->
+                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">
+                                <div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <img src="img/Testi/Alya.jpg" alt="Alya" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow min-w-[120px]">
+                                    <h4 class="font-bold text-heading text-sm leading-tight">Alya</h4>
+                                    <p class="text-xs text-gray-500 leading-tight mt-0.5">Community Coordinator</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Internal 2 - HERZA -->
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">
+                            <p class="text-body italic mb-6 flex-grow">"Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata."</p>
+                            <!-- Updated Container with Flex Wrap -->
+                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">
+                                <div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <img src="img/Testi/Herza.jpg" alt="Herza" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow min-w-[120px]">
+                                    <h4 class="font-bold text-heading text-sm leading-tight">Herza</h4>
+                                    <p class="text-xs text-gray-500 leading-tight mt-0.5">Web Developer</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Internal 3 - KARYN -->
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">
+                            <p class="text-body italic mb-6 flex-grow">"Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan."</p>
+                            <!-- Updated Container with Flex Wrap -->
+                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">
+                                <div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <img src="img/Testi/Karyn.jpg" alt="Karyn" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow min-w-[120px]">
+                                    <h4 class="font-bold text-heading text-sm leading-tight">Karyn</h4>
+                                    <p class="text-xs text-gray-500 leading-tight mt-0.5">Teacher</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Founder Section -->
+        <section class="py-20 bg-white">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-bg rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-gray-100">
+                    <div class="md:w-2/5 relative">
+                        <img src="img/ceo.jpeg" alt="Yuni Triandini - Founder Hey Youth" class="w-full h-full object-cover min-h-[300px]">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <div class="md:w-3/5 p-8 md:p-12 flex flex-col justify-center">
+                        <div class="mb-6">
+                            <span class="bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">Leadership</span>
+                        </div>
+                        <h3 class="text-2xl lg:text-3xl font-bold text-heading mb-6 font-serif">A Word From Our Founder</h3>
+                        <p class="text-body mb-6 italic text-lg text-gray-600 border-l-4 border-primary pl-4">
+                            "Pendidikan adalah senjata paling ampuh yang bisa Anda gunakan untuk mengubah dunia. Di Hey Youth, kami percaya bahwa setiap anak berhak mendapatkan kesempatan yang sama."
+                        </p>
+                        <p class="text-body mb-8">
+                            Kami terus bergerak maju, menghubungkan kepedulian dengan aksi, dan membangun ekosistem pendidikan yang inklusif bagi semua.
+                        </p>
+                        
+                        <!-- Updated Container with Flex Wrap for Founder -->
+                        <div class="flex flex-wrap items-center gap-4 pt-4 border-t border-gray-200 mt-auto">
+                            <div class="h-12 w-1 bg-primary flex-shrink-0 rounded-full"></div>
+                            <div class="flex-grow min-w-[150px]">
+                                <h4 class="text-lg font-bold text-heading leading-tight">Yuni Triandini</h4>
+                                <p class="text-sm text-gray-500 font-medium leading-tight mt-0.5">Founder of Hey Youth</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 bg-bg">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-base text-primary font-bold tracking-wide uppercase mb-2">FAQ</h2>
+                    <h3 class="text-3xl lg:text-4xl font-extrabold text-heading">Got Questions?</h3>
+                    <p class="mt-4 text-body">Jawaban untuk pertanyaan yang sering diajukan.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Question 1 -->
+                    <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
+                        <button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">
+                            <span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">Why don't we recruit people per batch?</span>
+                            <div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg>
+                            </div>
+                        </button>
+                        <div class="faq-content">
+                            <div class="faq-inner overflow-hidden">
+                                <div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">
+                                    Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
+                        <button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">
+                            <span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">Do I need to have high English levels to join Hey Youth?</span>
+                            <div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg>
+                            </div>
+                        </button>
+                        <div class="faq-content">
+                            <div class="faq-inner overflow-hidden">
+                                <div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">
+                                    Tidak wajib. Meskipun beberapa program internasional membutuhkan kemampuan Bahasa Inggris, kami menyediakan banyak peran di mana Bahasa Indonesia adalah bahasa utama komunikasi. Yang terpenting adalah semangat berkontribusi.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
+                        <button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">
+                            <span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">How can I donate to foundation?</span>
+                            <div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg>
+                            </div>
+                        </button>
+                        <div class="faq-content">
+                            <div class="faq-inner overflow-hidden">
+                                <div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">
+                                    Anda dapat mendukung kami melalui transfer bank atau donasi barang. Silakan kunjungi halaman Donation untuk informasi rekening dan kebutuhan barang terkini.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Global Contributors / Map Section -->
+        <section id="activities" class="py-24 bg-white overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Left Side: Text Content -->
+                    <div class="order-2 lg:order-1">
+                        <h2 class="text-base text-accent font-bold tracking-wide uppercase mb-2">Jangkauan Kami</h2>
+                        <h3 class="text-3xl lg:text-4xl font-bold text-heading mb-6">
+                            Global Impact,<br>Local Roots
+                        </h3>
+                        <p class="text-body text-lg mb-8 leading-relaxed text-gray-600">
+                            Kami menyambut baik kontributor dari 22 provinsi di Indonesia dan 20 negara lainnya. Jejak kami tersebar dari Sabang sampai Merauke, dibangun oleh relawan lokal yang didukung oleh jaringan global.
+                        </p>
+                        
+                        <!-- Stats List -->
+                        <ul class="space-y-6 mb-10">
+                            <li class="flex items-center group">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-primary mr-4 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                                    <i class="fas fa-map-marker-alt text-lg"></i>
+                                </div>
+                                <div>
+                                    <span class="block font-bold text-heading text-lg">22 Provinsi</span>
+                                    <span class="text-sm text-gray-500">Tersebar di seluruh Indonesia</span>
+                                </div>
+                            </li>
+                            <li class="flex items-center group">
+                                <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-yellow-50 flex items-center justify-center text-accent mr-4 group-hover:bg-accent group-hover:text-white transition-colors duration-300">
+                                    <i class="fas fa-globe-asia text-lg"></i>
+                                </div>
+                                <div>
+                                    <span class="block font-bold text-heading text-lg">20 Negara</span>
+                                    <span class="text-sm text-gray-500">Jaringan kontributor internasional</span>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <a href="#" class="inline-flex items-center text-primary font-bold hover:text-accent transition-colors group">
+                            Lihat Detail Kegiatan
+                            <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+
+                    <!-- Right Side: Interactive Map Container -->
+                    <div class="order-1 lg:order-2">
+                        <div class="relative w-full h-[450px] rounded-3xl shadow-2xl border-4 border-gray-50 bg-gray-100">
+                            
+                            <!-- ID 'map' digunakan di script.js -->
+                            <div id="map" class="w-full h-full"></div>
+                            
+                            <div class="absolute bottom-6 left-6 z-[400] bg-white/90 backdrop-blur px-4 py-2 rounded-lg shadow-md border border-gray-100 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                <span class="text-xs font-bold text-gray-700">Live Tracking Active</span>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Footer Strip -->
+        <section id="join" class="bg-primary py-20 relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white opacity-10"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 rounded-full bg-white opacity-10"></div>
+
+            <div class="max-w-4xl mx-auto text-center px-4 relative z-10">
+                <h2 class="text-3xl lg:text-5xl font-bold text-white mb-6 leading-tight font-serif">
+                    Ready to be part of movement?
+                </h2>
+                <p class="text-blue-100 mb-10 text-lg lg:text-xl font-light">
+                    Together, we can create a brighter future for next generation.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://bit.ly/HYOprec" class="inline-block bg-accent hover:bg-white hover:text-primary text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg transform hover:scale-105 text-lg border-2 border-transparent">
+                        Join Hey Youth Today!
+                    </a>
+                    <a href="#contact" class="inline-block bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary font-bold py-4 px-10 rounded-full transition-all text-lg">
+                        Contact Us
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-heading text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <span class="text-2xl font-bold text-white block mb-4">Hey Youth!</span>
+                    <p class="mt-4 text-sm leading-relaxed text-gray-400">
+                        Helping youths grow through webinar, mentoring & volunteering
+Est. 2018 | 5K+ learners | 📩 Join our team to make a real impact 🌏
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-xs tracking-wider">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-envelope text-accent"></i> hey.youth.id@gmail.com</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-accent"></i> Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-xs tracking-wider">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fa-brands fa-x-twitter">‌</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS Library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 1. Navbar Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('shadow-md', 'bg-white/95');
+                    navbar.classList.remove('py-2');
+                } else {
+                    navbar.classList.remove('shadow-md', 'bg-white/95');
+                    navbar.classList.add('py-2');
+                }
+            });
+
+            // --- 2. Mobile Menu Toggle ---
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+                iconMenu.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+                document.body.classList.toggle('overflow-hidden');
+            });
+
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                    iconMenu.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                });
+            });
+
+            // --- 3. FAQ Accordion Logic ---
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const header = item.querySelector('.faq-header');
+                header.addEventListener('click', () => {
+                    const content = item.querySelector('.faq-content');
+                    const isActive = item.classList.contains('active');
+                    faqItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-content').classList.remove('open');
+                    });
+                    if (!isActive) {
+                        item.classList.add('active');
+                        content.classList.add('open');
+                    }
+                });
+            });
+
+            // --- 4. Leaflet Map Initialization (Dengan Custom Pin) ---
+            const mapElement = document.getElementById('map');
+            
+            if (mapElement) {
+                // Inisialisasi Peta
+                const map = L.map('map').setView([-2.5489, 118.0149], 6); // Zoom 6 agar pin tidak terlalu menumpuk
+
+                // Menambahkan Zoom Control
+                L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+                // Tile Layer
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+
+                // --- FUNGSI PEMBUAT PIN KUSTOM (User + Badge) ---
+                function createCustomPin(volunteers) {
+                    // HTML untuk Marker Pin
+                    // Lingkaran Biru (Hey Youth) + Ikon User + Badge Oranye
+                    return L.divIcon({
+                        className: 'custom-div-icon',
+                        html: `
+                            <div class="marker-pin-container">
+                                <div class="marker-pin-body">
+                                    <div class="marker-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    </div>
+                                    <!-- Badge Jumlah Relawan -->
+                                    <div class="marker-badge">${volunteers}</div>
+                                </div>
+                            </div>
+                        `,
+                        // Ukuran ikon (Sesuai CSS)
+                        iconSize: [40, 50], 
+                        iconAnchor: [20, 50], // Titik jangkar (posisi bawah tengah)
+                        popupAnchor: [0, -50] // Posisi popup relatif terhadap pin (muncul di atas pin)
+                    });
+                }
+
+                const locations = [
+                    { name: "Jakarta", lat: -6.2088, lng: 106.8456, volunteers: 8 },
+                    { name: "Karawang", lat: -6.3146, lng: 107.3094, volunteers: 1 },
+                    { name: "Medan", lat: 3.5952, lng: 98.6722, volunteers: 1 },
+                    { name: "Jakarta Timur", lat: -6.2307, lng: 106.8967, volunteers: 2 },
+                    { name: "Malang", lat: -7.9826, lng: 112.6308, volunteers: 3 },
+                    { name: "Jakarta Selatan", lat: -6.2615, lng: 106.8106, volunteers: 2 },
+                    { name: "Arcamanik, Bandung", lat: -6.9175, lng: 107.6191, volunteers: 1 },
+                    { name: "Depok", lat: -6.4025, lng: 106.8048, volunteers: 3 },
+                    { name: "Bogor", lat: -6.5950, lng: 106.7997, volunteers: 4 },
+                    { name: "Bangka", lat: -2.3216, lng: 106.1086, volunteers: 1 },
+                    { name: "West Java", lat: -6.9034, lng: 107.6046, volunteers: 1 },
+                    { name: "Palembang", lat: -2.9761, lng: 104.7754, volunteers: 1 },
+                    { name: "Sunter, Jakarta Utara", lat: -6.1360, lng: 106.8778, volunteers: 1 },
+                    { name: "Purwokerto", lat: -7.4239, lng: 109.2215, volunteers: 1 },
+                    { name: "Cikarang", lat: -6.2737, lng: 107.1352, volunteers: 1 },
+                    { name: "Bekasi", lat: -6.2369, lng: 106.9715, volunteers: 3 },
+                    { name: "Tuban, East Java", lat: -6.9079, lng: 112.0560, volunteers: 1 },
+                    { name: "Sumedang, Jatinangor", lat: -6.9329, lng: 107.7667, volunteers: 1 },
+                    { name: "Gresik", lat: -7.1666, lng: 112.6568, volunteers: 1 },
+                    { name: "Purbalingga", lat: -7.3707, lng: 109.3582, volunteers: 1 },
+                    { name: "Jakarta Barat", lat: -6.1754, lng: 106.8272, volunteers: 1 },
+                    { name: "Aceh", lat: 5.5524, lng: 95.3188, volunteers: 1 },
+                    { name: "Batang, Jawa Tengah", lat: -7.0094, lng: 109.7368, volunteers: 1 },
+                    { name: "Bandung", lat: -6.9175, lng: 107.6191, volunteers: 2 },
+                    { name: "Surabaya", lat: -7.2504, lng: 112.7688, volunteers: 1 },
+                    { name: "Bali", lat: -8.4095, lng: 115.1889, volunteers: 1 },
+                    { name: "Surakarta", lat: -7.5559, lng: 110.8200, volunteers: 1 },
+                    { name: "Pekanbaru", lat: 0.5071, lng: 101.4478, volunteers: 1 },
+                    { name: "South Tangerang", lat: -6.2878, lng: 106.7323, volunteers: 1 },
+                    { name: "Kendari", lat: -3.9806, lng: 122.5160, volunteers: 1 }
+                ];
+
+                // Loop untuk menambahkan marker ke peta
+                locations.forEach(loc => {
+                    // Membuat ikon custom untuk tiap lokasi
+                    const customIcon = createCustomPin(loc.volunteers);
+
+                    L.marker([loc.lat, loc.lng], {icon: customIcon}).addTo(map)
+                        .bindPopup(`<strong>${loc.name}</strong><br>Volunteers: ${loc.volunteers}`);
+                });
+
+                // Memaksa peta untuk "invalidate size" agar merender ulang jika layout berubah
+                setTimeout(function() {
+                    map.invalidateSize();
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

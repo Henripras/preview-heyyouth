@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation - Hey Youth!</title>
+    <meta name="description" content="Dukung misi pendidikan Hey Youth. Donasi Anda membantu menyediakan akses pendidikan bagi anak-anak di seluruh Indonesia.">
+    
+    <!-- Library Eksternal (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Konfigurasi Tailwind (Sama persis dengan index.html) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1D4ED8',
+                        primaryDark: '#1e40af',
+                        accent: '#F59E0B',
+                        bg: '#F8FAFC',
+                        heading: '#0F172A',
+                        body: '#475569',
+                        surface: '#EFF6FF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Fonts Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Tambahan (Sama dengan index.html) */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #1D4ED8;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        html {
+            scroll-padding-top: 80px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-hide {
+            /* Hide scrollbar for clean look on donation cards if needed */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-bg text-body font-sans antialiased selection:bg-primary selection:text-white">
+
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-2 group">
+                    <img src="img/NEW HEY YOUTH Sep 2025.png" alt="Hey Youth Logo" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="nav-link text-body hover:text-primary transition-colors">Home</a>
+                    <a href="About us.html" class="nav-link text-body hover:text-primary transition-colors">About us</a>
+                    <a href="activities.html" class="nav-link text-body hover:text-primary transition-colors">Activities</a>
+                    <a href="partners.html" class="nav-link text-body hover:text-primary transition-colors">Partners</a>
+                    <!-- Active State untuk Donation -->
+                    <a href="donation.html" class="nav-link text-primary font-bold hover:text-primaryDark transition-colors">Donation</a>
+                </div>
+
+                <!-- CTA Button Desktop -->
+                <div class="hidden md:flex">
+                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Join Us!
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-heading hover:text-primary focus:outline-none p-2" aria-label="Toggle menu">
+                        <svg id="icon-menu" class="h-6 w-6 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg id="icon-close" class="h-6 w-6 hidden transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl transform transition-all duration-300 origin-top">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="index.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Home</a>
+                <a href="About us.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">About us</a>
+                <a href="activities.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Activities</a>
+                <a href="partners.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Partners</a>
+                <a href="donation.html" class="block px-4 py-3 rounded-xl text-base font-medium text-primary font-bold bg-blue-50">Donation</a>
+                <div class="pt-4 border-t border-gray-100 mt-4">
+                    <a href="https://bit.ly/HYOprec" class="block w-full text-center bg-accent text-white px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors shadow-md">
+                        Join Us Now!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Wrapper -->
+    <main class="pt-20">
+
+        <!-- Hero Section Donation (Based on Screenshot 8 & 9) -->
+        <section class="py-16 lg:py-24 bg-surface relative overflow-hidden">
+            <!-- Decorative Shapes -->
+            <div class="absolute top-0 left-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Left: Content -->
+                    <div class="animate-fade-in-up">
+                        <h1 class="text-4xl lg:text-5xl font-extrabold text-heading mb-6 font-serif leading-tight">
+                            Support Our <span class="text-primary">Mission</span>
+                        </h1>
+                        <p class="text-lg text-body mb-8 max-w-lg leading-relaxed">
+                            Bantu kami menyediakan akses pendidikan yang layak bagi anak-anak Indonesia. Setiap donasi Anda menjadi jembatan menuju masa depan yang lebih cerah.
+                        </p>
+                        <div>
+                            <a href="#details" class="inline-flex items-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-accent hover:bg-yellow-600 transition-all shadow-lg hover:shadow-orange-200 hover:-translate-y-1">
+                                Donate Now
+                                <i class="fas fa-heart ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Stats Grid (Why Donation Matters) -->
+                    <div class="grid sm:grid-cols-2 gap-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-primary mb-4">
+                                <i class="fas fa-laptop-code text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-heading text-lg mb-2">Edukasi Digital</h3>
+                            <p class="text-sm text-gray-600">Mengadakan webinar dan workshop digital untuk menjangkau lebih banyak siswa.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-yellow-50 rounded-xl flex items-center justify-center text-accent mb-4">
+                                <i class="fas fa-book-open text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-heading text-lg mb-2">Bahan Ajar</h3>
+                            <p class="text-sm text-gray-600">Menyediakan buku dan perlengkapan belajar bagi pemuda yang kurang mampu.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow sm:col-span-2">
+                            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600 mb-4">
+                                <i class="fas fa-hands-helping text-xl"></i>
+                            </div>
+                            <h3 class="font-bold text-heading text-lg mb-2">Operasional Yayasan</h3>
+                            <p class="text-sm text-gray-600">Mendukung logistik dan operasional tim relawan di lapangan agar program berjalan lancar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Strip Section -->
+        <section class="bg-white py-10 overflow-hidden">
+            <div class="w-full h-64 md:h-80 relative">
+                <!-- Placeholder Image for Community Activity -->
+                <img src="img/Front Card.webp" alt="Hey Youth Community Activity" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="bg-white/90 backdrop-blur px-6 py-3 rounded-full shadow-lg">
+                        <p class="font-bold text-primary text-sm uppercase tracking-widest">Together We Can</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Details Section (Based on Screenshot 9) -->
+        <section id="details" class="py-20 bg-surface">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-heading mb-4">Make a Donation</h2>
+                    <p class="text-lg text-body">Pilih metode transfer yang paling nyaman bagi Anda.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    
+                    <!-- Card 1: Bank Transfer -->
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden flex flex-col h-full">
+                        <div class="bg-blue-600 px-6 py-4 flex items-center justify-between">
+                            <h3 class="text-white font-bold text-lg"><i class="fas fa-university mr-2"></i> Bank Transfer</h3>
+                            <i class="fas fa-lock text-blue-200"></i>
+                        </div>
+                        <div class="p-8 flex-grow flex flex-col justify-center">
+                            <div class="mb-6">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Bank Name</p>
+                                <p class="text-xl font-bold text-heading">Bank Central Asia (BCA)</p>
+                            </div>
+                            <div class="mb-6">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Account Name</p>
+                                <p class="text-lg font-medium text-heading">Yuni Triandini</p>
+                            </div>
+                            <div class="bg-surface p-4 rounded-xl border border-blue-100 flex justify-between items-center group cursor-pointer" onclick="alert('Nomor rekening disalin!')">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Account Number</p>
+                                    <p class="text-2xl font-mono font-bold text-primary">466 0070 724</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-primary transition-colors">
+                                    <i class="far fa-copy text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: QRIS -->
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden flex flex-col h-full">
+                        <div class="bg-accent px-6 py-4 flex items-center justify-between">
+                            <h3 class="text-white font-bold text-lg"><i class="fas fa-qrcode mr-2"></i> QRIS / E-Wallet</h3>
+                            <i class="fas fa-mobile-alt text-yellow-200"></i>
+                        </div>
+                        <div class="p-8 flex-grow flex flex-col items-center justify-center text-center">
+                            <div class="w-48 h-48 bg-gray-100 rounded-xl mb-6 flex items-center justify-center border border-gray-200">
+                                <!-- Placeholder QR Code -->
+                                <i class="fas fa-qrcode text-6xl text-gray-300"></i>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Scan kode di atas menggunakan aplikasi e-wallet (GoPay, OVO, Dana, ShopeePay, dll) atau Mobile Banking.
+                            </p>
+                            <span class="inline-block bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">Instant Payment</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Assistance Section -->
+        <section class="py-16 bg-white">
+            <div class="max-w-3xl mx-auto px-4 text-center">
+                <h3 class="text-2xl font-bold text-heading mb-4">Have Questions or Need Assistance?</h3>
+                <p class="text-body mb-8">
+                    Tim kami siap membantu Anda jika membutuhkan bantuan terkait proses donasi atau konfirmasi pembayaran.
+                </p>
+                <a href="Donation.html" class="inline-flex items-center justify-center px-8 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-full transition-all">
+                    <i class="fas fa-headset mr-2"></i> Contact Us
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer (Identical with index.html) -->
+    <footer class="bg-heading text-gray-400 py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <span class="text-2xl font-bold text-white block mb-4">Hey Youth!</span>
+                    <p class="mt-4 text-sm leading-relaxed text-gray-400">
+                        Helping youths grow through webinar, mentoring & volunteering<br>
+                        Est. 2018 | 5K+ learners | 📩 Join our team to make a real impact 🌏
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-xs tracking-wider">Contact</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><i class="fas fa-envelope text-accent"></i> hey.youth.id@gmail.com</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-accent"></i> Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase text-xs tracking-wider">Follow Us</h4>
+                    <p class="text-xs mb-3 text-gray-500">Follow us to keep you updated with our latest activities</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fa-brands fa-x-twitter">‌</i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-xs">
+                &copy; Hey Youth. Made with ❤ for Golden Future. All right reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 1. Navbar Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('shadow-md', 'bg-white/95');
+                    navbar.classList.remove('py-2');
+                } else {
+                    navbar.classList.remove('shadow-md', 'bg-white/95');
+                    navbar.classList.add('py-2');
+                }
+            });
+
+            // --- 2. Mobile Menu Toggle ---
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+                iconMenu.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+                document.body.classList.toggle('overflow-hidden');
+            });
+
+            // Close menu when clicking a link
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    menu.classList.add('hidden');
+                    iconMenu.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
