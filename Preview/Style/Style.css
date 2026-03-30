@@ -1,0 +1,130 @@
+/* ========================================
+   HEY YOUTH! — Global Stylesheet
+   ======================================== */
+
+/* --- Navigation Link Underline Effect --- */
+.nav-link {
+    position: relative;
+}
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #1D4ED8;
+    transition: width 0.3s ease;
+}
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* --- Scroll Offset untuk Anchor Link --- */
+html {
+    scroll-padding-top: 80px;
+}
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* --- FAQ Accordion --- */
+.faq-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.faq-content.open {
+    grid-template-rows: 1fr;
+}
+.faq-inner {
+    overflow: hidden;
+}
+.faq-item.active {
+    border-color: #1D4ED8;
+    background-color: #EFF6FF;
+    box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.1),
+                0 2px 4px -1px rgba(29, 78, 216, 0.06);
+}
+.faq-item.active .faq-header-text {
+    color: #1D4ED8;
+    font-weight: 700;
+}
+.faq-item.active .faq-icon {
+    transform: rotate(180deg);
+    background-color: #1D4ED8;
+    color: #ffffff;
+}
+
+/* --- Leaflet Map Container --- */
+#map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* --- Custom Leaflet Marker Pin --- */
+.custom-div-icon {
+    background: transparent;
+    position: relative;
+}
+.marker-pin-container {
+    position: relative;
+    width: 40px;
+    height: 50px;
+}
+.marker-pin-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1D4ED8;
+    border-radius: 50% 50% 0 50%;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+.marker-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+.marker-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: #F59E0B;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
