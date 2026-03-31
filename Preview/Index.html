@@ -9,6 +9,7 @@
     <!-- Library Eksternal (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
     <!-- Konfigurasi Tailwind -->
@@ -212,59 +213,14 @@
                 </div>
                 <div class="mb-16">
                     <h3 class="text-xl font-bold text-heading mb-6 border-l-4 border-accent pl-4">From Externals</h3>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
-                            <p class="text-body italic mb-6 flex-grow">"Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami."</p>
-                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
-                                <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0"><img src="img/Testi/p1.jpg" alt="Rifki Zamzam" class="w-full h-full object-cover"></div>
-                                <div class="flex-grow min-w-[120px]"><h4 class="font-bold text-heading text-sm leading-tight">Mr. Rifki Zamzam</h4><p class="text-xs text-primary font-semibold leading-tight mt-0.5">Co-Founder, Qatar HR Forum</p></div>
-                            </div>
-                        </div>
-                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
-                            <p class="text-body italic mb-6 flex-grow">"Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan."</p>
-                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
-                                <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0"><img src="img/Testi/p2.jpg" alt="Rina Nurutami" class="w-full h-full object-cover"></div>
-                                <div class="flex-grow min-w-[120px]"><h4 class="font-bold text-heading text-sm leading-tight">Ms. Rina Nurutami, S.Psi</h4><p class="text-xs text-primary font-semibold leading-tight mt-0.5">Vice Principal, Daarut Tauhid</p></div>
-                            </div>
-                        </div>
-                        <div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">
-                            <p class="text-body italic mb-6 flex-grow">"Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata."</p>
-                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
-                                <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0"><img src="img/Testi/p3.jpg" alt="Yiwen Xu" class="w-full h-full object-cover"></div>
-                                <div class="flex-grow min-w-[120px]"><h4 class="font-bold text-heading text-sm leading-tight">Yiwen Xu</h4><p class="text-xs text-primary font-semibold leading-tight mt-0.5">Student, Univ. of Edinburgh</p></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="external-testimonials" class="grid md:grid-cols-3 gap-8"></div>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold text-heading mb-6 border-l-4 border-primary pl-4">From Internals</h3>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        <div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">
-                            <p class="text-body italic mb-6 flex-grow">"Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari."</p>
-                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">
-                                <div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0"><img src="img/Testi/Alya.jpg" alt="Alya" class="w-full h-full object-cover"></div>
-                                <div class="flex-grow min-w-[120px]"><h4 class="font-bold text-heading text-sm leading-tight">Alya</h4><p class="text-xs text-gray-500 leading-tight mt-0.5">Community Coordinator</p></div>
-                            </div>
-                        </div>
-                        <div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">
-                            <p class="text-body italic mb-6 flex-grow">"Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata."</p>
-                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">
-                                <div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0"><img src="img/Testi/Herza.jpg" alt="Herza" class="w-full h-full object-cover"></div>
-                                <div class="flex-grow min-w-[120px]"><h4 class="font-bold text-heading text-sm leading-tight">Herza</h4><p class="text-xs text-gray-500 leading-tight mt-0.5">Web Developer</p></div>
-                            </div>
-                        </div>
-                        <div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">
-                            <p class="text-body italic mb-6 flex-grow">"Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan."</p>
-                            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">
-                                <div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0"><img src="img/Testi/Karyn.jpg" alt="Karyn" class="w-full h-full object-cover"></div>
-                                <div class="flex-grow min-w-[120px]"><h4 class="font-bold text-heading text-sm leading-tight">Karyn</h4><p class="text-xs text-gray-500 leading-tight mt-0.5">Teacher</p></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="internal-testimonials" class="grid md:grid-cols-3 gap-8"></div>
                 </div>
             </div>
         </section>
-
         <!-- Founder Section -->
         <section class="py-20 bg-white">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -295,29 +251,7 @@
                     <h3 class="text-3xl lg:text-4xl font-extrabold text-heading">Got Questions?</h3>
                     <p class="mt-4 text-body">Jawaban untuk pertanyaan yang sering diajukan.</p>
                 </div>
-                <div class="space-y-4">
-                    <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
-                        <button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">
-                            <span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">Why don't we recruit people per batch?</span>
-                            <div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg></div>
-                        </button>
-                        <div class="faq-content"><div class="faq-inner overflow-hidden"><div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.</div></div></div>
-                    </div>
-                    <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
-                        <button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">
-                            <span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">Do I need to have high English levels to join Hey Youth?</span>
-                            <div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg></div>
-                        </button>
-                        <div class="faq-content"><div class="faq-inner overflow-hidden"><div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">Tidak wajib. Meskipun beberapa program internasional membutuhkan kemampuan Bahasa Inggris, kami menyediakan banyak peran di mana Bahasa Indonesia adalah bahasa utama komunikasi. Yang terpenting adalah semangat berkontribusi.</div></div></div>
-                    </div>
-                    <div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
-                        <button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">
-                            <span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">How can I donate to foundation?</span>
-                            <div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg></div>
-                        </button>
-                        <div class="faq-content"><div class="faq-inner overflow-hidden"><div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">Anda dapat mendukung kami melalui transfer bank atau donasi barang. Silakan kunjungi halaman Donation untuk informasi rekening dan kebutuhan barang terkini.</div></div></div>
-                    </div>
-                </div>
+                <div id="faq-container" class="space-y-4"></div>
             </div>
         </section>
 
@@ -400,10 +334,7 @@
         </div>
     </footer>
 
-    <!-- Leaflet JS (harus sebelum script.js karena peta bergantung padanya) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <!-- Global Script -->
-    <script src="script.js"></script>
+    <script src="Javascript/Script.js"></script>
 </body>
 </html>

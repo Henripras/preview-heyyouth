@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Dashboard - Hey Youth!</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1D4ED8',
+                        primaryDark: '#1e40af',
+                        accent: '#F59E0B',
+                        bg: '#F8FAFC',
+                        heading: '#0F172A',
+                        body: '#475569',
+                        surface: '#EFF6FF',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-link.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 3px solid #F59E0B;
+            color: #ffffff;
+        }
+        .sidebar-link:not(.active):hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        .cms-card { transition: all 0.2s ease; }
+        .cms-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .modal-overlay {
+            background: rgba(15,23,42,0.5);
+            backdrop-filter: blur(4px);
+        }
+        .toast-enter { animation: slideInRight 0.3s ease-out; }
+        .toast-exit { animation: slideOutRight 0.3s ease-in forwards; }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        textarea { resize: vertical; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        .upload-zone {
+            border: 2px dashed #d1d5db;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: #1D4ED8;
+            background-color: #EFF6FF;
+        }
+        .upload-zone img {
+            max-height: 160px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body class="bg-bg text-body min-h-screen">
+
+    <!-- ===== MOBILE TOP BAR ===== -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-heading text-white h-14 flex items-center justify-between px-4 shadow-lg">
+        <button id="sidebar-toggle" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+        <span class="font-bold text-sm">CMS Dashboard</span>
+        <a href="../Index.html" class="p-2 hover:bg-white/10 rounded-lg transition-colors" title="Lihat Beranda">
+            <i class="fas fa-external-link-alt text-sm"></i>
+        </a>
+    </div>
+
+    <!-- ===== SIDEBAR BACKDROP ===== -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-50 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-heading text-gray-300 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b border-white/10">
+            <a href="login.html" class="flex items-center gap-2">
+                <img src="../img/NEW HEY YOUTH Sep 2025.png" alt="Logo" class="h-8 w-auto brightness-0 invert">
+            </a>
+            <p class="text-xs text-gray-500 mt-2 ml-1">Admin Panel</p>
+        </div>
+        <nav class="flex-1 py-4 space-y-1 px-3 overflow-y-auto">
+            <button onclick="switchTab('homepage')" data-tab="homepage" class="sidebar-link active w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
+                <i class="fas fa-home w-5 text-center text-xs"></i>
+                <span>Homepage</span>
+                <span id="count-total" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
+            </button>
+        </nav>
+        <div class="p-4 border-t border-white/10 space-y-2">
+            <a href="../Index.html" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
+                <i class="fas fa-external-link-alt w-5 text-center text-xs"></i>
+                <span>Lihat Beranda</span>
+            </a>
+            <button onclick="resetData()" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-red-400 rounded-lg hover:bg-white/5 transition-all w-full text-left">
+                <i class="fas fa-undo w-5 text-center text-xs"></i>
+                <span>Reset ke Default</span>
+            </button>
+            <button onclick="logout()" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-red-400 rounded-lg hover:bg-white/5 transition-all w-full text-left">
+                <i class="fas fa-sign-out-alt w-5 text-center text-xs"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="lg:ml-64 pt-14 lg:pt-0 min-h-screen">
+        <header class="bg-white border-b border-gray-200 px-6 lg:px-8 py-5 flex items-center justify-between sticky top-0 z-30">
+            <div>
+                <h1 class="text-xl font-bold text-heading">Homepage</h1>
+                <p class="text-sm text-gray-500 mt-0.5">Kelola seluruh konten yang tampil di beranda</p>
+            </div>
+        </header>
+
+        <div class="p-6 lg:p-8 space-y-10">
+
+            <!-- External Testimonials -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-accent text-sm"><i class="fas fa-user-tie"></i></div>
+                        <h2 class="text-lg font-bold text-heading">Testimoni Eksternal</h2>
+                        <span id="count-external" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                    </div>
+                    <button onclick="openAddModal('external')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                        <i class="fas fa-plus text-[10px]"></i> Tambah
+                    </button>
+                </div>
+                <div id="list-external" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+            </div>
+
+            <hr class="border-gray-200">
+
+            <!-- Internal Testimonials -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-primary text-sm"><i class="fas fa-users"></i></div>
+                        <h2 class="text-lg font-bold text-heading">Testimoni Internal</h2>
+                        <span id="count-internal" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                    </div>
+                    <button onclick="openAddModal('internal')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                        <i class="fas fa-plus text-[10px]"></i> Tambah
+                    </button>
+                </div>
+                <div id="list-internal" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+            </div>
+
+            <hr class="border-gray-200">
+
+            <!-- FAQ -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm"><i class="fas fa-question-circle"></i></div>
+                        <h2 class="text-lg font-bold text-heading">FAQ</h2>
+                        <span id="count-faq" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                    </div>
+                    <button onclick="openAddModal('faq')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                        <i class="fas fa-plus text-[10px]"></i> Tambah
+                    </button>
+                </div>
+                <div id="list-faq" class="space-y-3 max-w-4xl"></div>
+            </div>
+
+            <hr class="border-gray-200">
+
+            <!-- Locations -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-sm"><i class="fas fa-map-marked-alt"></i></div>
+                        <h2 class="text-lg font-bold text-heading">Lokasi Peta</h2>
+                        <span id="count-locations" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                    </div>
+                    <button onclick="openAddModal('locations')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                        <i class="fas fa-plus text-[10px]"></i> Tambah
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="text-left px-4 py-3 font-semibold text-heading">#</th>
+                                    <th class="text-left px-4 py-3 font-semibold text-heading">Lokasi</th>
+                                    <th class="text-left px-4 py-3 font-semibold text-heading">Latitude</th>
+                                    <th class="text-left px-4 py-3 font-semibold text-heading">Longitude</th>
+                                    <th class="text-left px-4 py-3 font-semibold text-heading">Relawan</th>
+                                    <th class="text-right px-4 py-3 font-semibold text-heading">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-locations"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ===== MODAL ===== -->
+    <div id="modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto z-10">
+            <div class="sticky top-0 bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between rounded-t-2xl z-10">
+                <h3 id="modal-title" class="font-bold text-heading text-lg">Tambah Item</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-heading transition-colors p-1">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="px-6 py-5"></div>
+        </div>
+    </div>
+
+    <!-- ===== CONFIRM DIALOG ===== -->
+    <div id="confirm-dialog" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0" onclick="closeConfirm()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm z-10 p-6 text-center">
+            <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-trash-alt text-red-500 text-xl"></i>
+            </div>
+            <h3 class="font-bold text-heading text-lg mb-2">Hapus Item?</h3>
+            <p class="text-sm text-gray-500 mb-6">Data yang dihapus tidak dapat dikembalikan.</p>
+            <div class="flex gap-3">
+                <button onclick="closeConfirm()" class="flex-1 py-2.5 border border-gray-200 text-heading font-semibold rounded-lg hover:bg-gray-50 transition-colors text-sm">Batal</button>
+                <button id="confirm-delete-btn" class="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition-colors text-sm">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="fixed bottom-6 right-6 z-[120] hidden">
+        <div id="toast-inner" class="flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg text-sm font-medium">
+            <i id="toast-icon"></i>
+            <span id="toast-text"></span>
+        </div>
+    </div>
+
+    <!-- Hidden file input (reused) -->
+    <input type="file" id="file-input-hidden" accept="image/*" class="hidden">
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+    (function () {
+        'use strict';
+
+        /* =========================================
+           AUTH CHECK
+           ========================================= */
+        if (!localStorage.getItem('hey_youth_auth')) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        /* =========================================
+           CONSTANTS & DEFAULT DATA
+           ========================================= */
+        var CMS_KEY = 'hey_youth_cms';
+
+        var DEFAULT_DATA = {
+            externalTestimonials: [
+                { id: 1, name: 'Mr. Rifki Zamzam', title: 'Co-Founder, Qatar HR Forum', quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', image: 'img/Testi/p1.jpg' },
+                { id: 2, name: 'Ms. Rina Nurutami, S.Psi', title: 'Vice Principal, Daarut Tauhid', quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', image: 'img/Testi/p2.jpg' },
+                { id: 3, name: 'Yiwen Xu', title: 'Student, Univ. of Edinburgh', quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', image: 'img/Testi/p3.jpg' }
+            ],
+            internalTestimonials: [
+                { id: 4, name: 'Alya', role: 'Community Coordinator', quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', image: 'img/Testi/Alya.jpg' },
+                { id: 5, name: 'Herza', role: 'Web Developer', quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', image: 'img/Testi/Herza.jpg' },
+                { id: 6, name: 'Karyn', role: 'Teacher', quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', image: 'img/Testi/Karyn.jpg' }
+            ],
+            faqs: [
+                { id: 7, question: "Why don't we recruit people per batch?", answer: 'Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.' },
+                { id: 8, question: 'Do I need to have high English levels to join Hey Youth?', answer: 'Tidak wajib. Meskipun beberapa program internasional membutuhkan kemampuan Bahasa Inggris, kami menyediakan banyak peran di mana Bahasa Indonesia adalah bahasa utama komunikasi. Yang terpenting adalah semangat berkontribusi.' },
+                { id: 9, question: 'How can I donate to foundation?', answer: 'Anda dapat mendukung kami melalui transfer bank atau donasi barang. Silakan kunjungi halaman Donation untuk informasi rekening dan kebutuhan barang terkini.' }
+            ],
+            locations: [
+                { id: 101, name: 'Jakarta', lat: -6.2088, lng: 106.8456, volunteers: 8 },
+                { id: 102, name: 'Karawang', lat: -6.3146, lng: 107.3094, volunteers: 1 },
+                { id: 103, name: 'Medan', lat: 3.5952, lng: 98.6722, volunteers: 1 },
+                { id: 104, name: 'Jakarta Timur', lat: -6.2307, lng: 106.8967, volunteers: 2 },
+                { id: 105, name: 'Malang', lat: -7.9826, lng: 112.6308, volunteers: 3 },
+                { id: 106, name: 'Jakarta Selatan', lat: -6.2615, lng: 106.8106, volunteers: 2 },
+                { id: 107, name: 'Arcamanik, Bandung', lat: -6.9175, lng: 107.6191, volunteers: 1 },
+                { id: 108, name: 'Depok', lat: -6.4025, lng: 106.8048, volunteers: 3 },
+                { id: 109, name: 'Bogor', lat: -6.5950, lng: 106.7997, volunteers: 4 },
+                { id: 110, name: 'Bangka', lat: -2.3216, lng: 106.1086, volunteers: 1 },
+                { id: 111, name: 'West Java', lat: -6.9034, lng: 107.6046, volunteers: 1 },
+                { id: 112, name: 'Palembang', lat: -2.9761, lng: 104.7754, volunteers: 1 },
+                { id: 113, name: 'Sunter, Jakarta Utara', lat: -6.1360, lng: 106.8778, volunteers: 1 },
+                { id: 114, name: 'Purwokerto', lat: -7.4239, lng: 109.2215, volunteers: 1 },
+                { id: 115, name: 'Cikarang', lat: -6.2737, lng: 107.1352, volunteers: 1 },
+                { id: 116, name: 'Bekasi', lat: -6.2369, lng: 106.9715, volunteers: 3 },
+                { id: 117, name: 'Tuban, East Java', lat: -6.9079, lng: 112.0560, volunteers: 1 },
+                { id: 118, name: 'Sumedang, Jatinangor', lat: -6.9329, lng: 107.7667, volunteers: 1 },
+                { id: 119, name: 'Gresik', lat: -7.1666, lng: 112.6568, volunteers: 1 },
+                { id: 120, name: 'Purbalingga', lat: -7.3707, lng: 109.3582, volunteers: 1 },
+                { id: 121, name: 'Jakarta Barat', lat: -6.1754, lng: 106.8272, volunteers: 1 },
+                { id: 122, name: 'Aceh', lat: 5.5524, lng: 95.3188, volunteers: 1 },
+                { id: 123, name: 'Batang, Jawa Tengah', lat: -7.0094, lng: 109.7368, volunteers: 1 },
+                { id: 124, name: 'Bandung', lat: -6.9175, lng: 107.6191, volunteers: 2 },
+                { id: 125, name: 'Surabaya', lat: -7.2504, lng: 112.7688, volunteers: 1 },
+                { id: 126, name: 'Bali', lat: -8.4095, lng: 115.1889, volunteers: 1 },
+                { id: 127, name: 'Surakarta', lat: -7.5559, lng: 110.8200, volunteers: 1 },
+                { id: 128, name: 'Pekanbaru', lat: 0.5071, lng: 101.4478, volunteers: 1 },
+                { id: 129, name: 'South Tangerang', lat: -6.2878, lng: 106.7323, volunteers: 1 },
+                { id: 130, name: 'Kendari', lat: -3.9806, lng: 122.5160, volunteers: 1 }
+            ]
+        };
+
+        /* =========================================
+           DATA LAYER
+           ========================================= */
+        function getData() {
+            try {
+                var raw = localStorage.getItem(CMS_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch (e) { }
+            return JSON.parse(JSON.stringify(DEFAULT_DATA));
+        }
+
+        function saveData(data) {
+            try {
+                localStorage.setItem(CMS_KEY, JSON.stringify(data));
+                return true;
+            } catch (e) {
+                showToast('Storage penuh! Kurangi ukuran gambar atau hapus beberapa data.', 'error');
+                return false;
+            }
+        }
+
+        /* =========================================
+           STATE
+           ========================================= */
+        var editingItem = null;
+        var editingSection = null;
+        var deletingId = null;
+        var deletingSection = null;
+
+        /* Temp storage for uploaded image base64 */
+        var uploadedImage = null;
+
+        /* =========================================
+           SIDEBAR & NAVIGATION
+           ========================================= */
+        window.switchTab = function (tab) {
+            editingItem = null;
+            editingSection = null;
+            document.querySelectorAll('.sidebar-link').forEach(function (el) {
+                el.classList.toggle('active', el.getAttribute('data-tab') === tab);
+            });
+            renderAllLists();
+            closeSidebar();
+        };
+
+        function renderAllLists() {
+            var data = getData();
+            renderTestimonials('list-external', data.externalTestimonials, 'external');
+            renderTestimonials('list-internal', data.internalTestimonials, 'internal');
+            renderFaqs(data.faqs);
+            renderLocations(data.locations);
+            updateCounts(data);
+        }
+
+        window.closeSidebar = function () {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+            document.getElementById('sidebar-backdrop').classList.add('hidden');
+        };
+
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.remove('-translate-x-full');
+            document.getElementById('sidebar-backdrop').classList.remove('hidden');
+        });
+
+        /* =========================================
+           COUNTS
+           ========================================= */
+        function updateCounts(data) {
+            var ext = data.externalTestimonials.length;
+            var int = data.internalTestimonials.length;
+            var faq = data.faqs.length;
+            var loc = data.locations.length;
+            document.getElementById('count-external').textContent = ext;
+            document.getElementById('count-internal').textContent = int;
+            document.getElementById('count-faq').textContent = faq;
+            document.getElementById('count-locations').textContent = loc;
+            document.getElementById('count-total').textContent = ext + int + faq + loc;
+        }
+
+        /* =========================================
+           IMAGE UPLOAD & COMPRESSION
+           ========================================= */
+        function compressImage(file, maxWidth, quality, callback) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = new Image();
+                img.onload = function () {
+                    var canvas = document.createElement('canvas');
+                    var w = img.width;
+                    var h = img.height;
+                    if (w > maxWidth) {
+                        h = Math.round((maxWidth / w) * h);
+                        w = maxWidth;
+                    }
+                    canvas.width = w;
+                    canvas.height = h;
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    callback(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function triggerUpload() {
+            var input = document.getElementById('file-input-hidden');
+            input.value = '';
+            input.onchange = function () {
+                var file = input.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    showToast('File harus berupa gambar.', 'error');
+                    return;
+                }
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('Ukuran file maksimal 10MB.', 'error');
+                    return;
+                }
+                /* Show loading state on upload zone */
+                var zone = document.getElementById('upload-zone');
+                if (zone) {
+                    zone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses gambar...</p></div>';
+                }
+                compressImage(file, 400, 0.7, function (base64) {
+                    uploadedImage = base64;
+                    updateUploadPreview(base64);
+                });
+            };
+            input.click();
+        }
+
+        function updateUploadPreview(src) {
+            var zone = document.getElementById('upload-zone');
+            if (!zone) return;
+            zone.innerHTML =
+                '<div class="relative">' +
+                    '<img src="' + src + '" alt="Preview" class="w-full h-40 object-contain rounded-lg bg-gray-50">' +
+                    '<button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-md transition-colors"><i class="fas fa-times"></i></button>' +
+                '</div>' +
+                '<p class="text-xs text-green-600 font-medium mt-2"><i class="fas fa-check-circle mr-1"></i>Gambar berhasil diupload</p>';
+        }
+
+        window.removeUpload = function () {
+            uploadedImage = null;
+            var zone = document.getElementById('upload-zone');
+            if (!zone) return;
+            zone.innerHTML =
+                '<div class="py-6 text-center">' +
+                    '<i class="fas fa-cloud-upload-alt text-3xl text-gray-300 mb-2 block"></i>' +
+                    '<p class="text-sm text-gray-500 font-medium">Klik atau seret gambar ke sini</p>' +
+                    '<p class="text-xs text-gray-400 mt-1">JPEG, PNG, WebP — Maks 10MB</p>' +
+                '</div>';
+        };
+
+        /* Drag & drop on upload zone */
+        function initDragDrop() {
+            var zone = document.getElementById('upload-zone');
+            if (!zone) return;
+            zone.addEventListener('click', triggerUpload);
+            zone.addEventListener('dragover', function (e) {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+            zone.addEventListener('dragleave', function () {
+                zone.classList.remove('dragover');
+            });
+            zone.addEventListener('drop', function (e) {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                var file = e.dataTransfer.files[0];
+                if (!file || !file.type.startsWith('image/')) {
+                    showToast('File harus berupa gambar.', 'error');
+                    return;
+                }
+                if (file.size > 10 * 1024 * 1024) {
+                    showToast('Ukuran file maksimal 10MB.', 'error');
+                    return;
+                }
+                zone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses gambar...</p></div>';
+                compressImage(file, 400, 0.7, function (base64) {
+                    uploadedImage = base64;
+                    updateUploadPreview(base64);
+                });
+            });
+        }
+
+        /* =========================================
+           RENDER — TESTIMONIALS
+           ========================================= */
+        function renderTestimonials(containerId, items, type) {
+            var container = document.getElementById(containerId);
+            if (items.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data. Klik "Tambah" untuk menambahkan.</p></div>';
+                return;
+            }
+            container.innerHTML = items.map(function (item) {
+                var imgSrc = item.image || '';
+                var isBase64 = imgSrc && imgSrc.startsWith('data:');
+                var displaySrc = isBase64 ? imgSrc : (imgSrc ? '../' + imgSrc : '');
+                var fallback = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.name) + '&size=100&background=random&color=fff';
+                var subtitle = type === 'external' ? item.title : item.role;
+                var badge = isBase64 ? '<span class="text-[9px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-medium">uploaded</span>' : '';
+                return '<div class="cms-card bg-white rounded-xl border border-gray-200 p-5 flex flex-col">' +
+                    '<div class="flex items-start gap-3 mb-3">' +
+                        '<img src="' + escapeAttr(displaySrc) + '" alt="' + escapeAttr(item.name) + '" class="w-11 h-11 rounded-full object-cover border-2 border-gray-100 flex-shrink-0" onerror="this.src=\'' + fallback + '\'">' +
+                        '<div class="min-w-0">' +
+                            '<div class="flex items-center gap-1.5">' +
+                                '<h4 class="font-bold text-heading text-sm truncate">' + escapeHtml(item.name) + '</h4>' +
+                                badge +
+                            '</div>' +
+                            '<p class="text-xs text-gray-500 truncate">' + escapeHtml(subtitle || '') + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                    '<p class="text-sm text-gray-600 italic flex-grow line-clamp-3">"' + escapeHtml(item.quote) + '"</p>' +
+                    '<div class="flex gap-2 mt-4 pt-3 border-t border-gray-100">' +
+                        '<button onclick="openEditModal(\'' + type + '\',' + item.id + ')" class="flex-1 text-xs font-semibold text-primary hover:bg-blue-50 py-2 rounded-lg transition-colors"><i class="fas fa-pen mr-1"></i> Edit</button>' +
+                        '<button onclick="confirmDelete(\'' + type + '\',' + item.id + ')" class="flex-1 text-xs font-semibold text-red-500 hover:bg-red-50 py-2 rounded-lg transition-colors"><i class="fas fa-trash mr-1"></i> Hapus</button>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        /* =========================================
+           RENDER — FAQS
+           ========================================= */
+        function renderFaqs(items) {
+            var container = document.getElementById('list-faq');
+            if (items.length === 0) {
+                container.innerHTML = '<div class="text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data. Klik "Tambah" untuk menambahkan.</p></div>';
+                return;
+            }
+            container.innerHTML = items.map(function (item) {
+                return '<div class="cms-card bg-white rounded-xl border border-gray-200 p-5">' +
+                    '<div class="flex items-start justify-between gap-3">' +
+                        '<div class="min-w-0 flex-grow">' +
+                            '<h4 class="font-bold text-heading text-sm mb-1">' + escapeHtml(item.question) + '</h4>' +
+                            '<p class="text-xs text-gray-500 line-clamp-2">' + escapeHtml(item.answer) + '</p>' +
+                        '</div>' +
+                        '<div class="flex gap-1 flex-shrink-0">' +
+                            '<button onclick="openEditModal(\'faq\',' + item.id + ')" class="p-2 text-primary hover:bg-blue-50 rounded-lg transition-colors" title="Edit"><i class="fas fa-pen text-xs"></i></button>' +
+                            '<button onclick="confirmDelete(\'faq\',' + item.id + ')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Hapus"><i class="fas fa-trash text-xs"></i></button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        /* =========================================
+           RENDER — LOCATIONS
+           ========================================= */
+        function renderLocations(items) {
+            var tbody = document.getElementById('list-locations');
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data.</p></td></tr>';
+                return;
+            }
+            tbody.innerHTML = items.map(function (item, idx) {
+                return '<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">' +
+                    '<td class="px-4 py-3 text-gray-400">' + (idx + 1) + '</td>' +
+                    '<td class="px-4 py-3 font-medium text-heading">' + escapeHtml(item.name) + '</td>' +
+                    '<td class="px-4 py-3 text-gray-500 font-mono text-xs">' + item.lat + '</td>' +
+                    '<td class="px-4 py-3 text-gray-500 font-mono text-xs">' + item.lng + '</td>' +
+                    '<td class="px-4 py-3"><span class="bg-accent/10 text-accent text-xs font-bold px-2 py-1 rounded-full">' + item.volunteers + '</span></td>' +
+                    '<td class="px-4 py-3 text-right">' +
+                        '<button onclick="openEditModal(\'locations\',' + item.id + ')" class="p-1.5 text-primary hover:bg-blue-50 rounded-lg transition-colors mr-1" title="Edit"><i class="fas fa-pen text-xs"></i></button>' +
+                        '<button onclick="confirmDelete(\'locations\',' + item.id + ')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Hapus"><i class="fas fa-trash text-xs"></i></button>' +
+                    '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        /* =========================================
+           MODAL — OPEN ADD
+           ========================================= */
+        window.openAddModal = function (section) {
+            editingItem = null;
+            editingSection = section;
+            uploadedImage = null;
+            renderModalForm(section, null);
+            openModal();
+        };
+
+        /* =========================================
+           MODAL — OPEN EDIT
+           ========================================= */
+        window.openEditModal = function (section, id) {
+            var data = getData();
+            var list;
+            switch (section) {
+                case 'external': list = data.externalTestimonials; break;
+                case 'internal': list = data.internalTestimonials; break;
+                case 'faq': list = data.faqs; break;
+                case 'locations': list = data.locations; break;
+            }
+            var item = list.find(function (i) { return i.id === id; });
+            if (!item) return;
+            editingItem = item;
+            editingSection = section;
+            /* If existing image is base64, put it in uploadedImage */
+            uploadedImage = (item.image && item.image.startsWith('data:')) ? item.image : null;
+            renderModalForm(section, item);
+            openModal();
+        };
+
+        /* =========================================
+           MODAL — RENDER FORM
+           ========================================= */
+        function renderModalForm(section, item) {
+            var isEdit = !!item;
+            var label;
+            if (section === 'external' || section === 'internal') label = 'Testimoni';
+            else if (section === 'faq') label = 'FAQ';
+            else label = 'Lokasi';
+
+            document.getElementById('modal-title').textContent = (isEdit ? 'Edit ' : 'Tambah ') + label;
+
+            var html = '';
+
+            if (section === 'external' || section === 'internal') {
+                html += formField('Nama', 'f-name', item ? item.name : '', 'text', 'Nama lengkap');
+                if (section === 'external') {
+                    html += formField('Jabatan / Title', 'f-title', item ? item.title : '', 'text', 'Co-Founder, Qatar HR Forum');
+                } else {
+                    html += formField('Peran / Role', 'f-role', item ? item.role : '', 'text', 'Community Coordinator');
+                }
+                html += formTextarea('Quote', 'f-quote', item ? item.quote : '', 'Kutipan testimoni...');
+
+                /* Image upload zone */
+                var existingSrc = '';
+                if (item && item.image) {
+                    if (item.image.startsWith('data:')) {
+                        existingSrc = item.image;
+                    } else {
+                        existingSrc = '../' + item.image;
+                    }
+                }
+
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Foto</label>' +
+                    '<div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
+
+                if (existingSrc) {
+                    html += '<div class="relative">' +
+                        '<img src="' + escapeAttr(existingSrc) + '" alt="Preview" class="w-full h-40 object-contain rounded-lg bg-gray-50">' +
+                        '<button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-md transition-colors"><i class="fas fa-times"></i></button>' +
+                        '</div>' +
+                        '<p class="text-xs text-green-600 font-medium mt-2"><i class="fas fa-check-circle mr-1"></i>Gambar tersedia</p>';
+                } else {
+                    html += '<div class="py-6 text-center">' +
+                        '<i class="fas fa-cloud-upload-alt text-3xl text-gray-300 mb-2 block"></i>' +
+                        '<p class="text-sm text-gray-500 font-medium">Klik atau seret gambar ke sini</p>' +
+                        '<p class="text-xs text-gray-400 mt-1">JPEG, PNG, WebP — Maks 10MB</p>' +
+                        '</div>';
+                }
+
+                html += '</div>' +
+                    '<p class="text-xs text-gray-400 -mt-2">Gambar akan di-compress otomatis (max 400px, JPEG 70%)</p>' +
+                    '</div>';
+
+            } else if (section === 'faq') {
+                html += formField('Pertanyaan', 'f-question', item ? item.question : '', 'text', 'Tulis pertanyaan...');
+                html += formTextarea('Jawaban', 'f-answer', item ? item.answer : '', 'Tulis jawaban...');
+            } else if (section === 'locations') {
+                html += formField('Nama Lokasi', 'f-name', item ? item.name : '', 'text', 'Jakarta, Bandung, dsb.');
+                html += formField('Latitude', 'f-lat', item ? item.lat : '', 'number', '-6.2088', 'step="any"');
+                html += formField('Longitude', 'f-lng', item ? item.lng : '', 'number', '106.8456', 'step="any"');
+                html += formField('Jumlah Relawan', 'f-volunteers', item ? item.volunteers : '', 'number', '1', 'min="1"');
+            }
+
+            html += '<div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">' +
+                '<button type="button" onclick="closeModal()" class="flex-1 py-2.5 border border-gray-200 text-heading font-semibold rounded-lg hover:bg-gray-50 transition-colors text-sm">Batal</button>' +
+                '<button type="button" onclick="saveItem()" class="flex-1 py-2.5 bg-primary hover:bg-primaryDark text-white font-semibold rounded-lg transition-colors text-sm">' + (isEdit ? 'Simpan Perubahan' : 'Tambah') + '</button>' +
+            '</div>';
+
+            document.getElementById('modal-body').innerHTML = html;
+
+            /* Init drag & drop after DOM update */
+            if (section === 'external' || section === 'internal') {
+                initDragDrop();
+            }
+        }
+
+        /* =========================================
+           FORM HELPERS
+           ========================================= */
+        function formField(label, id, value, type, placeholder, extra) {
+            return '<div class="mb-4">' +
+                '<label class="block text-sm font-semibold text-heading mb-1.5">' + label + '</label>' +
+                '<input type="' + type + '" id="' + id + '" value="' + escapeAttr(value) + '" placeholder="' + escapeAttr(placeholder) + '" ' + (extra || '') + ' class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">' +
+            '</div>';
+        }
+
+        function formTextarea(label, id, value, placeholder) {
+            return '<div class="mb-4">' +
+                '<label class="block text-sm font-semibold text-heading mb-1.5">' + label + '</label>' +
+                '<textarea id="' + id + '" rows="3" placeholder="' + escapeAttr(placeholder) + '" class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">' + escapeHtml(value) + '</textarea>' +
+            '</div>';
+        }
+
+        /* =========================================
+           MODAL OPEN / CLOSE
+           ========================================= */
+        function openModal() {
+            document.getElementById('modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            setTimeout(function () {
+                var firstInput = document.querySelector('#modal-body input, #modal-body textarea');
+                if (firstInput) firstInput.focus();
+            }, 100);
+        }
+
+        window.closeModal = function () {
+            document.getElementById('modal').classList.add('hidden');
+            document.body.style.overflow = '';
+            editingItem = null;
+            editingSection = null;
+            uploadedImage = null;
+        };
+
+        /* =========================================
+           SAVE ITEM
+           ========================================= */
+        window.saveItem = function () {
+            var section = editingSection;
+            var data = getData();
+            var isEdit = !!editingItem;
+
+            if (section === 'external' || section === 'internal') {
+                var name = document.getElementById('f-name').value.trim();
+                var quote = document.getElementById('f-quote').value.trim();
+                if (!name || !quote) { showToast('Nama dan quote wajib diisi.', 'error'); return; }
+
+                /* Determine image: uploaded base64 > existing path > empty */
+                var image = '';
+                if (uploadedImage) {
+                    image = uploadedImage;
+                } else if (isEdit && editingItem.image && !editingItem.image.startsWith('data:')) {
+                    /* Keep old path if no new upload */
+                    image = editingItem.image;
+                }
+
+                var obj = { id: isEdit ? editingItem.id : Date.now(), name: name, quote: quote, image: image };
+                var list;
+
+                if (section === 'external') {
+                    obj.title = document.getElementById('f-title').value.trim() || '';
+                    list = data.externalTestimonials;
+                } else {
+                    obj.role = document.getElementById('f-role').value.trim() || '';
+                    list = data.internalTestimonials;
+                }
+
+                if (isEdit) {
+                    var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
+                    if (idx !== -1) list[idx] = obj;
+                } else {
+                    list.push(obj);
+                }
+
+            } else if (section === 'faq') {
+                var question = document.getElementById('f-question').value.trim();
+                var answer = document.getElementById('f-answer').value.trim();
+                if (!question || !answer) { showToast('Pertanyaan dan jawaban wajib diisi.', 'error'); return; }
+
+                var obj = { id: isEdit ? editingItem.id : Date.now(), question: question, answer: answer };
+                var list = data.faqs;
+                if (isEdit) {
+                    var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
+                    if (idx !== -1) list[idx] = obj;
+                } else {
+                    list.push(obj);
+                }
+
+            } else if (section === 'locations') {
+                var name = document.getElementById('f-name').value.trim();
+                var lat = parseFloat(document.getElementById('f-lat').value);
+                var lng = parseFloat(document.getElementById('f-lng').value);
+                var volunteers = parseInt(document.getElementById('f-volunteers').value) || 1;
+                if (!name || isNaN(lat) || isNaN(lng)) { showToast('Nama, latitude, dan longitude wajib diisi.', 'error'); return; }
+
+                var obj = { id: isEdit ? editingItem.id : Date.now(), name: name, lat: lat, lng: lng, volunteers: volunteers };
+                var list = data.locations;
+                if (isEdit) {
+                    var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
+                    if (idx !== -1) list[idx] = obj;
+                } else {
+                    list.push(obj);
+                }
+            }
+
+            if (!saveData(data)) return;
+            closeModal();
+            renderAllLists();
+            showToast(isEdit ? 'Data berhasil diperbarui.' : 'Data berhasil ditambahkan.', 'success');
+        };
+
+        /* =========================================
+           DELETE
+           ========================================= */
+        window.confirmDelete = function (section, id) {
+            deletingSection = section;
+            deletingId = id;
+            document.getElementById('confirm-dialog').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('confirm-delete-btn').onclick = function () { executeDelete(); };
+        };
+
+        window.closeConfirm = function () {
+            document.getElementById('confirm-dialog').classList.add('hidden');
+            document.body.style.overflow = '';
+            deletingSection = null;
+            deletingId = null;
+        };
+
+        function executeDelete() {
+            var data = getData();
+            var section = deletingSection;
+            var id = deletingId;
+            switch (section) {
+                case 'external': data.externalTestimonials = data.externalTestimonials.filter(function (i) { return i.id !== id; }); break;
+                case 'internal': data.internalTestimonials = data.internalTestimonials.filter(function (i) { return i.id !== id; }); break;
+                case 'faq': data.faqs = data.faqs.filter(function (i) { return i.id !== id; }); break;
+                case 'locations': data.locations = data.locations.filter(function (i) { return i.id !== id; }); break;
+            }
+            if (!saveData(data)) return;
+            closeConfirm();
+            renderAllLists();
+            showToast('Data berhasil dihapus.', 'success');
+        }
+
+        /* =========================================
+           RESET DATA
+           ========================================= */
+        window.resetData = function () {
+            if (!confirm('Reset semua data ke default? Semua gambar yang diupload akan hilang.')) return;
+            localStorage.removeItem(CMS_KEY);
+            renderAllLists();
+            showToast('Data berhasil direset ke default.', 'success');
+        };
+
+        /* =========================================
+           LOGOUT
+           ========================================= */
+        window.logout = function () {
+            localStorage.removeItem('hey_youth_auth');
+            window.location.href = 'login.html';
+        };
+
+        /* =========================================
+           TOAST
+           ========================================= */
+        var toastTimer = null;
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            var inner = document.getElementById('toast-inner');
+            var icon = document.getElementById('toast-icon');
+            var text = document.getElementById('toast-text');
+            if (toastTimer) clearTimeout(toastTimer);
+            text.textContent = message;
+            if (type === 'success') {
+                inner.className = 'flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg text-sm font-medium bg-green-600 text-white toast-enter';
+                icon.className = 'fas fa-check-circle';
+            } else {
+                inner.className = 'flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg text-sm font-medium bg-red-500 text-white toast-enter';
+                icon.className = 'fas fa-exclamation-circle';
+            }
+            toast.classList.remove('hidden');
+            toastTimer = setTimeout(function () {
+                inner.classList.remove('toast-enter');
+                inner.classList.add('toast-exit');
+                setTimeout(function () {
+                    toast.classList.add('hidden');
+                    inner.classList.remove('toast-exit');
+                }, 300);
+            }, 3000);
+        }
+
+        /* =========================================
+           UTILITIES
+           ========================================= */
+        function escapeHtml(str) {
+            if (!str) return '';
+            var div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function escapeAttr(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        /* =========================================
+           KEYBOARD
+           ========================================= */
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                if (!document.getElementById('confirm-dialog').classList.contains('hidden')) { closeConfirm(); }
+                else if (!document.getElementById('modal').classList.contains('hidden')) { closeModal(); }
+            }
+        });
+
+        /* =========================================
+           INIT
+           ========================================= */
+        renderAllLists();
+
+    })();
+    </script>
+</body>
+</html>

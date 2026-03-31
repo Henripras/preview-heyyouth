@@ -83,32 +83,31 @@ html {
 }
 .marker-pin-container {
     position: relative;
-    width: 40px;
-    height: 50px;
-}
-.marker-pin-body {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #1D4ED8;
-    border-radius: 50% 50% 0 50%;
-    transform: rotate(45deg);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    z-index: 1;
-}
-.marker-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-45deg);
-    width: 18px;
-    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2;
+    color: #1D4ED8;
+    font-size: 36px;
+    line-height: 1;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
+}
+.marker-badge {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background-color: #F59E0B;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 .marker-badge {
     position: absolute;

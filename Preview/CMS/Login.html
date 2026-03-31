@@ -286,8 +286,9 @@
                 setTimeout(function () {
                     setLoading(false);
 
-                    if (email === 'admin@gmail.com' && password === 'admin123') {
-                        window.location.href = '../Index.html';
+                                if (email === 'admin@gmail.com' && password === 'admin123') {
+                localStorage.setItem('hey_youth_auth', 'true');
+                window.location.href = 'dashboard.html';
                     } else {
                         showError('Email atau password salah. Silakan coba lagi.');
                     }
