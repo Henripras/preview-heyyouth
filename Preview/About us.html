@@ -56,15 +56,15 @@
                     <img src="img/NEW HEY YOUTH Sep 2025.png" alt="Hey Youth Logo" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
                 </a>
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="index.html" class="nav-link text-body font-medium hover:text-primary transition-colors">Home</a>
+                    <a href="index.html" class="nav-link text-body hover:text-primary transition-colors">Home</a>
                     <a href="About us.html" class="nav-link text-primary font-bold hover:text-primaryDark transition-colors">About us</a>
                     <a href="Activities.html" class="nav-link text-body hover:text-primary transition-colors">Activities</a>
                     <a href="Partner.html" class="nav-link text-body hover:text-primary transition-colors">Partners</a>
                     <a href="Donation.html" class="nav-link text-body hover:text-primary transition-colors">Donation</a>
                 </div>
-                <div class="pt-4 border-t border-gray-100 mt-4 space-y-2">
-                    <a href="CMS/Login.html" class="block w-full text-center border-2 border-gray-200 text-heading font-semibold px-4 py-3 rounded-xl hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2"><i class="fas fa-lock text-sm"></i> Dashboard</a>
-                    <a href="https://bit.ly/HYOprec" class="block w-full text-center bg-accent text-white px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors shadow-md">Join Us Now!</a>
+                    <div class="hidden md:flex items-center gap-3">
+                    <a href="CMS/Login.html" class="text-body hover:text-primary px-3 py-2.5 rounded-lg font-medium transition-colors text-sm flex items-center gap-1.5"><i class="fas fa-lock text-xs"></i> Dashboard</a>
+                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">Join Us!</a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-heading hover:text-primary focus:outline-none p-2" aria-label="Toggle menu">
@@ -77,11 +77,12 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl transform transition-all duration-300 origin-top">
             <div class="px-4 pt-4 pb-6 space-y-2">
                 <a href="index.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Home</a>
-                <a href="About us.html" class="block px-4 py-3 rounded-xl text-base font-medium text-primary bg-primary/10">About us</a>
-                <a href="Activities.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Activities</a>
+                <a href="About us.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">About us</a>
+                <a href="Activities.html" class="block px-4 py-3 rounded-xl text-base font-medium text-primary font-bold bg-blue-50">Activities</a>
                 <a href="Partner.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Partners</a>
                 <a href="Donation.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Donation</a>
-                <div class="pt-4 border-t border-gray-100 mt-4">
+                <div class="pt-4 border-t border-gray-100 mt-4 space-y-2">
+                    <a href="CMS/Login.html" class="block w-full text-center border-2 border-gray-200 text-heading font-semibold px-4 py-3 rounded-xl hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2"><i class="fas fa-lock text-sm"></i> Dashboard</a>
                     <a href="https://bit.ly/HYOprec" class="block w-full text-center bg-accent text-white px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors shadow-md">Join Us Now!</a>
                 </div>
             </div>
@@ -296,14 +297,14 @@
             </div>
         </section>
 
-        <!-- CTA Section -->
-        <section class="py-20 bg-surface">
-            <div class="max-w-4xl mx-auto text-center px-4">
-                <h2 class="text-3xl lg:text-4xl font-bold text-heading mb-6 font-serif">Siap Bergabung Dengan Kami?</h2>
-                <p class="text-lg text-body mb-8">Jadilah bagian dari perubahan. Mari bersama-sama mencerdaskan kehidupan bangsa.</p>
-                <div class="hidden md:flex items-center gap-3">
-                    <a href="CMS/Login.html" class="text-body hover:text-primary px-3 py-2.5 rounded-lg font-medium transition-colors text-sm flex items-center gap-1.5"><i class="fas fa-lock text-xs"></i> Dashboard</a>
-                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">Join Us!</a>
+        <!-- Secondary CTA Section -->
+        <section class="py-20 bg-bg text-center">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-3xl lg:text-5xl font-bold text-heading mb-6">Ready to be part of the movement?</h2>
+                <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">Together, we can create a brighter future for the next generation.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-8 py-3.5 rounded-full font-bold transition-all shadow-lg hover:-translate-y-1">Join Hey Youth Today!</a>
+                    <a href="index.html#contact" class="bg-white border border-gray-300 text-heading hover:border-primary hover:text-primary px-8 py-3.5 rounded-full font-bold transition-all shadow-sm hover:shadow-md">Contact Us</a>
                 </div>
             </div>
         </section>
