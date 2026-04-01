@@ -108,10 +108,18 @@
             <p class="text-xs text-gray-500 mt-2 ml-1">Admin Panel</p>
         </div>
         <nav class="flex-1 py-4 space-y-1 px-3 overflow-y-auto">
+            <!-- Menu Homepage -->
             <button onclick="switchTab('homepage')" data-tab="homepage" class="sidebar-link active w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-home w-5 text-center text-xs"></i>
                 <span>Homepage</span>
-                <span id="count-total" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
+                <span id="count-homepage" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
+            </button>
+            
+            <!-- Menu About Us -->
+            <button onclick="switchTab('about')" data-tab="about" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
+                <i class="fas fa-users w-5 text-center text-xs"></i>
+                <span>About Us</span>
+                <span id="count-about" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
         </nav>
         <div class="p-4 border-t border-white/10 space-y-2">
@@ -134,94 +142,136 @@
     <main class="lg:ml-64 pt-14 lg:pt-0 min-h-screen">
         <header class="bg-white border-b border-gray-200 px-6 lg:px-8 py-5 flex items-center justify-between sticky top-0 z-30">
             <div>
-                <h1 class="text-xl font-bold text-heading">Homepage</h1>
-                <p class="text-sm text-gray-500 mt-0.5">Kelola seluruh konten yang tampil di beranda</p>
+                <h1 id="page-title" class="text-xl font-bold text-heading">Homepage</h1>
+                <p id="page-desc" class="text-sm text-gray-500 mt-0.5">Kelola seluruh konten yang tampil di beranda</p>
             </div>
         </header>
 
-        <div class="p-6 lg:p-8 space-y-10">
-
-            <!-- External Testimonials -->
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-accent text-sm"><i class="fas fa-user-tie"></i></div>
-                        <h2 class="text-lg font-bold text-heading">Testimoni Eksternal</h2>
-                        <span id="count-external" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+        <div id="content-area" class="p-6 lg:p-8 space-y-10">
+            
+            <!-- VIEW: HOMEPAGE -->
+            <div id="view-homepage" class="space-y-10">
+                <!-- External Testimonials -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center text-accent text-sm"><i class="fas fa-user-tie"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Testimoni Eksternal</h2>
+                            <span id="count-external" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                        </div>
+                        <button onclick="openAddModal('external')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-plus text-[10px]"></i> Tambah
+                        </button>
                     </div>
-                    <button onclick="openAddModal('external')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
-                        <i class="fas fa-plus text-[10px]"></i> Tambah
-                    </button>
+                    <div id="list-external" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
                 </div>
-                <div id="list-external" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+
+                <hr class="border-gray-200">
+
+                <!-- Internal Testimonials -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-primary text-sm"><i class="fas fa-users"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Testimoni Internal</h2>
+                            <span id="count-internal" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                        </div>
+                        <button onclick="openAddModal('internal')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-plus text-[10px]"></i> Tambah
+                        </button>
+                    </div>
+                    <div id="list-internal" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+                </div>
+
+                <hr class="border-gray-200">
+
+                <!-- FAQ -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm"><i class="fas fa-question-circle"></i></div>
+                            <h2 class="text-lg font-bold text-heading">FAQ</h2>
+                            <span id="count-faq" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                        </div>
+                        <button onclick="openAddModal('faq')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-plus text-[10px]"></i> Tambah
+                        </button>
+                    </div>
+                    <div id="list-faq" class="space-y-3 max-w-4xl"></div>
+                </div>
+
+                <hr class="border-gray-200">
+
+                <!-- Locations -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-sm"><i class="fas fa-map-marked-alt"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Lokasi Peta</h2>
+                            <span id="count-locations" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                        </div>
+                        <button onclick="openAddModal('locations')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-plus text-[10px]"></i> Tambah
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th class="text-left px-4 py-3 font-semibold text-heading">#</th>
+                                        <th class="text-left px-4 py-3 font-semibold text-heading">Lokasi</th>
+                                        <th class="text-left px-4 py-3 font-semibold text-heading">Latitude</th>
+                                        <th class="text-left px-4 py-3 font-semibold text-heading">Longitude</th>
+                                        <th class="text-left px-4 py-3 font-semibold text-heading">Relawan</th>
+                                        <th class="text-right px-4 py-3 font-semibold text-heading">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-locations"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- END VIEW: HOMEPAGE -->
 
-            <hr class="border-gray-200">
-
-            <!-- Internal Testimonials -->
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-primary text-sm"><i class="fas fa-users"></i></div>
-                        <h2 class="text-lg font-bold text-heading">Testimoni Internal</h2>
-                        <span id="count-internal" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+            <!-- VIEW: ABOUT US -->
+            <div id="view-about" class="hidden space-y-10">
+                <!-- Hero Section Config -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-primary text-sm"><i class="fas fa-image"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Hero Section</h2>
+                        </div>
+                        <button onclick="openEditModal('about-hero', null)" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-pen text-[10px]"></i> Edit Konten
+                        </button>
                     </div>
-                    <button onclick="openAddModal('internal')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
-                        <i class="fas fa-plus text-[10px]"></i> Tambah
-                    </button>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <p class="text-sm text-gray-500 mb-4">Pratinjau konten Hero Section di halaman About Us:</p>
+                        <div id="preview-about-hero" class="border border-gray-100 rounded-lg p-4 bg-gray-50"></div>
+                    </div>
                 </div>
-                <div id="list-internal" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
-            </div>
 
-            <hr class="border-gray-200">
+                <hr class="border-gray-200">
 
-            <!-- FAQ -->
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm"><i class="fas fa-question-circle"></i></div>
-                        <h2 class="text-lg font-bold text-heading">FAQ</h2>
-                        <span id="count-faq" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                <!-- Leadership Team -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center text-accent text-sm"><i class="fas fa-user-tie"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Leadership Team</h2>
+                            <span id="count-team" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                        </div>
+                        <button onclick="openAddModal('team')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-plus text-[10px]"></i> Tambah Anggota
+                        </button>
                     </div>
-                    <button onclick="openAddModal('faq')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
-                        <i class="fas fa-plus text-[10px]"></i> Tambah
-                    </button>
-                </div>
-                <div id="list-faq" class="space-y-3 max-w-4xl"></div>
-            </div>
-
-            <hr class="border-gray-200">
-
-            <!-- Locations -->
-            <div>
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-sm"><i class="fas fa-map-marked-alt"></i></div>
-                        <h2 class="text-lg font-bold text-heading">Lokasi Peta</h2>
-                        <span id="count-locations" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
-                    </div>
-                    <button onclick="openAddModal('locations')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
-                        <i class="fas fa-plus text-[10px]"></i> Tambah
-                    </button>
-                </div>
-                <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead class="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th class="text-left px-4 py-3 font-semibold text-heading">#</th>
-                                    <th class="text-left px-4 py-3 font-semibold text-heading">Lokasi</th>
-                                    <th class="text-left px-4 py-3 font-semibold text-heading">Latitude</th>
-                                    <th class="text-left px-4 py-3 font-semibold text-heading">Longitude</th>
-                                    <th class="text-left px-4 py-3 font-semibold text-heading">Relawan</th>
-                                    <th class="text-right px-4 py-3 font-semibold text-heading">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="list-locations"></tbody>
-                        </table>
-                    </div>
+                    <div id="list-team" class="grid md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
                 </div>
             </div>
+            <!-- END VIEW: ABOUT US -->
 
         </div>
     </main>
@@ -332,6 +382,17 @@
                 { id: 128, name: 'Pekanbaru', lat: 0.5071, lng: 101.4478, volunteers: 1 },
                 { id: 129, name: 'South Tangerang', lat: -6.2878, lng: 106.7323, volunteers: 1 },
                 { id: 130, name: 'Kendari', lat: -3.9806, lng: 122.5160, volunteers: 1 }
+            ],
+            // DATA BARU: ABOUT US
+            aboutHero: {
+                title: 'Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span>',
+                subtitle: 'Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.',
+                volunteerCount: '1k+'
+            },
+            team: [
+                { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'img/Testi/Yuni.jpg', linkedin: '#', instagram: '#' },
+                { id: 202, name: 'Rama', role: 'Head of Marketing', image: 'img/Testi/Rama.jpg', linkedin: '#', instagram: '#' },
+                { id: 203, name: 'Dzikri', role: 'Head of Graphic Designer', image: 'img/Testi/Dzikri.jpg', linkedin: '#', instagram: '#' }
             ]
         };
 
@@ -363,19 +424,36 @@
         var editingSection = null;
         var deletingId = null;
         var deletingSection = null;
-
-        /* Temp storage for uploaded image base64 */
         var uploadedImage = null;
 
         /* =========================================
-           SIDEBAR & NAVIGATION
+           SIDEBAR & NAVIGATION (UPDATED)
            ========================================= */
         window.switchTab = function (tab) {
             editingItem = null;
             editingSection = null;
+            
+            // Active class sidebar
             document.querySelectorAll('.sidebar-link').forEach(function (el) {
                 el.classList.toggle('active', el.getAttribute('data-tab') === tab);
             });
+
+            // Hide all views
+            document.getElementById('view-homepage').classList.add('hidden');
+            document.getElementById('view-about').classList.add('hidden');
+
+            // Show selected view
+            if (tab === 'homepage') {
+                document.getElementById('view-homepage').classList.remove('hidden');
+                document.getElementById('page-title').textContent = 'Homepage';
+                document.getElementById('page-desc').textContent = 'Kelola seluruh konten yang tampil di beranda';
+            } else if (tab === 'about') {
+                document.getElementById('view-about').classList.remove('hidden');
+                document.getElementById('page-title').textContent = 'About Us';
+                document.getElementById('page-desc').textContent = 'Kelola profil organisasi dan tim inti';
+                renderAboutPreview(); // Render preview hero
+            }
+
             renderAllLists();
             closeSidebar();
         };
@@ -386,6 +464,7 @@
             renderTestimonials('list-internal', data.internalTestimonials, 'internal');
             renderFaqs(data.faqs);
             renderLocations(data.locations);
+            renderTeam(data.team);
             updateCounts(data);
         }
 
@@ -407,11 +486,16 @@
             var int = data.internalTestimonials.length;
             var faq = data.faqs.length;
             var loc = data.locations.length;
+            var team = data.team.length;
+
             document.getElementById('count-external').textContent = ext;
             document.getElementById('count-internal').textContent = int;
             document.getElementById('count-faq').textContent = faq;
             document.getElementById('count-locations').textContent = loc;
-            document.getElementById('count-total').textContent = ext + int + faq + loc;
+            document.getElementById('count-team').textContent = team;
+
+            document.getElementById('count-homepage').textContent = ext + int + faq + loc;
+            document.getElementById('count-about').textContent = team + 1; // Hero + Team count
         }
 
         /* =========================================
@@ -454,7 +538,6 @@
                     showToast('Ukuran file maksimal 10MB.', 'error');
                     return;
                 }
-                /* Show loading state on upload zone */
                 var zone = document.getElementById('upload-zone');
                 if (zone) {
                     zone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses gambar...</p></div>';
@@ -490,7 +573,6 @@
                 '</div>';
         };
 
-        /* Drag & drop on upload zone */
         function initDragDrop() {
             var zone = document.getElementById('upload-zone');
             if (!zone) return;
@@ -608,6 +690,48 @@
         }
 
         /* =========================================
+           RENDER — TEAM
+           ========================================= */
+        function renderTeam(items) {
+            var container = document.getElementById('list-team');
+            if (items.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data tim.</p></div>';
+                return;
+            }
+            container.innerHTML = items.map(function (item) {
+                var imgSrc = item.image || '';
+                var isBase64 = imgSrc && imgSrc.startsWith('data:');
+                var displaySrc = isBase64 ? imgSrc : (imgSrc ? '../' + imgSrc : '');
+                var fallback = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.name) + '&size=100&background=random&color=fff';
+                var badge = isBase64 ? '<span class="text-[9px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-medium">uploaded</span>' : '';
+                
+                return '<div class="cms-card bg-white rounded-xl border border-gray-200 p-5 flex flex-col items-center text-center">' +
+                    '<div class="relative mb-3">' +
+                        '<img src="' + escapeAttr(displaySrc) + '" alt="' + escapeAttr(item.name) + '" class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-md" onerror="this.src=\'' + fallback + '\'">' +
+                        badge +
+                    '</div>' +
+                    '<h4 class="font-bold text-heading text-sm truncate w-full">' + escapeHtml(item.name) + '</h4>' +
+                    '<p class="text-xs text-primary font-semibold mb-3">' + escapeHtml(item.role) + '</p>' +
+                    '<div class="flex gap-2 mt-auto w-full">' +
+                        '<button onclick="openEditModal(\'team\',' + item.id + ')" class="flex-1 text-xs font-semibold text-primary hover:bg-blue-50 py-2 rounded-lg transition-colors"><i class="fas fa-pen mr-1"></i> Edit</button>' +
+                        '<button onclick="confirmDelete(\'team\',' + item.id + ')" class="flex-1 text-xs font-semibold text-red-500 hover:bg-red-50 py-2 rounded-lg transition-colors"><i class="fas fa-trash mr-1"></i> Hapus</button>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderAboutPreview() {
+            var data = getData();
+            var hero = data.aboutHero;
+            var el = document.getElementById('preview-about-hero');
+            if(!el) return;
+            el.innerHTML = 
+                '<h3 class="text-2xl font-bold text-heading mb-2">' + hero.title + '</h3>' +
+                '<p class="text-sm text-gray-600">' + hero.subtitle + '</p>' +
+                '<div class="mt-3 text-xs text-gray-400">Total Relawan: ' + hero.volunteerCount + '</div>';
+        }
+
+        /* =========================================
            MODAL — OPEN ADD
            ========================================= */
         window.openAddModal = function (section) {
@@ -618,23 +742,27 @@
             openModal();
         };
 
-        /* =========================================
-           MODAL — OPEN EDIT
-           ========================================= */
         window.openEditModal = function (section, id) {
             var data = getData();
             var list;
-            switch (section) {
-                case 'external': list = data.externalTestimonials; break;
-                case 'internal': list = data.internalTestimonials; break;
-                case 'faq': list = data.faqs; break;
-                case 'locations': list = data.locations; break;
+            var item = null;
+
+            if (section === 'about-hero') {
+                item = data.aboutHero;
+            } else {
+                switch (section) {
+                    case 'external': list = data.externalTestimonials; break;
+                    case 'internal': list = data.internalTestimonials; break;
+                    case 'faq': list = data.faqs; break;
+                    case 'locations': list = data.locations; break;
+                    case 'team': list = data.team; break;
+                }
+                item = list.find(function (i) { return i.id === id; });
             }
-            var item = list.find(function (i) { return i.id === id; });
+            
             if (!item) return;
             editingItem = item;
             editingSection = section;
-            /* If existing image is base64, put it in uploadedImage */
             uploadedImage = (item.image && item.image.startsWith('data:')) ? item.image : null;
             renderModalForm(section, item);
             openModal();
@@ -648,13 +776,20 @@
             var label;
             if (section === 'external' || section === 'internal') label = 'Testimoni';
             else if (section === 'faq') label = 'FAQ';
-            else label = 'Lokasi';
+            else if (section === 'locations') label = 'Lokasi';
+            else if (section === 'team') label = 'Team Member';
+            else if (section === 'about-hero') label = 'Konten Hero';
 
             document.getElementById('modal-title').textContent = (isEdit ? 'Edit ' : 'Tambah ') + label;
 
             var html = '';
 
-            if (section === 'external' || section === 'internal') {
+            if (section === 'about-hero') {
+                html += formTextarea('Judul (Support HTML)', 'f-title', item ? item.title : '', 'Judul besar...');
+                html += formTextarea('Subtitle', 'f-subtitle', item ? item.subtitle : '', 'Deskripsi singkat...');
+                html += formField('Label Relawan (Contoh: 1k+)', 'f-volunteer', item ? item.volunteerCount : '1k+', 'text', '1k+');
+            }
+            else if (section === 'external' || section === 'internal') {
                 html += formField('Nama', 'f-name', item ? item.name : '', 'text', 'Nama lengkap');
                 if (section === 'external') {
                     html += formField('Jabatan / Title', 'f-title', item ? item.title : '', 'text', 'Co-Founder, Qatar HR Forum');
@@ -703,6 +838,31 @@
                 html += formField('Latitude', 'f-lat', item ? item.lat : '', 'number', '-6.2088', 'step="any"');
                 html += formField('Longitude', 'f-lng', item ? item.lng : '', 'number', '106.8456', 'step="any"');
                 html += formField('Jumlah Relawan', 'f-volunteers', item ? item.volunteers : '', 'number', '1', 'min="1"');
+            } 
+            else if (section === 'team') {
+                html += formField('Nama', 'f-name', item ? item.name : '', 'text', 'Nama Lengkap');
+                html += formField('Role / Jabatan', 'f-role', item ? item.role : '', 'text', 'Founder, Manager, dsb.');
+                html += formField('LinkedIn URL', 'f-linkedin', item ? item.linkedin : '', 'text', 'https://linkedin.com/in/...');
+                html += formField('Instagram URL', 'f-instagram', item ? item.instagram : '', 'text', 'https://instagram.com/...');
+
+                /* Image Upload for Team */
+                var existingSrc = '';
+                if (item && item.image) {
+                    if (item.image.startsWith('data:')) {
+                        existingSrc = item.image;
+                    } else {
+                        existingSrc = '../' + item.image;
+                    }
+                }
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Foto Profil</label>' +
+                    '<div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
+                if (existingSrc) {
+                    html += '<div class="relative"><img src="' + escapeAttr(existingSrc) + '" class="w-full h-40 object-contain rounded-lg bg-gray-50"><button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-md transition-colors"><i class="fas fa-times"></i></button></div><p class="text-xs text-green-600 font-medium mt-2"><i class="fas fa-check-circle mr-1"></i>Foto tersedia</p>';
+                } else {
+                    html += '<div class="py-6 text-center"><i class="fas fa-cloud-upload-alt text-3xl text-gray-300 mb-2 block"></i><p class="text-sm text-gray-500 font-medium">Klik atau seret gambar ke sini</p><p class="text-xs text-gray-400 mt-1">JPEG, PNG, WebP</p></div>';
+                }
+                html += '</div></div>';
             }
 
             html += '<div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">' +
@@ -713,14 +873,11 @@
             document.getElementById('modal-body').innerHTML = html;
 
             /* Init drag & drop after DOM update */
-            if (section === 'external' || section === 'internal') {
+            if (section === 'external' || section === 'internal' || section === 'team') {
                 initDragDrop();
             }
         }
 
-        /* =========================================
-           FORM HELPERS
-           ========================================= */
         function formField(label, id, value, type, placeholder, extra) {
             return '<div class="mb-4">' +
                 '<label class="block text-sm font-semibold text-heading mb-1.5">' + label + '</label>' +
@@ -735,9 +892,6 @@
             '</div>';
         }
 
-        /* =========================================
-           MODAL OPEN / CLOSE
-           ========================================= */
         function openModal() {
             document.getElementById('modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -763,17 +917,21 @@
             var data = getData();
             var isEdit = !!editingItem;
 
-            if (section === 'external' || section === 'internal') {
+            if (section === 'about-hero') {
+                data.aboutHero.title = document.getElementById('f-title').value.trim();
+                data.aboutHero.subtitle = document.getElementById('f-subtitle').value.trim();
+                data.aboutHero.volunteerCount = document.getElementById('f-volunteer').value.trim();
+                if (!data.aboutHero.title) { showToast('Judul wajib diisi.', 'error'); return; }
+            }
+            else if (section === 'external' || section === 'internal') {
                 var name = document.getElementById('f-name').value.trim();
                 var quote = document.getElementById('f-quote').value.trim();
                 if (!name || !quote) { showToast('Nama dan quote wajib diisi.', 'error'); return; }
 
-                /* Determine image: uploaded base64 > existing path > empty */
                 var image = '';
                 if (uploadedImage) {
                     image = uploadedImage;
                 } else if (isEdit && editingItem.image && !editingItem.image.startsWith('data:')) {
-                    /* Keep old path if no new upload */
                     image = editingItem.image;
                 }
 
@@ -824,11 +982,40 @@
                 } else {
                     list.push(obj);
                 }
+            } 
+            else if (section === 'team') {
+                var name = document.getElementById('f-name').value.trim();
+                var role = document.getElementById('f-role').value.trim();
+                if (!name || !role) { showToast('Nama dan role wajib diisi.', 'error'); return; }
+
+                var image = '';
+                if (uploadedImage) {
+                    image = uploadedImage;
+                } else if (isEdit && editingItem.image && !editingItem.image.startsWith('data:')) {
+                    image = editingItem.image;
+                }
+
+                var obj = { 
+                    id: isEdit ? editingItem.id : Date.now(), 
+                    name: name, 
+                    role: role, 
+                    linkedin: document.getElementById('f-linkedin').value.trim() || '#',
+                    instagram: document.getElementById('f-instagram').value.trim() || '#',
+                    image: image 
+                };
+                var list = data.team;
+                if (isEdit) {
+                    var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
+                    if (idx !== -1) list[idx] = obj;
+                } else {
+                    list.push(obj);
+                }
             }
 
             if (!saveData(data)) return;
             closeModal();
             renderAllLists();
+            if(section === 'about-hero') renderAboutPreview();
             showToast(isEdit ? 'Data berhasil diperbarui.' : 'Data berhasil ditambahkan.', 'success');
         };
 
@@ -859,6 +1046,7 @@
                 case 'internal': data.internalTestimonials = data.internalTestimonials.filter(function (i) { return i.id !== id; }); break;
                 case 'faq': data.faqs = data.faqs.filter(function (i) { return i.id !== id; }); break;
                 case 'locations': data.locations = data.locations.filter(function (i) { return i.id !== id; }); break;
+                case 'team': data.team = data.team.filter(function (i) { return i.id !== id; }); break;
             }
             if (!saveData(data)) return;
             closeConfirm();
@@ -866,19 +1054,14 @@
             showToast('Data berhasil dihapus.', 'success');
         }
 
-        /* =========================================
-           RESET DATA
-           ========================================= */
         window.resetData = function () {
             if (!confirm('Reset semua data ke default? Semua gambar yang diupload akan hilang.')) return;
             localStorage.removeItem(CMS_KEY);
             renderAllLists();
+            renderAboutPreview();
             showToast('Data berhasil direset ke default.', 'success');
         };
 
-        /* =========================================
-           LOGOUT
-           ========================================= */
         window.logout = function () {
             localStorage.removeItem('hey_youth_auth');
             window.location.href = 'login.html';
@@ -913,9 +1096,6 @@
             }, 3000);
         }
 
-        /* =========================================
-           UTILITIES
-           ========================================= */
         function escapeHtml(str) {
             if (!str) return '';
             var div = document.createElement('div');
@@ -928,9 +1108,6 @@
             return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
-        /* =========================================
-           KEYBOARD
-           ========================================= */
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 if (!document.getElementById('confirm-dialog').classList.contains('hidden')) { closeConfirm(); }
@@ -938,9 +1115,6 @@
             }
         });
 
-        /* =========================================
-           INIT
-           ========================================= */
         renderAllLists();
 
     })();

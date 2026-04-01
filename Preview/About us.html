@@ -77,8 +77,8 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl transform transition-all duration-300 origin-top">
             <div class="px-4 pt-4 pb-6 space-y-2">
                 <a href="index.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Home</a>
-                <a href="About us.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">About us</a>
-                <a href="Activities.html" class="block px-4 py-3 rounded-xl text-base font-medium text-primary font-bold bg-blue-50">Activities</a>
+                <a href="About us.html" class="block px-4 py-3 rounded-xl text-base font-medium text-primary font-bold bg-blue-50">About us</a>
+                <a href="Activities.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Activities</a>
                 <a href="Partner.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Partners</a>
                 <a href="Donation.html" class="block px-4 py-3 rounded-xl text-base font-medium text-body hover:text-primary hover:bg-gray-50">Donation</a>
                 <div class="pt-4 border-t border-gray-100 mt-4 space-y-2">
@@ -91,20 +91,26 @@
 
     <main class="pt-20">
 
-        <!-- Hero Section -->
-        <section class="relative overflow-hidden py-20 lg:py-28 bg-white">
+        <!-- Hero Section (DINAMIS) -->
+        <section id="about-hero" class="relative overflow-hidden py-20 lg:py-28 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
                     <div class="order-2 lg:order-1 animate-fade-in-up">
                         <span class="text-accent font-bold tracking-wider uppercase text-sm mb-4 block">About Hey Youth</span>
-                        <h1 class="text-4xl lg:text-6xl font-bold text-heading leading-tight mb-6 font-serif">Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span></h1>
-                        <p class="text-lg text-body mb-8 leading-relaxed">Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.</p>
+                        <h1 id="hero-title" class="text-4xl lg:text-6xl font-bold text-heading leading-tight mb-6 font-serif">
+                            <!-- Konten akan diisi oleh JS -->
+                        </h1>
+                        <p id="hero-subtitle" class="text-lg text-body mb-8 leading-relaxed">
+                            <!-- Konten akan diisi oleh JS -->
+                        </p>
                         <div class="flex items-center gap-4">
                             <div class="flex -space-x-3">
                                 <img class="w-10 h-10 rounded-full border-2 border-white" src="https://picsum.photos/seed/p1/100/100" alt="Member">
                                 <img class="w-10 h-10 rounded-full border-2 border-white" src="https://picsum.photos/seed/p2/100/100" alt="Member">
                                 <img class="w-10 h-10 rounded-full border-2 border-white" src="https://picsum.photos/seed/p3/100/100" alt="Member">
-                                <div class="w-10 h-10 rounded-full border-2 border-white bg-surface flex items-center justify-center text-xs font-bold text-primary">1k+</div>
+                                <div id="hero-volunteer-badge" class="w-10 h-10 rounded-full border-2 border-white bg-surface flex items-center justify-center text-xs font-bold text-primary">
+                                    <!-- Konten akan diisi oleh JS -->
+                                </div>
                             </div>
                             <span class="text-sm font-semibold text-body">Relawan muda telah bergabung</span>
                         </div>
@@ -251,7 +257,7 @@
             </div>
         </section>
 
-        <!-- Leadership Team Section -->
+        <!-- Leadership Team Section (DINAMIS) -->
         <section class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
@@ -259,40 +265,11 @@
                     <h3 class="text-3xl lg:text-4xl font-extrabold text-heading">Our Leadership Team</h3>
                     <p class="mt-4 text-body">Meet the passionate individuals driving our mission to transform education across Indonesia.</p>
                 </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-bg rounded-3xl p-6 text-center hover:shadow-xl transition-all duration-300 border border-gray-100">
-                        <div class="w-32 h-32 mx-auto rounded-full p-1 bg-gradient-to-tr from-primary to-accent mb-4">
-                            <img src="img/Testi/Yuni.jpg" alt="Yuni Triandini" class="w-full h-full rounded-full object-cover border-4 border-white" onerror="this.src='https://picsum.photos/seed/yuni/200/200'">
-                        </div>
-                        <h4 class="text-xl font-bold text-heading">Yuni Triandini</h4>
-                        <p class="text-primary font-semibold text-sm mb-4">Founder</p>
-                        <div class="flex justify-center space-x-3">
-                            <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="bg-bg rounded-3xl p-6 text-center hover:shadow-xl transition-all duration-300 border border-gray-100">
-                        <div class="w-32 h-32 mx-auto rounded-full p-1 bg-white mb-4">
-                            <img src="img/Testi/Rama.jpg" alt="Rama" class="w-full h-full rounded-full object-cover border-4 border-white" onerror="this.src='https://picsum.photos/seed/rama/200/200'">
-                        </div>
-                        <h4 class="text-xl font-bold text-heading">Rama</h4>
-                        <p class="text-gray-500 font-semibold text-sm mb-4">Head of Marketing</p>
-                        <div class="flex justify-center space-x-3">
-                            <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                    <div class="bg-bg rounded-3xl p-6 text-center hover:shadow-xl transition-all duration-300 border border-gray-100">
-                        <div class="w-32 h-32 mx-auto rounded-full p-1 bg-white mb-4">
-                            <img src="img/Testi/Dzikri.jpg" alt="Dzikri" class="w-full h-full rounded-full object-cover border-4 border-white" onerror="this.src='https://picsum.photos/seed/dzikri/200/200'">
-                        </div>
-                        <h4 class="text-xl font-bold text-heading">Dzikri</h4>
-                        <p class="text-gray-500 font-semibold text-sm mb-4">Head of Graphic Designer</p>
-                        <div class="flex justify-center space-x-3">
-                            <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-primary"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
+                
+                <!-- Container Tim yang akan dirender JS -->
+                <div id="team-container" class="grid md:grid-cols-3 gap-8">
+                    <!-- Konten tim akan di-generate oleh JavaScript -->
+                    <div class="col-span-full text-center py-10">Loading team data...</div>
                 </div>
             </div>
         </section>
@@ -340,6 +317,99 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="Javascript/Script.js"></script>
+    <!-- Script Khusus About Us untuk mengambil data CMS -->
+    <script>
+        (function() {
+            // Fungsi Helper
+            function _esc(s) {
+                if (!s) return '';
+                var d = document.createElement('div');
+                d.textContent = s;
+                return d.innerHTML;
+            }
+
+            // Data Default untuk About Us
+            var _DEFAULT_ABOUT = {
+                hero: {
+                    title: 'Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span>',
+                    subtitle: 'Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.',
+                    volunteerCount: '1k+'
+                },
+                team: [
+                    { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'img/Testi/Yuni.jpg', linkedin: '#', instagram: '#' },
+                    { id: 202, name: 'Rama', role: 'Head of Marketing', image: 'img/Testi/Rama.jpg', linkedin: '#', instagram: '#' },
+                    { id: 203, name: 'Dzikri', role: 'Head of Graphic Designer', image: 'img/Testi/Dzikri.jpg', linkedin: '#', instagram: '#' }
+                ]
+            };
+
+            function getData() {
+                try {
+                    var raw = localStorage.getItem('hey_youth_cms');
+                    if (raw) {
+                        var parsed = JSON.parse(raw);
+                        // Jika data di localStorage ada tentang 'aboutHero' dan 'team', pakai itu
+                        if (parsed.aboutHero && parsed.team) {
+                            return parsed;
+                        }
+                    }
+                } catch (e) { }
+                // Jika tidak ada atau error, pakai default
+                return { aboutHero: _DEFAULT_ABOUT.hero, team: _DEFAULT_ABOUT.team };
+            }
+
+            // Render Hero Section
+            function renderHero() {
+                var data = getData();
+                var heroData = data.aboutHero || _DEFAULT_ABOUT.hero;
+                
+                var titleEl = document.getElementById('hero-title');
+                var subEl = document.getElementById('hero-subtitle');
+                var badgeEl = document.getElementById('hero-volunteer-badge');
+
+                if(titleEl) titleEl.innerHTML = heroData.title;
+                if(subEl) subEl.textContent = heroData.subtitle;
+                if(badgeEl) badgeEl.textContent = heroData.volunteerCount;
+            }
+
+            // Render Team Section
+            function renderTeam() {
+                var data = getData();
+                var teamData = data.team || _DEFAULT_ABOUT.team;
+                var container = document.getElementById('team-container');
+
+                if (!container) return;
+
+                var html = '';
+                for (var i = 0; i < teamData.length; i++) {
+                    var member = teamData[i];
+                    var imgSrc = member.image;
+                    var isBase64 = imgSrc && imgSrc.startsWith('data:');
+                    var displaySrc = isBase64 ? imgSrc : (imgSrc ? imgSrc : 'https://picsum.photos/seed/'+member.id+'/200/200');
+                    var fallback = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(member.name) + '&size=100&background=random&color=fff';
+
+                    html += '<div class="bg-bg rounded-3xl p-6 text-center hover:shadow-xl transition-all duration-300 border border-gray-100">' +
+                        '<div class="w-32 h-32 mx-auto rounded-full p-1 bg-gradient-to-tr from-primary to-accent mb-4">' +
+                            '<img src="' + _esc(displaySrc) + '" alt="' + _esc(member.name) + '" class="w-full h-full rounded-full object-cover border-4 border-white" onerror="this.src=\'' + fallback + '\'">' +
+                        '</div>' +
+                        '<h4 class="text-xl font-bold text-heading">' + _esc(member.name) + '</h4>' +
+                        '<p class="text-primary font-semibold text-sm mb-4">' + _esc(member.role) + '</p>' +
+                        '<div class="flex justify-center space-x-3">' +
+                            '<a href="' + _esc(member.linkedin) + '" class="text-gray-400 hover:text-primary"><i class="fab fa-linkedin-in"></i></a>' +
+                            '<a href="' + _esc(member.instagram) + '" class="text-gray-400 hover:text-primary"><i class="fab fa-instagram"></i></a>' +
+                        '</div>' +
+                    '</div>';
+                }
+                container.innerHTML = html;
+            }
+
+            // Jalankan saat DOM siap
+            document.addEventListener('DOMContentLoaded', function() {
+                renderHero();
+                renderTeam();
+            });
+
+        })();
+    </script>
 </body>
 </html>
