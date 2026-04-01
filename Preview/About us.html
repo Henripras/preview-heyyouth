@@ -91,17 +91,17 @@
 
     <main class="pt-20">
 
-        <!-- Hero Section (DINAMIS) -->
+                <!-- Hero Section (DINAMIS) -->
         <section id="about-hero" class="relative overflow-hidden py-20 lg:py-28 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
                     <div class="order-2 lg:order-1 animate-fade-in-up">
                         <span class="text-accent font-bold tracking-wider uppercase text-sm mb-4 block">About Hey Youth</span>
                         <h1 id="hero-title" class="text-4xl lg:text-6xl font-bold text-heading leading-tight mb-6 font-serif">
-                            <!-- Konten akan diisi oleh JS -->
+                            <!-- JS akan isi ini -->
                         </h1>
                         <p id="hero-subtitle" class="text-lg text-body mb-8 leading-relaxed">
-                            <!-- Konten akan diisi oleh JS -->
+                            <!-- JS akan isi ini -->
                         </p>
                         <div class="flex items-center gap-4">
                             <div class="flex -space-x-3">
@@ -109,17 +109,20 @@
                                 <img class="w-10 h-10 rounded-full border-2 border-white" src="https://picsum.photos/seed/p2/100/100" alt="Member">
                                 <img class="w-10 h-10 rounded-full border-2 border-white" src="https://picsum.photos/seed/p3/100/100" alt="Member">
                                 <div id="hero-volunteer-badge" class="w-10 h-10 rounded-full border-2 border-white bg-surface flex items-center justify-center text-xs font-bold text-primary">
-                                    <!-- Konten akan diisi oleh JS -->
+                                    <!-- JS akan isi ini -->
                                 </div>
                             </div>
                             <span class="text-sm font-semibold text-body">Relawan muda telah bergabung</span>
                         </div>
                     </div>
+                    
+                    <!-- GAMBAR HERO DENGAN ID -->
                     <div class="order-1 lg:order-2 relative">
                         <div class="absolute top-0 right-0 -mr-10 -mt-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl z-0"></div>
                         <div class="absolute bottom-0 left-0 -ml-10 -mb-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl z-0"></div>
                         <div class="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                            <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop" alt="About Hey Youth Education" class="w-full h-auto object-cover">
+                            <!-- Tambahkan ID di sini agar bisa diubah lewat JS -->
+                            <img id="hero-image-display" src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop" alt="About Hey Youth Education" class="w-full h-auto object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                         </div>
                     </div>
@@ -359,6 +362,7 @@
             }
 
             // Render Hero Section
+                        // Render Hero Section
             function renderHero() {
                 var data = getData();
                 var heroData = data.aboutHero || _DEFAULT_ABOUT.hero;
@@ -366,10 +370,20 @@
                 var titleEl = document.getElementById('hero-title');
                 var subEl = document.getElementById('hero-subtitle');
                 var badgeEl = document.getElementById('hero-volunteer-badge');
+                var imgEl = document.getElementById('hero-image-display');
 
                 if(titleEl) titleEl.innerHTML = heroData.title;
                 if(subEl) subEl.textContent = heroData.subtitle;
                 if(badgeEl) badgeEl.textContent = heroData.volunteerCount;
+
+                // Update Image Hero
+                if(imgEl && heroData.image) {
+                    var isBase64 = heroData.image.startsWith('data:');
+                    imgEl.src = isBase64 ? heroData.image : heroData.image;
+                    imgEl.onerror = function() {
+                        this.src = 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop';
+                    };
+                }
             }
 
             // Render Team Section

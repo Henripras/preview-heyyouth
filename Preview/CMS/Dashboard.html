@@ -387,7 +387,8 @@
             aboutHero: {
                 title: 'Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span>',
                 subtitle: 'Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.',
-                volunteerCount: '1k+'
+                volunteerCount: '1k+',
+                image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop' // Default Image
             },
             team: [
                 { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'img/Testi/Yuni.jpg', linkedin: '#', instagram: '#' },
@@ -726,9 +727,14 @@
             var el = document.getElementById('preview-about-hero');
             if(!el) return;
             el.innerHTML = 
-                '<h3 class="text-2xl font-bold text-heading mb-2">' + hero.title + '</h3>' +
-                '<p class="text-sm text-gray-600">' + hero.subtitle + '</p>' +
-                '<div class="mt-3 text-xs text-gray-400">Total Relawan: ' + hero.volunteerCount + '</div>';
+                '<div class="flex gap-4 mb-4">' +
+                    '<img src="' + (hero.image ? (hero.image.startsWith('data:') ? hero.image : '../'+hero.image) : 'https://via.placeholder.com/150') + '" class="w-24 h-24 object-cover rounded-lg shadow-sm">' +
+                    '<div class="flex-1">' +
+                        '<h3 class="text-xl font-bold text-heading mb-1 leading-tight">' + hero.title + '</h3>' +
+                        '<p class="text-xs text-gray-500 line-clamp-2">' + hero.subtitle + '</p>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="text-xs text-gray-400">Badge Relawan: ' + hero.volunteerCount + '</div>';
         }
 
         /* =========================================
@@ -785,9 +791,36 @@
             var html = '';
 
             if (section === 'about-hero') {
-                html += formTextarea('Judul (Support HTML)', 'f-title', item ? item.title : '', 'Judul besar...');
+                html += formField('Judul (Support HTML)', 'f-title', item ? item.title : '', 'text', 'Judul besar...');
                 html += formTextarea('Subtitle', 'f-subtitle', item ? item.subtitle : '', 'Deskripsi singkat...');
                 html += formField('Label Relawan (Contoh: 1k+)', 'f-volunteer', item ? item.volunteerCount : '1k+', 'text', '1k+');
+
+                // --- UPLOAD GAMBAR HERO ---
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Gambar Background Hero</label>' +
+                    '<div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
+                
+                var existingHeroSrc = '';
+                if (item && item.image) {
+                    existingHeroSrc = item.image.startsWith('data:') ? item.image : '../' + item.image;
+                }
+
+                if (existingHeroSrc) {
+                    html += '<div class="relative">' +
+                        '<img src="' + escapeAttr(existingHeroSrc) + '" alt="Hero Preview" class="w-full h-40 object-cover rounded-lg bg-gray-50">' +
+                        '<button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs shadow-md transition-colors"><i class="fas fa-times"></i></button>' +
+                        '</div>' +
+                        '<p class="text-xs text-green-600 font-medium mt-2"><i class="fas fa-check-circle mr-1"></i>Gambar Hero tersedia</p>';
+                } else {
+                    html += '<div class="py-6 text-center">' +
+                        '<i class="fas fa-image text-3xl text-gray-300 mb-2 block"></i>' +
+                        '<p class="text-sm text-gray-500 font-medium">Klik untuk ganti gambar background</p>' +
+                        '<p class="text-xs text-gray-400 mt-1">Disarankan rasio landscape (16:9)</p>' +
+                        '</div>';
+                }
+
+                html += '</div></div>';
+                // ---------------------------
             }
             else if (section === 'external' || section === 'internal') {
                 html += formField('Nama', 'f-name', item ? item.name : '', 'text', 'Nama lengkap');
@@ -873,7 +906,7 @@
             document.getElementById('modal-body').innerHTML = html;
 
             /* Init drag & drop after DOM update */
-            if (section === 'external' || section === 'internal' || section === 'team') {
+            if (section === 'external' || section === 'internal' || section === 'team' || section === 'about-hero') {
                 initDragDrop();
             }
         }
@@ -921,6 +954,20 @@
                 data.aboutHero.title = document.getElementById('f-title').value.trim();
                 data.aboutHero.subtitle = document.getElementById('f-subtitle').value.trim();
                 data.aboutHero.volunteerCount = document.getElementById('f-volunteer').value.trim();
+                
+                // --- LOGIKA GAMBAR HERO ---
+                if (uploadedImage) {
+                    data.aboutHero.image = uploadedImage;
+                } else if (isEdit) {
+                    if (item && item.image) {
+                        data.aboutHero.image = item.image;
+                    }
+                } else {
+                    if (DEFAULT_DATA.aboutHero && DEFAULT_DATA.aboutHero.image) {
+                        data.aboutHero.image = DEFAULT_DATA.aboutHero.image;
+                    }
+                }
+                
                 if (!data.aboutHero.title) { showToast('Judul wajib diisi.', 'error'); return; }
             }
             else if (section === 'external' || section === 'internal') {
