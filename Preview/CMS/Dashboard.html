@@ -128,6 +128,13 @@
                 <span>Activities</span>
                 <span id="count-activities" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
+
+            <!-- Menu Partners (NEW) -->
+            <button onclick="switchTab('partners')" data-tab="partners" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
+                <i class="fas fa-handshake w-5 text-center text-xs"></i>
+                <span>Partners</span>
+                <span id="count-partners" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
+            </button>
         </nav>
         <div class="p-4 border-t border-white/10 space-y-2">
             <a href="../Index.html" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
@@ -317,6 +324,24 @@
             </div>
             <!-- END VIEW: ACTIVITIES -->
 
+            <!-- VIEW: PARTNERS (NEW) -->
+            <div id="view-partners" class="hidden space-y-10">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center text-teal-600 text-sm"><i class="fas fa-handshake"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Daftar Partner</h2>
+                            <span id="count-partners-list" class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">0</span>
+                        </div>
+                        <button onclick="openAddModal('partner')" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-plus text-[10px]"></i> Tambah Partner
+                        </button>
+                    </div>
+                    <div id="list-partners" class="grid md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+                </div>
+            </div>
+            <!-- END VIEW: PARTNERS -->
+
         </div>
     </main>
 
@@ -473,6 +498,12 @@
                     thumbnail: 'https://picsum.photos/seed/pod2/300/300',
                     spotifyLink: 'https://open.spotify.com/episode/1a0xUotfQZAdD6jtHT4l5g?si=l3nk1yvSSzK7XPMMFLMvHA&nd=1&dlsi=746e34d28eaa4e68'
                 }
+            ],
+            partners: [
+                { id: 1, name: 'Qatar HR Forum', description: 'Membangun jaringan profesional HR global.', icon: 'fa-users-cog', color: 'blue', link: '#' },
+                { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', color: 'pink', link: '#' },
+                { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', color: 'purple', link: '#' },
+                { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', color: 'green', link: '#' }
             ]
         };
 
@@ -520,6 +551,7 @@
             document.getElementById('view-homepage').classList.add('hidden');
             document.getElementById('view-about').classList.add('hidden');
             document.getElementById('view-activities').classList.add('hidden');
+            document.getElementById('view-partners').classList.add('hidden'); // NEW
 
             if (tab === 'homepage') {
                 document.getElementById('view-homepage').classList.remove('hidden');
@@ -534,6 +566,10 @@
                 document.getElementById('view-activities').classList.remove('hidden');
                 document.getElementById('page-title').textContent = 'Activities';
                 document.getElementById('page-desc').textContent = 'Kelola berita kegiatan dan episode podcast terbaru';
+            } else if (tab === 'partners') { // NEW
+                document.getElementById('view-partners').classList.remove('hidden');
+                document.getElementById('page-title').textContent = 'Partners';
+                document.getElementById('page-desc').textContent = 'Kelola daftar mitra dan kolaborator organisasi';
             }
 
             renderAllLists();
@@ -549,6 +585,7 @@
             renderTeam(data.team);
             renderActivityCards(data.activityCards);
             renderPodcasts(data.podcasts);
+            renderPartners(data.partners); // NEW
             updateCounts(data);
         }
 
@@ -573,6 +610,7 @@
             var team = data.team.length;
             var actCards = data.activityCards.length;
             var pods = data.podcasts.length;
+            var partners = data.partners.length; // NEW
 
             document.getElementById('count-external').textContent = ext;
             document.getElementById('count-internal').textContent = int;
@@ -582,6 +620,8 @@
             
             document.getElementById('count-activity-cards').textContent = actCards;
             document.getElementById('count-podcasts').textContent = pods;
+            document.getElementById('count-partners').textContent = partners; // NEW
+            document.getElementById('count-partners-list').textContent = partners; // NEW
 
             document.getElementById('count-homepage').textContent = ext + int + faq + loc;
             document.getElementById('count-about').textContent = team + 1; 
@@ -838,7 +878,7 @@
         }
 
         /* =========================================
-           RENDER — PODCASTS (UPDATED)
+           RENDER — PODCASTS
            ========================================= */
         function renderPodcasts(items) {
             var container = document.getElementById('list-podcasts');
@@ -862,6 +902,43 @@
                     '<div class="flex gap-2 flex-shrink-0">' +
                         '<button onclick="openEditModal(\'podcast\',' + item.id + ')" class="p-1.5 text-primary hover:bg-blue-50 rounded-lg transition-colors"><i class="fas fa-pen text-xs"></i></button>' +
                         '<button onclick="confirmDelete(\'podcast\',' + item.id + ')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"><i class="fas fa-trash text-xs"></i></button>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        /* =========================================
+           RENDER — PARTNERS (NEW)
+           ========================================= */
+        function renderPartners(items) {
+            var container = document.getElementById('list-partners');
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400"><p>Belum ada data partner.</p></div>';
+                return;
+            }
+            
+            // Mapping warna icon ke class Tailwind
+            var colorMap = {
+                'blue': 'bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white',
+                'pink': 'bg-pink-50 text-pink-500 hover:bg-pink-500 hover:text-white',
+                'purple': 'bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white',
+                'green': 'bg-green-50 text-green-600 hover:bg-green-600 hover:text-white',
+                'yellow': 'bg-yellow-50 text-yellow-600 hover:bg-yellow-600 hover:text-white',
+                'gray': 'bg-gray-100 text-gray-500 hover:bg-gray-500 hover:text-white',
+            };
+
+            container.innerHTML = items.map(function (item) {
+                var colorClass = colorMap[item.color] || colorMap['blue'];
+                
+                return '<div class="cms-card bg-white rounded-xl border border-gray-200 p-6 flex flex-col items-center text-center group h-full">' +
+                    '<div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl mb-4 transition-all duration-300 ' + colorClass + '">' +
+                        '<i class="fas ' + (item.icon || 'fa-building') + '"></i>' +
+                    '</div>' +
+                    '<h4 class="font-bold text-heading text-lg mb-2">' + escapeHtml(item.name) + '</h4>' +
+                    '<p class="text-sm text-gray-500 mb-6 flex-grow line-clamp-2">' + escapeHtml(item.description) + '</p>' +
+                    '<div class="flex gap-2 w-full mt-auto">' +
+                        '<button onclick="openEditModal(\'partner\',' + item.id + ')" class="flex-1 text-xs font-semibold text-primary hover:bg-blue-50 py-2 rounded-lg transition-colors"><i class="fas fa-pen mr-1"></i> Edit</button>' +
+                        '<button onclick="confirmDelete(\'partner\',' + item.id + ')" class="flex-1 text-xs font-semibold text-red-500 hover:bg-red-50 py-2 rounded-lg transition-colors"><i class="fas fa-trash mr-1"></i> Hapus</button>' +
                     '</div>' +
                 '</div>';
             }).join('');
@@ -910,6 +987,7 @@
                     case 'team': list = data.team; break;
                     case 'activity-card': list = data.activityCards; break;
                     case 'podcast': list = data.podcasts; break;
+                    case 'partner': list = data.partners; break; // NEW
                 }
                 item = list.find(function (i) { return i.id === id; });
             }
@@ -939,6 +1017,7 @@
             else if (section === 'about-hero') label = 'Konten Hero';
             else if (section === 'activity-card') label = 'Activity Card';
             else if (section === 'podcast') label = 'Podcast Episode';
+            else if (section === 'partner') label = 'Partner'; // NEW
 
             document.getElementById('modal-title').textContent = (isEdit ? 'Edit ' : 'Tambah ') + label;
 
@@ -1028,6 +1107,49 @@
                     html += '<div class="py-6 text-center"><i class="fas fa-image text-3xl text-gray-300 mb-2"></i><p class="text-sm text-gray-500">Upload Thumbnail</p></div>';
                 }
                 html += '</div></div>';
+            }
+                        else if (section === 'partner') { 
+                html += formField('Nama Partner', 'f-name', item ? item.name : '', 'text', 'Contoh: Qatar HR Forum');
+                html += formTextarea('Deskripsi Singkat', 'f-desc', item ? item.description : '', 'Deskripsi singkat...');
+                
+                // Input Link Partner (BARU)
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Link Partner (URL)</label>' +
+                    '<div class="relative">' +
+                        '<span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-link text-xs"></i></span>' +
+                        '<input type="url" id="f-link" value="' + (item ? (item.link || '#') : 'https://') + '" placeholder="https://website-partner.com" class="w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary">' +
+                    '</div>' +
+                    '<p class="text-[10px] text-gray-400 mt-1">Masukkan URL lengkap (dengan https://)</p>' +
+                '</div>';
+
+                // Dropdown Pilihan Icon
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Pilih Icon</label>' +
+                    '<select id="f-icon" class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary">' +
+                        '<option value="fa-handshake" ' + (item && item.icon === 'fa-handshake' ? 'selected' : '') + '>Handshake (Kerjasama)</option>' +
+                        '<option value="fa-users-cog" ' + (item && item.icon === 'fa-users-cog' ? 'selected' : '') + '>Users Cog (Komunitas)</option>' +
+                        '<option value="fa-spa" ' + (item && item.icon === 'fa-spa' ? 'selected' : '') + '>Spa (Kesehatan/Kecantikan)</option>' +
+                        '<option value="fa-flask" ' + (item && item.icon === 'fa-flask' ? 'selected' : '') + '>Flask (Sains/Lab)</option>' +
+                        '<option value="fa-school" ' + (item && item.icon === 'fa-school' ? 'selected' : '') + '>School (Pendidikan)</option>' +
+                        '<option value="fa-building" ' + (item && item.icon === 'fa-building' ? 'selected' : '') + '>Building (Korporat)</option>' +
+                        '<option value="fa-heart" ' + (item && item.icon === 'fa-heart' ? 'selected' : '') + '>Heart (Sosial)</option>' +
+                        '<option value="fa-globe" ' + (item && item.icon === 'fa-globe' ? 'selected' : '') + '>Globe (Global)</option>' +
+                        '<option value="fa-spotify" ' + (item && item.icon === 'fa-spotify' ? 'selected' : '') + '>Spotify (Musik/Podcast)</option>' + // Contoh icon Spotify
+                    '</select>' +
+                '</div>';
+
+                // Dropdown Pilihan Warna
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Warna Latar</label>' +
+                    '<select id="f-color" class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary">' +
+                        '<option value="blue" ' + (item && item.color === 'blue' ? 'selected' : '') + '>Biru</option>' +
+                        '<option value="pink" ' + (item && item.color === 'pink' ? 'selected' : '') + '>Pink</option>' +
+                        '<option value="purple" ' + (item && item.color === 'purple' ? 'selected' : '') + '>Ungu</option>' +
+                        '<option value="green" ' + (item && item.color === 'green' ? 'selected' : '') + '>Hijau</option>' +
+                        '<option value="yellow" ' + (item && item.color === 'yellow' ? 'selected' : '') + '>Kuning</option>' +
+                        '<option value="gray" ' + (item && item.color === 'gray' ? 'selected' : '') + '>Abu-abu</option>' +
+                    '</select>' +
+                '</div>';
             }
 
             html += '<div class="flex gap-3 mt-6 pt-4 border-t border-gray-100">' +
@@ -1228,6 +1350,28 @@
                     list.push(obj);
                 }
             }
+            else if (section === 'partner') { // NEW
+                var name = document.getElementById('f-name').value.trim();
+                var description = document.getElementById('f-desc').value.trim();
+                if (!name) { showToast('Nama partner wajib diisi.', 'error'); return; }
+
+                var obj = {
+                    id: isEdit ? editingItem.id : Date.now(),
+                    name: name,
+                    description: description,
+                    icon: document.getElementById('f-icon').value,
+                    color: document.getElementById('f-color').value,
+                    link: document.getElementById('f-link').value.trim() || '#'
+                };
+                
+                var list = data.partners;
+                if (isEdit) {
+                    var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
+                    if (idx !== -1) list[idx] = obj;
+                } else {
+                    list.push(obj);
+                }
+            }
 
             if (!saveData(data)) return;
             closeModal();
@@ -1266,6 +1410,7 @@
                 case 'team': data.team = data.team.filter(function (i) { return i.id !== id; }); break;
                 case 'activity-card': data.activityCards = data.activityCards.filter(function (i) { return i.id !== id; }); break;
                 case 'podcast': data.podcasts = data.podcasts.filter(function (i) { return i.id !== id; }); break;
+                case 'partner': data.partners = data.partners.filter(function (i) { return i.id !== id; }); break; // NEW
             }
             if (!saveData(data)) return;
             closeConfirm();

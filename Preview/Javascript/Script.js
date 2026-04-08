@@ -69,6 +69,13 @@ var _CMS_DEFAULT = {
         { id: 128, name: 'Pekanbaru', lat: 0.5071, lng: 101.4478, volunteers: 1 },
         { id: 129, name: 'South Tangerang', lat: -6.2878, lng: 106.7323, volunteers: 1 },
         { id: 130, name: 'Kendari', lat: -3.9806, lng: 122.5160, volunteers: 1 }
+    ],
+
+    partners: [
+        { id: 1, name: 'Qatar HR Forum', description: 'Membangun jaringan profesional HR global.', icon: 'fa-users-cog', color: 'blue', link: 'https://qatarhrforum.com' },
+        { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', color: 'pink', link: 'https://instagram.com' },
+        { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', color: 'purple', link: '#' },
+        { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', color: 'green', link: '#' }
     ]
 };
 
@@ -136,6 +143,49 @@ function _renderFAQ(data) {
             + '</button>'
             + '<div class="faq-content"><div class="faq-inner overflow-hidden"><div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">' + _esc(f.answer) + '</div></div></div>'
             + '</div>';
+    }
+    el.innerHTML = html;
+}
+
+/* ------ CMS: RENDER PARTNERS (PUBLIC VIEW) ------ */
+function _renderPartners(data) {
+    var el = document.getElementById('partners-grid-container');
+    if (!el || !data || !data.length) {
+        if(el) el.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400">Belum ada data partner.</div>';
+        return;
+    }
+
+    var colorMap = {
+        'blue': 'bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white',
+        'pink': 'bg-pink-50 text-pink-500 hover:bg-pink-500 hover:text-white',
+        'purple': 'bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white',
+        'green': 'bg-green-50 text-green-600 hover:bg-green-600 hover:text-white',
+        'yellow': 'bg-yellow-50 text-yellow-600 hover:bg-yellow-600 hover:text-white',
+        'gray': 'bg-gray-100 text-gray-500 hover:bg-gray-500 hover:text-white',
+    };
+
+    var html = '';
+    for (var i = 0; i < data.length; i++) {
+        var p = data[i];
+        var colorClass = colorMap[p.color] || colorMap['blue'];
+        
+        var targetLink = p.link && p.link !== '#' ? p.link : '#';
+        var targetAttr = (targetLink !== '#') ? 'target="_blank" rel="noopener noreferrer"' : '';
+        var btnText = (targetLink !== '#') ? 'Visit Website <i class="fas fa-external-link-alt ml-1 text-xs"></i>' : 'Learn More';
+
+        html += '<div class="bg-white rounded-2xl p-8 shadow-md border border-gray-100 hover:shadow-xl transition-all duration-300 group flex flex-col items-center text-center h-full">' +
+            '<div class="w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-6 transition-all duration-300 ' + colorClass + '">' +
+                '<i class="fas ' + (p.icon || 'fa-building') + '"></i>' +
+            '</div>' +
+            '<h3 class="text-xl font-bold text-heading mb-6 leading-tight">' + _esc(p.name) + '</h3>' +
+            '<p class="text-sm text-gray-500 mb-6 flex-grow line-clamp-3">' + _esc(p.description) + '</p>' + 
+            
+            '<div class="mt-auto w-full">' +
+                '<a href="' + _escA(targetLink) + '" ' + targetAttr + ' class="block w-full py-2.5 px-4 rounded-lg bg-accent/10 text-accent font-bold text-sm hover:bg-accent hover:text-white transition-colors border border-accent/20 text-center">' +
+                    btnText +
+                '</a>' +
+            '</div>' +
+        '</div>';
     }
     el.innerHTML = html;
 }
@@ -241,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
         _renderExternal(cms.externalTestimonials);
         _renderInternal(cms.internalTestimonials);
         _renderFAQ(cms.faqs);
+        _renderPartners(cms.partners);
 
         if (cms.locations && cms.locations.length) {
             _cmsLocations = cms.locations;
@@ -248,6 +299,8 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (e) {
         console.error('CMS error:', e);
     }
+    
+    
 
     /* --- 2. FAQ accordion --- */
     _initFAQ();
