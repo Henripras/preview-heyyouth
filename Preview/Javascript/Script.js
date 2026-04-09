@@ -76,7 +76,19 @@ var _CMS_DEFAULT = {
         { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', color: 'pink', link: 'https://instagram.com' },
         { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', color: 'purple', link: '#' },
         { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', color: 'green', link: '#' }
-    ]
+    ],
+    
+    // DATA DONATION BARU
+    donationSettings: {
+        heroTitle: 'Support Our Mission',
+        heroSubtitle: 'Bantu kami menyediakan akses pendidikan yang layak bagi anak-anak Indonesia. Setiap donasi Anda menjadi jembatan menuju masa depan yang lebih cerah.',
+        stripText: 'Together We Can',
+        stripImage: 'img/Front Card.webp',
+        bankName: 'Bank Central Asia (BCA)',
+        accountName: 'Yuni Triandini',
+        accountNumber: '466 0070 724',
+        qrisImage: 'https://via.placeholder.com/200?text=QRIS' 
+    }
 };
 
 function _getCMS() {
@@ -190,6 +202,43 @@ function _renderPartners(data) {
     el.innerHTML = html;
 }
 
+/* ------ CMS: RENDER DONATION PAGE (BARU) ------ */
+function _renderDonation(data) {
+    if (!data || !data.donationSettings) return;
+    var s = data.donationSettings;
+
+    // 1. Update Hero Text
+    var heroSubEl = document.querySelector('#hero-donation p.text-lg');
+    if (heroSubEl) heroSubEl.textContent = s.heroSubtitle;
+
+    // 2. Update Image Strip
+    var stripImgEl = document.getElementById('strip-img-display');
+    var stripTextEl = document.getElementById('strip-text-display');
+    if (stripImgEl && s.stripImage) {
+        stripImgEl.src = s.stripImage.startsWith('data:') ? s.stripImage : s.stripImage;
+    }
+    if (stripTextEl) stripTextEl.textContent = s.stripText;
+
+    // 3. Update Payment Details
+    var bankNameEl = document.getElementById('bank-name-display');
+    var accNameEl = document.getElementById('acc-name-display');
+    var accNumEl = document.getElementById('acc-num-display');
+    
+    if (bankNameEl) bankNameEl.textContent = s.bankName;
+    if (accNameEl) accNameEl.textContent = s.accountName;
+    if (accNumEl) accNumEl.textContent = s.accountNumber;
+    
+    // 4. Update QRIS
+    var qrisImgEl = document.getElementById('qris-img-display');
+    if (qrisImgEl && s.qrisImage) {
+        qrisImgEl.src = s.qrisImage.startsWith('data:') ? s.qrisImage : s.qrisImage;
+        qrisImgEl.classList.remove('hidden'); // Tampilkan gambar asli
+        // Sembunyikan placeholder icon jika ada
+        var placeholder = qrisImgEl.nextElementSibling;
+        if (placeholder && placeholder.tagName === 'I') placeholder.classList.add('hidden');
+    }
+}
+
 /* ------ FAQ ACCORDION ------ */
 function _initFAQ() {
     var items = document.querySelectorAll('.faq-item');
@@ -214,6 +263,22 @@ function _initFAQ() {
             });
         })(items[i]);
     }
+}
+
+/* ------ COPY TO CLIPBOARD ------ */
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        var btn = document.querySelector('#acc-num-display').nextElementSibling;
+        var originalHtml = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-check text-green-500 text-xl"></i>';
+        
+        setTimeout(function() {
+            btn.innerHTML = originalHtml;
+        }, 2000);
+    }).catch(function(err) {
+        console.error('Gagal menyalin: ', err);
+    });
 }
 
 /* ------ NAVBAR SCROLL ------ */
@@ -292,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
         _renderInternal(cms.internalTestimonials);
         _renderFAQ(cms.faqs);
         _renderPartners(cms.partners);
+        _renderDonation(cms); // RENDER DONATION
 
         if (cms.locations && cms.locations.length) {
             _cmsLocations = cms.locations;

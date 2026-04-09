@@ -91,7 +91,7 @@
             <i class="fas fa-bars text-lg"></i>
         </button>
         <span class="font-bold text-sm">CMS Dashboard</span>
-        <a href="../Index.html" class="p-2 hover:bg-white/10 rounded-lg transition-colors" title="Lihat Beranda">
+        <a href="../index.html" class="p-2 hover:bg-white/10 rounded-lg transition-colors" title="Lihat Beranda">
             <i class="fas fa-external-link-alt text-sm"></i>
         </a>
     </div>
@@ -129,15 +129,21 @@
                 <span id="count-activities" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
 
-            <!-- Menu Partners (NEW) -->
+            <!-- Menu Partners -->
             <button onclick="switchTab('partners')" data-tab="partners" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-handshake w-5 text-center text-xs"></i>
                 <span>Partners</span>
                 <span id="count-partners" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
+
+            <!-- Menu Donation -->
+            <button onclick="switchTab('donation')" data-tab="donation" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
+                <i class="fas fa-donate w-5 text-center text-xs"></i>
+                <span>Donation</span>
+            </button>
         </nav>
         <div class="p-4 border-t border-white/10 space-y-2">
-            <a href="../Index.html" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
+            <a href="../index.html" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
                 <i class="fas fa-external-link-alt w-5 text-center text-xs"></i>
                 <span>Lihat Beranda</span>
             </a>
@@ -324,7 +330,7 @@
             </div>
             <!-- END VIEW: ACTIVITIES -->
 
-            <!-- VIEW: PARTNERS (NEW) -->
+            <!-- VIEW: PARTNERS -->
             <div id="view-partners" class="hidden space-y-10">
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -341,6 +347,26 @@
                 </div>
             </div>
             <!-- END VIEW: PARTNERS -->
+
+            <!-- VIEW: DONATION (NEW) -->
+            <div id="view-donation" class="hidden space-y-10">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center text-red-600 text-sm"><i class="fas fa-heart"></i></div>
+                            <h2 class="text-lg font-bold text-heading">Pengaturan Halaman Donation</h2>
+                        </div>
+                        <button onclick="openEditModal('donation-settings', null)" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors shadow-sm flex items-center gap-1.5">
+                            <i class="fas fa-pen text-[10px]"></i> Edit Konten
+                        </button>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <p class="text-sm text-gray-500 mb-4">Kelola teks hero, gambar strip, dan detail rekening bank:</p>
+                        <div id="preview-donation" class="border border-gray-100 rounded-lg p-4 bg-gray-50"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- END VIEW: DONATION -->
 
         </div>
     </main>
@@ -504,7 +530,17 @@
                 { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', color: 'pink', link: '#' },
                 { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', color: 'purple', link: '#' },
                 { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', color: 'green', link: '#' }
-            ]
+            ],
+            donationSettings: {
+                heroTitle: 'Support Our Mission',
+                heroSubtitle: 'Bantu kami menyediakan akses pendidikan yang layak bagi anak-anak Indonesia. Setiap donasi Anda menjadi jembatan menuju masa depan yang lebih cerah.',
+                stripText: 'Together We Can',
+                stripImage: 'img/Front Card.webp',
+                bankName: 'Bank Central Asia (BCA)',
+                accountName: 'Yuni Triandini',
+                accountNumber: '466 0070 724',
+                qrisImage: 'https://via.placeholder.com/200?text=QRIS' // Ganti dengan gambar QRIS asli jika ada
+            },
         };
 
         /* =========================================
@@ -536,6 +572,7 @@
         var deletingId = null;
         var deletingSection = null;
         var uploadedImage = null;
+        var uploadedQrisImage = null; // Variabel khusus untuk QRIS
 
         /* =========================================
            SIDEBAR & NAVIGATION
@@ -551,7 +588,8 @@
             document.getElementById('view-homepage').classList.add('hidden');
             document.getElementById('view-about').classList.add('hidden');
             document.getElementById('view-activities').classList.add('hidden');
-            document.getElementById('view-partners').classList.add('hidden'); // NEW
+            document.getElementById('view-partners').classList.add('hidden');
+            document.getElementById('view-donation').classList.add('hidden');
 
             if (tab === 'homepage') {
                 document.getElementById('view-homepage').classList.remove('hidden');
@@ -566,10 +604,15 @@
                 document.getElementById('view-activities').classList.remove('hidden');
                 document.getElementById('page-title').textContent = 'Activities';
                 document.getElementById('page-desc').textContent = 'Kelola berita kegiatan dan episode podcast terbaru';
-            } else if (tab === 'partners') { // NEW
+            } else if (tab === 'partners') {
                 document.getElementById('view-partners').classList.remove('hidden');
                 document.getElementById('page-title').textContent = 'Partners';
                 document.getElementById('page-desc').textContent = 'Kelola daftar mitra dan kolaborator organisasi';
+            } else if (tab === 'donation') {
+                document.getElementById('view-donation').classList.remove('hidden');
+                document.getElementById('page-title').textContent = 'Donation Page';
+                document.getElementById('page-desc').textContent = 'Kelola konten halaman donasi';
+                renderDonationPreview();
             }
 
             renderAllLists();
@@ -585,7 +628,7 @@
             renderTeam(data.team);
             renderActivityCards(data.activityCards);
             renderPodcasts(data.podcasts);
-            renderPartners(data.partners); // NEW
+            renderPartners(data.partners);
             updateCounts(data);
         }
 
@@ -610,7 +653,7 @@
             var team = data.team.length;
             var actCards = data.activityCards.length;
             var pods = data.podcasts.length;
-            var partners = data.partners.length; // NEW
+            var partners = data.partners.length;
 
             document.getElementById('count-external').textContent = ext;
             document.getElementById('count-internal').textContent = int;
@@ -620,8 +663,8 @@
             
             document.getElementById('count-activity-cards').textContent = actCards;
             document.getElementById('count-podcasts').textContent = pods;
-            document.getElementById('count-partners').textContent = partners; // NEW
-            document.getElementById('count-partners-list').textContent = partners; // NEW
+            document.getElementById('count-partners').textContent = partners;
+            document.getElementById('count-partners-list').textContent = partners;
 
             document.getElementById('count-homepage').textContent = ext + int + faq + loc;
             document.getElementById('count-about').textContent = team + 1; 
@@ -654,7 +697,7 @@
             reader.readAsDataURL(file);
         }
 
-        function triggerUpload() {
+        function triggerUpload(targetType) {
             var input = document.getElementById('file-input-hidden');
             input.value = '';
             input.onchange = function () {
@@ -668,13 +711,21 @@
                     showToast('Ukuran file maksimal 10MB.', 'error');
                     return;
                 }
-                var zone = document.getElementById('upload-zone');
+                
+                var zoneId = (targetType === 'qris') ? 'upload-zone-qris' : 'upload-zone';
+                var zone = document.getElementById(zoneId);
+                
                 if (zone) {
                     zone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses gambar...</p></div>';
                 }
                 compressImage(file, 400, 0.7, function (base64) {
-                    uploadedImage = base64;
-                    updateUploadPreview(base64);
+                    if (targetType === 'qris') {
+                        uploadedQrisImage = base64;
+                        updateUploadPreviewQris(base64);
+                    } else {
+                        uploadedImage = base64;
+                        updateUploadPreview(base64);
+                    }
                 });
             };
             input.click();
@@ -691,6 +742,17 @@
                 '<p class="text-xs text-green-600 font-medium mt-2"><i class="fas fa-check-circle mr-1"></i>Gambar berhasil diupload</p>';
         }
 
+        function updateUploadPreviewQris(src) {
+            var zone = document.getElementById('upload-zone-qris');
+            if (!zone) return;
+            zone.innerHTML =
+                '<div class="relative">' +
+                    '<img src="' + src + '" alt="Preview QRIS" class="w-24 h-24 object-contain mx-auto bg-gray-50 rounded">' +
+                    '<button type="button" onclick="removeUploadQris()" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs shadow-md"><i class="fas fa-times"></i></button>' +
+                '</div>' +
+                '<p class="text-xs text-green-600 font-medium mt-2 text-center">QRIS Uploaded</p>';
+        }
+
         window.removeUpload = function () {
             uploadedImage = null;
             var zone = document.getElementById('upload-zone');
@@ -703,10 +765,32 @@
                 '</div>';
         };
 
-        function initDragDrop() {
-            var zone = document.getElementById('upload-zone');
+        window.removeUploadQris = function () {
+            uploadedQrisImage = null;
+            var zone = document.getElementById('upload-zone-qris');
             if (!zone) return;
-            zone.addEventListener('click', triggerUpload);
+            zone.innerHTML =
+                '<div class="py-4 text-center text-gray-400 text-sm border border-dashed border-gray-300 rounded">' +
+                    '<i class="fas fa-qrcode text-2xl mb-1"></i>' +
+                    '<p>Upload QRIS</p>' +
+                '</div>';
+        };
+
+        function initDragDrop(targetType) {
+            var zoneId = (targetType === 'qris') ? 'upload-zone-qris' : 'upload-zone';
+            var zone = document.getElementById(zoneId);
+            if (!zone) return;
+            
+            // Helper click
+            var clickHandler = (function(z, t) {
+                return function() { triggerUpload(t); };
+            })(zone, targetType);
+
+            if (!zone.hasClickEvent) {
+                zone.addEventListener('click', clickHandler);
+                zone.hasClickEvent = true;
+            }
+
             zone.addEventListener('dragover', function (e) {
                 e.preventDefault();
                 zone.classList.add('dragover');
@@ -726,10 +810,18 @@
                     showToast('Ukuran file maksimal 10MB.', 'error');
                     return;
                 }
-                zone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses gambar...</p></div>';
+                
+                var loadingHtml = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses gambar...</p></div>';
+                zone.innerHTML = loadingHtml;
+
                 compressImage(file, 400, 0.7, function (base64) {
-                    uploadedImage = base64;
-                    updateUploadPreview(base64);
+                    if (targetType === 'qris') {
+                        uploadedQrisImage = base64;
+                        updateUploadPreviewQris(base64);
+                    } else {
+                        uploadedImage = base64;
+                        updateUploadPreview(base64);
+                    }
                 });
             });
         }
@@ -908,7 +1000,7 @@
         }
 
         /* =========================================
-           RENDER — PARTNERS (NEW)
+           RENDER — PARTNERS
            ========================================= */
         function renderPartners(items) {
             var container = document.getElementById('list-partners');
@@ -917,7 +1009,6 @@
                 return;
             }
             
-            // Mapping warna icon ke class Tailwind
             var colorMap = {
                 'blue': 'bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white',
                 'pink': 'bg-pink-50 text-pink-500 hover:bg-pink-500 hover:text-white',
@@ -960,6 +1051,25 @@
                 '<div class="text-xs text-gray-400">Badge Relawan: ' + hero.volunteerCount + '</div>';
         }
 
+        function renderDonationPreview() {
+            var data = getData();
+            var s = data.donationSettings;
+            var el = document.getElementById('preview-donation');
+            if(!el) return;
+            
+            el.innerHTML = 
+                '<div class="grid grid-cols-2 gap-4 text-sm">' +
+                    '<div><strong>Hero Title:</strong><br>' + _esc(s.heroTitle) + '</div>' +
+                    '<div><strong>Strip Text:</strong><br>' + _esc(s.stripText) + '</div>' +
+                    '<div class="col-span-2"><strong>Bank Info:</strong> ' + _esc(s.bankName) + ' - ' + _esc(s.accountNumber) + '</div>' +
+                '</div>';
+        }
+
+        function _esc(str) { 
+            if (!str) return ''; 
+            return str.replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
+        }
+
         /* =========================================
            MODAL — OPEN ADD
            ========================================= */
@@ -967,6 +1077,7 @@
             editingItem = null;
             editingSection = section;
             uploadedImage = null;
+            uploadedQrisImage = null;
             renderModalForm(section, null);
             openModal();
         };
@@ -978,6 +1089,8 @@
 
             if (section === 'about-hero') {
                 item = data.aboutHero;
+            } else if (section === 'donation-settings') {
+                item = data.donationSettings;
             } else {
                 switch (section) {
                     case 'external': list = data.externalTestimonials; break;
@@ -987,7 +1100,7 @@
                     case 'team': list = data.team; break;
                     case 'activity-card': list = data.activityCards; break;
                     case 'podcast': list = data.podcasts; break;
-                    case 'partner': list = data.partners; break; // NEW
+                    case 'partner': list = data.partners; break;
                 }
                 item = list.find(function (i) { return i.id === id; });
             }
@@ -995,11 +1108,19 @@
             if (!item) return;
             editingItem = item;
             editingSection = section;
+            
+            // Reset Uploads
             uploadedImage = (item.image && item.image.startsWith('data:')) ? item.image : null;
-            // Special handling for podcast thumbnail if it exists
-            if(section === 'podcast' && item.thumbnail) {
+            if (section === 'podcast' && item.thumbnail) {
                  uploadedImage = (item.thumbnail && item.thumbnail.startsWith('data:')) ? item.thumbnail : null;
             }
+            // Reset QRIS Upload specifically for Donation
+            if (section === 'donation-settings' && item.qrisImage) {
+                uploadedQrisImage = item.qrisImage.startsWith('data:') ? item.qrisImage : null;
+            } else {
+                uploadedQrisImage = null;
+            }
+
             renderModalForm(section, item);
             openModal();
         };
@@ -1017,13 +1138,50 @@
             else if (section === 'about-hero') label = 'Konten Hero';
             else if (section === 'activity-card') label = 'Activity Card';
             else if (section === 'podcast') label = 'Podcast Episode';
-            else if (section === 'partner') label = 'Partner'; // NEW
+            else if (section === 'partner') label = 'Partner';
+            else if (section === 'donation-settings') label = 'Pengaturan Donation';
 
             document.getElementById('modal-title').textContent = (isEdit ? 'Edit ' : 'Tambah ') + label;
 
             var html = '';
 
-            if (section === 'about-hero') {
+            // --- DONATION SETTINGS FORM ---
+            if (section === 'donation-settings') {
+                html += formField('Judul Hero', 'f-hero-title', item ? item.heroTitle : '', 'text', 'Contoh: Support Our Mission');
+                html += formTextarea('Sub Hero', 'f-hero-sub', item ? item.heroSubtitle : '', 'Deskripsi...');
+                html += formField('Teks di Gambar Strip', 'f-strip-text', item ? item.stripText : '', 'text', 'Together We Can');
+                
+                // Upload Image Strip
+                html += '<div class="mb-4"><label class="block text-sm font-semibold text-heading mb-1.5">Gambar Strip (Banner Tengah)</label><div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
+                var existingStrip = '';
+                if (item && item.stripImage) existingStrip = item.stripImage.startsWith('data:') ? item.stripImage : '../' + item.stripImage;
+                if (existingStrip) {
+                    html += '<div class="relative"><img src="' + escapeAttr(existingStrip) + '" class="w-full h-32 object-cover rounded-lg"><button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 text-white rounded-full"><i class="fas fa-times"></i></button></div>';
+                } else {
+                    html += '<div class="py-4 text-center text-gray-400 text-sm">Klik untuk upload gambar strip</div>';
+                }
+                html += '</div></div>';
+
+                // Payment Details
+                html += '<hr class="my-4"><h4 class="font-bold text-heading mb-4">Payment Details</h4>';
+                html += formField('Nama Bank', 'f-bank-name', item ? item.bankName : '', 'text', 'BCA');
+                html += formField('Atas Nama', 'f-acc-name', item ? item.accountName : '', 'text', 'Yuni Triandini');
+                html += formField('Nomor Rekening', 'f-acc-num', item ? item.accountNumber : '', 'text', '466...');
+                
+                // Upload QRIS
+                html += '<div class="mb-4"><label class="block text-sm font-semibold text-heading mb-1.5">Gambar QRIS</label><div id="upload-zone-qris" class="upload-zone rounded-xl p-4 text-center border border-dashed border-gray-300">';
+                var existingQris = '';
+                if (item && item.qrisImage) existingQris = item.qrisImage.startsWith('data:') ? item.qrisImage : '../' + item.qrisImage;
+                if (existingQris) {
+                    html += '<div class="relative"><img src="' + escapeAttr(existingQris) + '" class="w-24 h-24 object-contain mx-auto bg-gray-50 rounded"><button type="button" onclick="removeUploadQris()" class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs">X</button></div>';
+                } else {
+                    html += '<div class="py-4 text-center text-gray-400 text-sm border border-dashed border-gray-300 rounded">Upload QRIS</div>';
+                }
+                html += '</div></div>';
+            }
+            // --- END DONATION SETTINGS ---
+
+            else if (section === 'about-hero') {
                 html += formField('Judul (Support HTML)', 'f-title', item ? item.title : '', 'text', 'Judul besar...');
                 html += formTextarea('Subtitle', 'f-subtitle', item ? item.subtitle : '', 'Deskripsi singkat...');
                 html += formField('Label Relawan (Contoh: 1k+)', 'f-volunteer', item ? item.volunteerCount : '1k+', 'text', '1k+');
@@ -1083,7 +1241,6 @@
                 html += formField('Tanggal', 'f-date', item ? item.date : '', 'text', '10 November 2025');
                 html += formTextarea('Deskripsi Singkat', 'f-desc', item ? item.description : '', 'Ringkasan...');
 
-                // Image Upload
                 var existingSrc = '';
                 if (item && item.image) existingSrc = item.image.startsWith('data:') ? item.image : '../' + item.image;
                 html += '<div class="mb-4"><label class="block text-sm font-semibold text-heading mb-1.5">Gambar Cover</label><div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
@@ -1096,7 +1253,6 @@
                 html += formField('Nomor Episode', 'f-episode', item ? item.episode : '', 'text', 'Episode 1');
                 html += formField('Link Spotify', 'f-spotify-link', item ? item.spotifyLink : '', 'text', 'https://open.spotify.com/...');
                 
-                // Image Upload for Podcast Thumbnail (BARU)
                 var existingThumb = '';
                 if (item && item.thumbnail) existingThumb = item.thumbnail.startsWith('data:') ? item.thumbnail : '../' + item.thumbnail;
 
@@ -1108,11 +1264,10 @@
                 }
                 html += '</div></div>';
             }
-                        else if (section === 'partner') { 
+            else if (section === 'partner') { 
                 html += formField('Nama Partner', 'f-name', item ? item.name : '', 'text', 'Contoh: Qatar HR Forum');
                 html += formTextarea('Deskripsi Singkat', 'f-desc', item ? item.description : '', 'Deskripsi singkat...');
                 
-                // Input Link Partner (BARU)
                 html += '<div class="mb-4">' +
                     '<label class="block text-sm font-semibold text-heading mb-1.5">Link Partner (URL)</label>' +
                     '<div class="relative">' +
@@ -1122,7 +1277,6 @@
                     '<p class="text-[10px] text-gray-400 mt-1">Masukkan URL lengkap (dengan https://)</p>' +
                 '</div>';
 
-                // Dropdown Pilihan Icon
                 html += '<div class="mb-4">' +
                     '<label class="block text-sm font-semibold text-heading mb-1.5">Pilih Icon</label>' +
                     '<select id="f-icon" class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary">' +
@@ -1134,11 +1288,10 @@
                         '<option value="fa-building" ' + (item && item.icon === 'fa-building' ? 'selected' : '') + '>Building (Korporat)</option>' +
                         '<option value="fa-heart" ' + (item && item.icon === 'fa-heart' ? 'selected' : '') + '>Heart (Sosial)</option>' +
                         '<option value="fa-globe" ' + (item && item.icon === 'fa-globe' ? 'selected' : '') + '>Globe (Global)</option>' +
-                        '<option value="fa-spotify" ' + (item && item.icon === 'fa-spotify' ? 'selected' : '') + '>Spotify (Musik/Podcast)</option>' + // Contoh icon Spotify
+                        '<option value="fa-spotify" ' + (item && item.icon === 'fa-spotify' ? 'selected' : '') + '>Spotify (Musik/Podcast)</option>' + 
                     '</select>' +
                 '</div>';
 
-                // Dropdown Pilihan Warna
                 html += '<div class="mb-4">' +
                     '<label class="block text-sm font-semibold text-heading mb-1.5">Warna Latar</label>' +
                     '<select id="f-color" class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary">' +
@@ -1159,8 +1312,33 @@
 
             document.getElementById('modal-body').innerHTML = html;
 
-            if (section === 'external' || section === 'internal' || section === 'team' || section === 'about-hero' || section === 'activity-card' || section === 'podcast') {
-                initDragDrop();
+            // Init Drag & Drop logic
+            if (section === 'donation-settings') {
+                initDragDrop('strip');
+                // Attach QRIS drag drop specifically
+                var qrisZone = document.getElementById('upload-zone-qris');
+                if(qrisZone) {
+                    // Re-attach event listener to ensure it works after HTML replacement
+                    qrisZone.addEventListener('click', (function() { triggerUpload('qris'); }));
+                    qrisZone.addEventListener('dragover', function(e) {
+                        e.preventDefault(); qrisZone.classList.add('dragover');
+                    });
+                    qrisZone.addEventListener('dragleave', function() { qrisZone.classList.remove('dragover'); });
+                    qrisZone.addEventListener('drop', function(e) {
+                        e.preventDefault(); qrisZone.classList.remove('dragover');
+                        var file = e.dataTransfer.files[0];
+                        if (!file || !file.type.startsWith('image/')) return showToast('File harus gambar', 'error');
+                        if (file.size > 10 * 1024 * 1024) return showToast('File terlalu besar', 'error');
+                        
+                        qrisZone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses QRIS...</p></div>';
+                        compressImage(file, 400, 0.7, function(base64) {
+                            uploadedQrisImage = base64;
+                            updateUploadPreviewQris(base64);
+                        });
+                    });
+                }
+            } else if (section === 'external' || section === 'internal' || section === 'team' || section === 'about-hero' || section === 'activity-card' || section === 'podcast') {
+                initDragDrop('main');
             }
         }
 
@@ -1193,6 +1371,7 @@
             editingItem = null;
             editingSection = null;
             uploadedImage = null;
+            uploadedQrisImage = null;
         };
 
         /* =========================================
@@ -1327,7 +1506,6 @@
                 
                 if (!title) { showToast('Judul wajib diisi.', 'error'); return; }
 
-                // Handle Image
                 var image = '';
                 if (uploadedImage) {
                     image = uploadedImage;
@@ -1350,7 +1528,7 @@
                     list.push(obj);
                 }
             }
-            else if (section === 'partner') { // NEW
+            else if (section === 'partner') { 
                 var name = document.getElementById('f-name').value.trim();
                 var description = document.getElementById('f-desc').value.trim();
                 if (!name) { showToast('Nama partner wajib diisi.', 'error'); return; }
@@ -1372,11 +1550,39 @@
                     list.push(obj);
                 }
             }
+            else if (section === 'donation-settings') {
+                data.donationSettings.heroTitle = document.getElementById('f-hero-title').value.trim();
+                data.donationSettings.heroSubtitle = document.getElementById('f-hero-sub').value.trim();
+                data.donationSettings.stripText = document.getElementById('f-strip-text').value.trim();
+                
+                // Handle Strip Image
+                if (uploadedImage) {
+                    data.donationSettings.stripImage = uploadedImage;
+                } else if (isEdit) {
+                    if (item && item.stripImage && !item.stripImage.startsWith('data:')) {
+                        data.donationSettings.stripImage = item.stripImage;
+                    }
+                }
+
+                data.donationSettings.bankName = document.getElementById('f-bank-name').value.trim();
+                data.donationSettings.accountName = document.getElementById('f-acc-name').value.trim();
+                data.donationSettings.accountNumber = document.getElementById('f-acc-num').value.trim();
+                
+                // Handle QRIS Image
+                if (uploadedQrisImage) {
+                    data.donationSettings.qrisImage = uploadedQrisImage;
+                } else if (isEdit) {
+                    if (item && item.qrisImage && !item.qrisImage.startsWith('data:')) {
+                        data.donationSettings.qrisImage = item.qrisImage;
+                    }
+                }
+            }
 
             if (!saveData(data)) return;
             closeModal();
             renderAllLists();
             if(section === 'about-hero') renderAboutPreview();
+            if(section === 'donation-settings') renderDonationPreview();
             showToast(isEdit ? 'Data berhasil diperbarui.' : 'Data berhasil ditambahkan.', 'success');
         };
 
@@ -1410,7 +1616,7 @@
                 case 'team': data.team = data.team.filter(function (i) { return i.id !== id; }); break;
                 case 'activity-card': data.activityCards = data.activityCards.filter(function (i) { return i.id !== id; }); break;
                 case 'podcast': data.podcasts = data.podcasts.filter(function (i) { return i.id !== id; }); break;
-                case 'partner': data.partners = data.partners.filter(function (i) { return i.id !== id; }); break; // NEW
+                case 'partner': data.partners = data.partners.filter(function (i) { return i.id !== id; }); break;
             }
             if (!saveData(data)) return;
             closeConfirm();
@@ -1423,6 +1629,7 @@
             localStorage.removeItem(CMS_KEY);
             renderAllLists();
             renderAboutPreview();
+            renderDonationPreview();
             showToast('Data berhasil direset.', 'success');
         };
 
