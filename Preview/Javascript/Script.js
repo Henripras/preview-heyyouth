@@ -1,5 +1,5 @@
 /* =============================================
-   HEY YOUTH! — Global Script
+   HEY YOUTH! — Global Script (UPDATED)
    ============================================= */
 
 var _cmsLocations = null;
@@ -320,28 +320,61 @@ function _initMobile() {
     }
 }
 
-/* ------ LEAFLET MAP ------ */
+/* =============================================
+   LEAFLET MAP (FINAL PRODUCTION VERSION)
+   ============================================= */
 function _initMap() {
     var el = document.getElementById('map');
     if (!el || typeof L === 'undefined') return;
-    var map = L.map('map').setView([-2.5489, 118.0149], 6);
+
+    // 1. Setup Peta (Fokus Indonesia)
+    var map = L.map('map').setView([-2.5489, 118.0149], 5); 
+
+    // 2. Kontrol Zoom
     L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // 3. Layer Peta Dasar (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
     }).addTo(map);
-        function pin(v) {
+
+    // 4. FUNGSI PEMBUAT PIN KUSTOM
+    function createPinIcon(volunteerCount) {
         return L.divIcon({
             className: 'custom-div-icon',
-            html: '<div class="marker-pin-container"><i class="bi bi-geo-alt-fill" style="color:#1D4ED8; font-size: 24px"></i><div class="marker-badge">' + v + '</div></div>',
-            iconSize: [22, 30], iconAnchor: [11, 30], popupAnchor: [0, -30]
+            html: `
+                <div class="marker-pin-container">
+                    <div class="marker-pin-body">
+                        <div class="marker-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="marker-badge">${volunteerCount}</div>
+                </div>
+            `,
+            iconSize: [40, 50],
+            iconAnchor: [20, 50],
+            popupAnchor: [0, -55]
         });
     }
+
+    // 5. Ambil data lokasi
     var locs = _cmsLocations || _CMS_DEFAULT.locations;
+    
+    // 6. Loop lokasi untuk render marker
     for (var i = 0; i < locs.length; i++) {
         var l = locs[i];
-        L.marker([l.lat, l.lng], { icon: pin(l.volunteers) }).addTo(map).bindPopup('<strong>' + l.name + '</strong><br>Volunteers: ' + l.volunteers);
+        L.marker([l.lat, l.lng], { icon: createPinIcon(l.volunteers) })
+         .addTo(map)
+         .bindPopup('<strong>' + l.name + '</strong><br>Volunteers: ' + l.volunteers);
     }
-    setTimeout(function() { map.invalidateSize(); }, 150);
+    
+    // 7. Fix render issue saat layout berubah
+    setTimeout(function() { map.invalidateSize(); }, 100);
 }
 
 /* =============================================
@@ -366,8 +399,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('CMS error:', e);
     }
     
-    
-
     /* --- 2. FAQ accordion --- */
     _initFAQ();
 
@@ -377,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /* --- 4. Mobile menu --- */
     _initMobile();
 
-    /* --- 5. Map --- */
+    /* --- 5. Map (Updated) --- */
     _initMap();
 
 });
