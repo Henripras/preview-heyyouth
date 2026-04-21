@@ -108,35 +108,26 @@
             <p class="text-xs text-gray-500 mt-2 ml-1">Admin Panel</p>
         </div>
         <nav class="flex-1 py-4 space-y-1 px-3 overflow-y-auto">
-            <!-- Menu Homepage -->
             <button onclick="switchTab('homepage')" data-tab="homepage" class="sidebar-link active w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-home w-5 text-center text-xs"></i>
                 <span>Homepage</span>
                 <span id="count-homepage" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
-            
-            <!-- Menu About Us -->
             <button onclick="switchTab('about')" data-tab="about" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-users w-5 text-center text-xs"></i>
                 <span>About Us</span>
                 <span id="count-about" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
-
-            <!-- Menu Activities -->
             <button onclick="switchTab('activities')" data-tab="activities" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-bolt w-5 text-center text-xs"></i>
                 <span>Activities</span>
                 <span id="count-activities" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
-
-            <!-- Menu Partners -->
             <button onclick="switchTab('partners')" data-tab="partners" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-handshake w-5 text-center text-xs"></i>
                 <span>Partners</span>
                 <span id="count-partners" class="ml-auto bg-white/10 text-xs px-2 py-0.5 rounded-full">0</span>
             </button>
-
-            <!-- Menu Donation -->
             <button onclick="switchTab('donation')" data-tab="donation" class="sidebar-link w-full text-left px-3 py-2.5 rounded-lg text-sm flex items-center gap-3 transition-all">
                 <i class="fas fa-donate w-5 text-center text-xs"></i>
                 <span>Donation</span>
@@ -185,9 +176,7 @@
                     </div>
                     <div id="list-external" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
                 </div>
-
                 <hr class="border-gray-200">
-
                 <!-- Internal Testimonials -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -202,9 +191,7 @@
                     </div>
                     <div id="list-internal" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
                 </div>
-
                 <hr class="border-gray-200">
-
                 <!-- FAQ -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -219,9 +206,7 @@
                     </div>
                     <div id="list-faq" class="space-y-3 max-w-4xl"></div>
                 </div>
-
                 <hr class="border-gray-200">
-
                 <!-- Locations -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -253,11 +238,9 @@
                     </div>
                 </div>
             </div>
-            <!-- END VIEW: HOMEPAGE -->
 
             <!-- VIEW: ABOUT US -->
             <div id="view-about" class="hidden space-y-10">
-                <!-- Hero Section Config -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -273,10 +256,7 @@
                         <div id="preview-about-hero" class="border border-gray-100 rounded-lg p-4 bg-gray-50"></div>
                     </div>
                 </div>
-
                 <hr class="border-gray-200">
-
-                <!-- Leadership Team -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
@@ -291,7 +271,6 @@
                     <div id="list-team" class="grid md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
                 </div>
             </div>
-            <!-- END VIEW: ABOUT US -->
 
             <!-- VIEW: ACTIVITIES -->
             <div id="view-activities" class="hidden space-y-10">
@@ -328,7 +307,6 @@
                     <div id="list-podcasts" class="grid md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
-            <!-- END VIEW: ACTIVITIES -->
 
             <!-- VIEW: PARTNERS -->
             <div id="view-partners" class="hidden space-y-10">
@@ -346,7 +324,6 @@
                     <div id="list-partners" class="grid md:grid-cols-2 xl:grid-cols-4 gap-4"></div>
                 </div>
             </div>
-            <!-- END VIEW: PARTNERS -->
 
             <!-- VIEW: DONATION (NEW) -->
             <div id="view-donation" class="hidden space-y-10">
@@ -366,7 +343,6 @@
                     </div>
                 </div>
             </div>
-            <!-- END VIEW: DONATION -->
 
         </div>
     </main>
@@ -497,7 +473,8 @@
                     title: 'Dream Big, Learn Bigger: Inspiring the Next Generation at Yos Sudarso', 
                     description: 'Kami mengunjungi sekolah di Yos Sudarso untuk berbagi inspirasi dan materi pendidikan interaktif kepada ratusan siswa, membantu mereka bermimpi lebih besar.',
                     image: 'img/activity1.jpg',
-                    link: '#'
+                    link: '#',
+                    fullStory: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>'
                 },
                 { 
                     id: 302, 
@@ -506,7 +483,8 @@
                     title: 'Instilling Education, Igniting Dreams: Hey Youth\'s Visit to TBM Kolong', 
                     description: 'Kunjungan spesial ke TBM Kolong untuk mendukung literasi di lingkungan sekitar, mendonasikan buku, dan mengadakan sesi membaca bersama anak-anak.',
                     image: 'img/activity2.jpg',
-                    link: '#'
+                    link: '#',
+                    fullStory: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>'
                 }
             ],
             podcasts: [
@@ -514,7 +492,7 @@
                     id: 401,
                     episode: 'Episode 2',
                     title: 'Suicide Is Not The Answer: Here\'s Why',
-                    thumbnail: 'https://picsum.photos/seed/pod1/300/300', // Gambar default
+                    thumbnail: 'https://picsum.photos/seed/pod1/300/300', 
                     spotifyLink: 'https://open.spotify.com/episode/5xcQh5HewK3MvIcxkSiWef' 
                 },
                 {
@@ -539,7 +517,7 @@
                 bankName: 'Bank Central Asia (BCA)',
                 accountName: 'Yuni Triandini',
                 accountNumber: '466 0070 724',
-                qrisImage: 'https://via.placeholder.com/200?text=QRIS' // Ganti dengan gambar QRIS asli jika ada
+                qrisImage: 'https://via.placeholder.com/200?text=QRIS' 
             },
         };
 
@@ -572,7 +550,7 @@
         var deletingId = null;
         var deletingSection = null;
         var uploadedImage = null;
-        var uploadedQrisImage = null; // Variabel khusus untuk QRIS
+        var uploadedQrisImage = null; 
 
         /* =========================================
            SIDEBAR & NAVIGATION
@@ -781,7 +759,6 @@
             var zone = document.getElementById(zoneId);
             if (!zone) return;
             
-            // Helper click
             var clickHandler = (function(z, t) {
                 return function() { triggerUpload(t); };
             })(zone, targetType);
@@ -827,7 +804,7 @@
         }
 
         /* =========================================
-           RENDER — TESTIMONIALS
+           RENDER FUNCTIONS
            ========================================= */
         function renderTestimonials(containerId, items, type) {
             var container = document.getElementById(containerId);
@@ -862,9 +839,6 @@
             }).join('');
         }
 
-        /* =========================================
-           RENDER — FAQS
-           ========================================= */
         function renderFaqs(items) {
             var container = document.getElementById('list-faq');
             if (items.length === 0) {
@@ -887,9 +861,6 @@
             }).join('');
         }
 
-        /* =========================================
-           RENDER — LOCATIONS
-           ========================================= */
         function renderLocations(items) {
             var tbody = document.getElementById('list-locations');
             if (items.length === 0) {
@@ -911,9 +882,6 @@
             }).join('');
         }
 
-        /* =========================================
-           RENDER — TEAM
-           ========================================= */
         function renderTeam(items) {
             var container = document.getElementById('list-team');
             if (items.length === 0) {
@@ -942,9 +910,6 @@
             }).join('');
         }
 
-        /* =========================================
-           RENDER — ACTIVITY CARDS
-           ========================================= */
         function renderActivityCards(items) {
             var container = document.getElementById('list-activity-cards');
             if (items.length === 0) {
@@ -969,9 +934,6 @@
             }).join('');
         }
 
-        /* =========================================
-           RENDER — PODCASTS
-           ========================================= */
         function renderPodcasts(items) {
             var container = document.getElementById('list-podcasts');
             if (items.length === 0) {
@@ -999,9 +961,6 @@
             }).join('');
         }
 
-        /* =========================================
-           RENDER — PARTNERS
-           ========================================= */
         function renderPartners(items) {
             var container = document.getElementById('list-partners');
             if (!items || items.length === 0) {
@@ -1109,12 +1068,10 @@
             editingItem = item;
             editingSection = section;
             
-            // Reset Uploads
             uploadedImage = (item.image && item.image.startsWith('data:')) ? item.image : null;
             if (section === 'podcast' && item.thumbnail) {
                  uploadedImage = (item.thumbnail && item.thumbnail.startsWith('data:')) ? item.thumbnail : null;
             }
-            // Reset QRIS Upload specifically for Donation
             if (section === 'donation-settings' && item.qrisImage) {
                 uploadedQrisImage = item.qrisImage.startsWith('data:') ? item.qrisImage : null;
             } else {
@@ -1142,16 +1099,13 @@
             else if (section === 'donation-settings') label = 'Pengaturan Donation';
 
             document.getElementById('modal-title').textContent = (isEdit ? 'Edit ' : 'Tambah ') + label;
-
             var html = '';
 
-            // --- DONATION SETTINGS FORM ---
             if (section === 'donation-settings') {
                 html += formField('Judul Hero', 'f-hero-title', item ? item.heroTitle : '', 'text', 'Contoh: Support Our Mission');
                 html += formTextarea('Sub Hero', 'f-hero-sub', item ? item.heroSubtitle : '', 'Deskripsi...');
                 html += formField('Teks di Gambar Strip', 'f-strip-text', item ? item.stripText : '', 'text', 'Together We Can');
                 
-                // Upload Image Strip
                 html += '<div class="mb-4"><label class="block text-sm font-semibold text-heading mb-1.5">Gambar Strip (Banner Tengah)</label><div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
                 var existingStrip = '';
                 if (item && item.stripImage) existingStrip = item.stripImage.startsWith('data:') ? item.stripImage : '../' + item.stripImage;
@@ -1162,13 +1116,11 @@
                 }
                 html += '</div></div>';
 
-                // Payment Details
                 html += '<hr class="my-4"><h4 class="font-bold text-heading mb-4">Payment Details</h4>';
                 html += formField('Nama Bank', 'f-bank-name', item ? item.bankName : '', 'text', 'BCA');
                 html += formField('Atas Nama', 'f-acc-name', item ? item.accountName : '', 'text', 'Yuni Triandini');
                 html += formField('Nomor Rekening', 'f-acc-num', item ? item.accountNumber : '', 'text', '466...');
                 
-                // Upload QRIS
                 html += '<div class="mb-4"><label class="block text-sm font-semibold text-heading mb-1.5">Gambar QRIS</label><div id="upload-zone-qris" class="upload-zone rounded-xl p-4 text-center border border-dashed border-gray-300">';
                 var existingQris = '';
                 if (item && item.qrisImage) existingQris = item.qrisImage.startsWith('data:') ? item.qrisImage : '../' + item.qrisImage;
@@ -1179,8 +1131,6 @@
                 }
                 html += '</div></div>';
             }
-            // --- END DONATION SETTINGS ---
-
             else if (section === 'about-hero') {
                 html += formField('Judul (Support HTML)', 'f-title', item ? item.title : '', 'text', 'Judul besar...');
                 html += formTextarea('Subtitle', 'f-subtitle', item ? item.subtitle : '', 'Deskripsi singkat...');
@@ -1191,7 +1141,6 @@
                     '<div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
                 var existingHeroSrc = '';
                 if (item && item.image) existingHeroSrc = item.image.startsWith('data:') ? item.image : '../' + item.image;
-
                 if (existingHeroSrc) {
                     html += '<div class="relative"><img src="' + escapeAttr(existingHeroSrc) + '" class="w-full h-40 object-cover rounded-lg bg-gray-50"><button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 text-white rounded-full"><i class="fas fa-times"></i></button></div><p class="text-xs text-green-600 mt-2">Gambar Hero tersedia</p>';
                 } else {
@@ -1239,7 +1188,15 @@
                 html += formField('Judul Kegiatan', 'f-title', item ? item.title : '', 'text', 'Judul lengkap...');
                 html += formField('Kategori', 'f-category', item ? item.category : '', 'text', 'Contoh: Education');
                 html += formField('Tanggal', 'f-date', item ? item.date : '', 'text', '10 November 2025');
-                html += formTextarea('Deskripsi Singkat', 'f-desc', item ? item.description : '', 'Ringkasan...');
+                html += formTextarea('Deskripsi Singkat (untuk Kartu)', 'f-desc', item ? item.description : '', 'Ringkasan...');
+
+                // --- TAMBAHAN FULL STORY ---
+                html += '<div class="mb-4">' +
+                    '<label class="block text-sm font-semibold text-heading mb-1.5">Full Story (Detail Artikel)</label>' +
+                    '<p class="text-xs text-gray-400 mb-2">Anda bisa menggunakan tag HTML sederhana seperti &lt;p&gt;, &lt;br&gt;, &lt;b&gt;.</p>' +
+                    '<textarea id="f-full-story" rows="10" placeholder="Tulis cerita lengkap di sini..." class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">' + (item ? (item.fullStory || '') : '') + '</textarea>' +
+                '</div>';
+                // ---------------------------
 
                 var existingSrc = '';
                 if (item && item.image) existingSrc = item.image.startsWith('data:') ? item.image : '../' + item.image;
@@ -1255,7 +1212,6 @@
                 
                 var existingThumb = '';
                 if (item && item.thumbnail) existingThumb = item.thumbnail.startsWith('data:') ? item.thumbnail : '../' + item.thumbnail;
-
                 html += '<div class="mb-4"><label class="block text-sm font-semibold text-heading mb-1.5">Thumbnail Cover</label><div id="upload-zone" class="upload-zone rounded-xl p-4 text-center">';
                 if (existingThumb) {
                     html += '<div class="relative"><img src="' + escapeAttr(existingThumb) + '" class="w-full h-40 object-cover rounded-lg bg-gray-50"><button type="button" onclick="removeUpload()" class="absolute top-1 right-1 w-7 h-7 bg-red-500 text-white rounded-full"><i class="fas fa-times"></i></button></div><p class="text-xs text-green-600 mt-2">Thumbnail tersedia</p>';
@@ -1312,13 +1268,10 @@
 
             document.getElementById('modal-body').innerHTML = html;
 
-            // Init Drag & Drop logic
             if (section === 'donation-settings') {
                 initDragDrop('strip');
-                // Attach QRIS drag drop specifically
                 var qrisZone = document.getElementById('upload-zone-qris');
                 if(qrisZone) {
-                    // Re-attach event listener to ensure it works after HTML replacement
                     qrisZone.addEventListener('click', (function() { triggerUpload('qris'); }));
                     qrisZone.addEventListener('dragover', function(e) {
                         e.preventDefault(); qrisZone.classList.add('dragover');
@@ -1329,7 +1282,6 @@
                         var file = e.dataTransfer.files[0];
                         if (!file || !file.type.startsWith('image/')) return showToast('File harus gambar', 'error');
                         if (file.size > 10 * 1024 * 1024) return showToast('File terlalu besar', 'error');
-                        
                         qrisZone.innerHTML = '<div class="py-6 text-center text-gray-400"><i class="fas fa-spinner fa-spin text-2xl mb-2 block"></i><p class="text-xs">Memproses QRIS...</p></div>';
                         compressImage(file, 400, 0.7, function(base64) {
                             uploadedQrisImage = base64;
@@ -1482,6 +1434,8 @@
                 if (uploadedImage) image = uploadedImage;
                 else if (isEdit && editingItem.image && !editingItem.image.startsWith('data:')) image = editingItem.image;
 
+                var fullStoryVal = document.getElementById('f-full-story').value;
+
                 var obj = {
                     id: isEdit ? editingItem.id : Date.now(),
                     title: title,
@@ -1489,7 +1443,8 @@
                     date: document.getElementById('f-date').value.trim(),
                     description: document.getElementById('f-desc').value.trim(),
                     image: image,
-                    link: '#'
+                    link: '#',
+                    fullStory: fullStoryVal
                 };
                 var list = data.activityCards;
                 if (isEdit) {
@@ -1555,7 +1510,6 @@
                 data.donationSettings.heroSubtitle = document.getElementById('f-hero-sub').value.trim();
                 data.donationSettings.stripText = document.getElementById('f-strip-text').value.trim();
                 
-                // Handle Strip Image
                 if (uploadedImage) {
                     data.donationSettings.stripImage = uploadedImage;
                 } else if (isEdit) {
@@ -1568,7 +1522,6 @@
                 data.donationSettings.accountName = document.getElementById('f-acc-name').value.trim();
                 data.donationSettings.accountNumber = document.getElementById('f-acc-num').value.trim();
                 
-                // Handle QRIS Image
                 if (uploadedQrisImage) {
                     data.donationSettings.qrisImage = uploadedQrisImage;
                 } else if (isEdit) {
