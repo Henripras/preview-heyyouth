@@ -220,6 +220,11 @@
                 if (raw) {
                     var parsed = JSON.parse(raw);
                     if(parsed && parsed.activityCards) {
+                        // Patch broken images in localStorage
+                        parsed.activityCards.forEach(function(card) {
+                            if (card.image === 'img/activity1.jpg') card.image = 'img/Donation.jpeg';
+                            if (card.image === 'img/activity2.jpg') card.image = 'img/Front Card.webp';
+                        });
                         return parsed;
                     }
                 }

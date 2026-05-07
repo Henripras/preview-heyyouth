@@ -45,7 +45,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Style/Style.css">
 </head>
 <body class="bg-bg text-body font-sans antialiased selection:bg-primary selection:text-white">
 
@@ -103,7 +103,7 @@
                 </h1>
                 <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 animate-fade-in-up" style="animation-delay: 0.2s;">Aktivitas kami dirancang untuk menciptakan dampak nyata bagi komunitas dan memberikan peluang belajar bagi generasi penerus.</p>
                 <div class="animate-fade-in-up" style="animation-delay: 0.3s;">
-                    <a href="#latest-activities" class="inline-flex items-center px-8 py-4 bg-accent hover:bg-yellow-600 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-orange-200 hover:-translate-y-1">Learn More <i class="fas fa-arrow-down ml-2"></i></a>
+                    <a href="#latest-activities" class="inline-flex items-center px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base bg-accent hover:bg-yellow-600 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-orange-200 hover:-translate-y-1">Learn More <i class="fas fa-arrow-down ml-2"></i></a>
                 </div>
             </div>
         </section>
@@ -149,8 +149,8 @@
                 <h2 class="text-3xl lg:text-5xl font-bold text-heading mb-6">Ready to be part of the movement?</h2>
                 <p class="text-lg text-gray-600 mb-10 max-w-2xl mx-auto">Together, we can create a brighter future for the next generation.</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-8 py-3.5 rounded-full font-bold transition-all shadow-lg hover:-translate-y-1">Join Hey Youth Today!</a>
-                    <a href="index.html#contact" class="bg-white border border-gray-300 text-heading hover:border-primary hover:text-primary px-8 py-3.5 rounded-full font-bold transition-all shadow-sm hover:shadow-md">Contact Us</a>
+                    <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-6 py-3 sm:px-8 sm:py-3.5 text-sm sm:text-base rounded-full font-bold transition-all shadow-lg hover:-translate-y-1">Join Hey Youth Today!</a>
+                    <a href="index.html#contact" class="bg-white border border-gray-300 text-heading hover:border-primary hover:text-primary px-6 py-3 sm:px-8 sm:py-3.5 text-sm sm:text-base rounded-full font-bold transition-all shadow-sm hover:shadow-md">Contact Us</a>
                 </div>
             </div>
         </section>
@@ -188,7 +188,7 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="Javascript/Script.js"></script>
 
     <!-- SCRIPT KHUSUS UNTUK ACTIVITIES -->
     <script>
@@ -207,7 +207,7 @@
                     date: '10 November 2025', 
                     title: 'Dream Big, Learn Bigger: Inspiring the Next Generation at Yos Sudarso', 
                     description: 'Kami mengunjungi sekolah di Yos Sudarso untuk berbagi inspirasi dan materi pendidikan interaktif kepada ratusan siswa, membantu mereka bermimpi lebih besar.',
-                    image: 'img/activity1.jpg',
+                    image: 'img/Donation.jpeg',
                     link: '#',
                     fullStory: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>'
                 },
@@ -217,7 +217,7 @@
                     date: '14 April 2025', 
                     title: 'Instilling Education, Igniting Dreams: Hey Youth\'s Visit to TBM Kolong', 
                     description: 'Kunjungan spesial ke TBM Kolong untuk mendukung literasi di lingkungan sekitar, mendonasikan buku, dan mengadakan sesi membaca bersama anak-anak.',
-                    image: 'img/activity2.jpg',
+                    image: 'img/Front Card.webp',
                     link: '#',
                     fullStory: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>'
                 }
@@ -245,6 +245,11 @@
                     var parsed = JSON.parse(raw);
                     // Validasi sederhana untuk memastikan struktur ada
                     if(parsed.activityCards && parsed.podcasts) {
+                        // Patch broken images in localStorage
+                        parsed.activityCards.forEach(function(card) {
+                            if (card.image === 'img/activity1.jpg') card.image = 'img/Donation.jpeg';
+                            if (card.image === 'img/activity2.jpg') card.image = 'img/Front Card.webp';
+                        });
                         return parsed;
                     }
                 }
