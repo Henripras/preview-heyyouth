@@ -331,10 +331,10 @@
         /* =========================================
            INIT
            ========================================= */
-        document.addEventListener('DOMContentLoaded', function () {
-            var data = getData();
-            renderActivityCards(data.activityCards);
-            renderPodcasts(data.podcasts);
+        document.addEventListener('DOMContentLoaded', async function () {
+            var data = await window.getFirebaseData(DEFAULT_DATA);
+            renderActivityCards(data.activityCards || DEFAULT_DATA.activityCards);
+            renderPodcasts(data.podcasts || DEFAULT_DATA.podcasts);
         });
 
     })();

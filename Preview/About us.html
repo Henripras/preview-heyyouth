@@ -386,9 +386,10 @@
             }
 
             // Jalankan saat DOM siap
-            document.addEventListener('DOMContentLoaded', function() {
-                renderHero();
-                renderTeam();
+            document.addEventListener('DOMContentLoaded', async function() {
+                var data = await window.getFirebaseData({ aboutHero: _DEFAULT_ABOUT.hero, team: _DEFAULT_ABOUT.team });
+                renderHero(data.aboutHero || _DEFAULT_ABOUT.hero);
+                renderTeam(data.team || _DEFAULT_ABOUT.team);
             });
 
         })();
