@@ -91,12 +91,8 @@ var _CMS_DEFAULT = {
     }
 };
 
-function _getCMS() {
-    try {
-        var raw = localStorage.getItem('hey_youth_cms');
-        if (raw) return JSON.parse(raw);
-    } catch (e) { }
-    return JSON.parse(JSON.stringify(_CMS_DEFAULT));
+async function _getCMS() {
+    return await window.getFirebaseData(_CMS_DEFAULT);
 }
 
 /* ------ CMS: RENDER EXTERNAL TESTIMONIALS ------ */
@@ -296,29 +292,60 @@ function _initNavbar() {
     });
 }
 
-/* ------ MOBILE MENU ------ */
-function _initMobile() {
+/* ------ INIT (MAIN SITES) ------ */
+document.addEventListener('DOMContentLoaded', async function () {
+    // 1. Mobile Menu
     var btn = document.getElementById('mobile-menu-btn');
     var menu = document.getElementById('mobile-menu');
     var iconO = document.getElementById('icon-menu');
     var iconC = document.getElementById('icon-close');
-    if (!btn || !menu || !iconO || !iconC) return;
-    btn.addEventListener('click', function() {
-        menu.classList.toggle('hidden');
-        iconO.classList.toggle('hidden');
-        iconC.classList.toggle('hidden');
-        document.body.classList.toggle('overflow-hidden');
-    });
-    var links = menu.querySelectorAll('a');
-    for (var i = 0; i < links.length; i++) {
-        links[i].addEventListener('click', function() {
-            menu.classList.add('hidden');
-            iconO.classList.remove('hidden');
-            iconC.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
+    
+    if(btn && menu && iconO && iconC) {
+        btn.addEventListener('click', function() {
+            menu.classList.toggle('hidden');
+            iconO.classList.toggle('hidden');
+            iconC.classList.toggle('hidden');
+            document.body.classList.toggle('overflow-hidden');
         });
+        var links = menu.querySelectorAll('a');
+        for(var i=0; i<links.length; i++){
+            links[i].addEventListener('click', function(){
+                menu.classList.add('hidden');
+                iconO.classList.remove('hidden');
+                iconC.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            });
+        }
     }
-}
+
+    // 2. Fetch CMS Data
+    var cms = await _getCMS();
+
+    /* --- 1. Load CMS data --- */
+    try {
+        _renderExternal(cms.externalTestimonials);
+        _renderInternal(cms.internalTestimonials);
+        _renderFAQ(cms.faqs);
+        _renderPartners(cms.partners);
+        _renderDonation(cms); // RENDER DONATION
+
+        if (cms.locations && cms.locations.length) {
+            _cmsLocations = cms.locations;
+        }
+    } catch (e) {
+        console.error('CMS error:', e);
+    }
+    
+    /* --- 2. FAQ accordion --- */
+    _initFAQ();
+
+    /* --- 3. Navbar --- */
+    _initNavbar();
+
+    /* --- 5. Map (Updated) --- */
+    _initMap();
+
+});
 
 /* =============================================
    LEAFLET MAP (FINAL PRODUCTION VERSION)

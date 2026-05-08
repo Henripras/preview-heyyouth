@@ -289,7 +289,10 @@
         </div>
     </footer>
 
-    <script src="Javascript/Script.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="javascript/firebase-init.js"></script>
+    <script src="javascript/Script.js"></script>
     <!-- Script Khusus About Us untuk mengambil data CMS -->
     <script>
         (function() {
@@ -332,9 +335,7 @@
 
             // Render Hero Section
                         // Render Hero Section
-            function renderHero() {
-                var data = getData();
-                var heroData = data.aboutHero || _DEFAULT_ABOUT.hero;
+            function renderHero(heroData) {
                 
                 var titleEl = document.getElementById('hero-title');
                 var subEl = document.getElementById('hero-subtitle');
@@ -356,9 +357,7 @@
             }
 
             // Render Team Section
-            function renderTeam() {
-                var data = getData();
-                var teamData = data.team || _DEFAULT_ABOUT.team;
+            function renderTeam(teamData) {
                 var container = document.getElementById('team-container');
 
                 if (!container) return;
