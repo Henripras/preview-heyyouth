@@ -6,30 +6,7 @@
     <title>CMS Dashboard - Hey Youth!</title>
     <meta name="robots" content="noindex, nofollow">
 
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1D4ED8',
-                        primaryDark: '#1e40af',
-                        accent: '#F59E0B',
-                        bg: '#F8FAFC',
-                        heading: '#0F172A',
-                        body: '#475569',
-                        surface: '#EFF6FF',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
-                    },
-                }
-            }
-        }
-    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,6 +58,7 @@
             object-fit: contain;
         }
     </style>
+    <link rel="stylesheet" href="../Style/tailwind.css">
 </head>
 
 <body class="bg-bg text-body min-h-screen">
@@ -401,6 +379,12 @@
             return;
         }
 
+        // ONE-TIME FIX: Clear bad localStorage paths from old default data
+        if (!localStorage.getItem('hey_youth_cms_v2_fixed')) {
+            localStorage.removeItem('hey_youth_cms');
+            localStorage.setItem('hey_youth_cms_v2_fixed', 'true');
+        }
+
         /* =========================================
            CONSTANTS & DEFAULT DATA
            ========================================= */
@@ -408,14 +392,14 @@
 
         var DEFAULT_DATA = {
             externalTestimonials: [
-                { id: 1, name: 'Mr. Rifki Zamzam', title: 'Co-Founder, Qatar HR Forum', quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', image: 'img/Testi/p1.jpg' },
-                { id: 2, name: 'Ms. Rina Nurutami, S.Psi', title: 'Vice Principal, Daarut Tauhid', quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', image: 'img/Testi/p2.jpg' },
-                { id: 3, name: 'Yiwen Xu', title: 'Student, Univ. of Edinburgh', quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', image: 'img/Testi/p3.jpg' }
+                { id: 1, name: 'Mr. Rifki Zamzam', title: 'Co-Founder, Qatar HR Forum', quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', image: 'https://ui-avatars.com/api/?name=Rifki+Zamzam&size=100&background=random&color=fff' },
+                { id: 2, name: 'Ms. Rina Nurutami, S.Psi', title: 'Vice Principal, Daarut Tauhid', quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', image: 'https://ui-avatars.com/api/?name=Rina+Nurutami&size=100&background=random&color=fff' },
+                { id: 3, name: 'Yiwen Xu', title: 'Student, Univ. of Edinburgh', quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', image: 'https://ui-avatars.com/api/?name=Yiwen+Xu&size=100&background=random&color=fff' }
             ],
             internalTestimonials: [
-                { id: 4, name: 'Alya', role: 'Community Coordinator', quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', image: 'img/Testi/Alya.jpg' },
-                { id: 5, name: 'Herza', role: 'Web Developer', quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', image: 'img/Testi/Herza.jpg' },
-                { id: 6, name: 'Karyn', role: 'Teacher', quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', image: 'img/Testi/Karyn.jpg' }
+                { id: 4, name: 'Alya', role: 'Community Coordinator', quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', image: 'https://ui-avatars.com/api/?name=Alya&size=100&background=random&color=fff' },
+                { id: 5, name: 'Herza', role: 'Web Developer', quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', image: 'https://ui-avatars.com/api/?name=Herza&size=100&background=random&color=fff' },
+                { id: 6, name: 'Karyn', role: 'Teacher', quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', image: 'https://ui-avatars.com/api/?name=Karyn&size=100&background=random&color=fff' }
             ],
             faqs: [
                 { id: 7, question: "Why don't we recruit people per batch?", answer: 'Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.' },
@@ -461,9 +445,9 @@
                 image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop'
             },
             team: [
-                { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'img/Testi/Yuni.jpg', linkedin: '#', instagram: '#' },
-                { id: 202, name: 'Rama', role: 'Head of Marketing', image: 'img/Testi/Rama.jpg', linkedin: '#', instagram: '#' },
-                { id: 203, name: 'Dzikri', role: 'Head of Graphic Designer', image: 'img/Testi/Dzikri.jpg', linkedin: '#', instagram: '#' }
+                { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'https://ui-avatars.com/api/?name=Yuni+Triandini&size=100&background=random&color=fff', linkedin: '#', instagram: '#' },
+                { id: 202, name: 'Rama', role: 'Head of Marketing', image: 'https://ui-avatars.com/api/?name=Rama&size=100&background=random&color=fff', linkedin: '#', instagram: '#' },
+                { id: 203, name: 'Dzikri', role: 'Head of Graphic Designer', image: 'https://ui-avatars.com/api/?name=Dzikri&size=100&background=random&color=fff', linkedin: '#', instagram: '#' }
             ],
             activityCards: [
                 { 
@@ -472,7 +456,7 @@
                     date: '10 November 2025', 
                     title: 'Dream Big, Learn Bigger: Inspiring the Next Generation at Yos Sudarso', 
                     description: 'Kami mengunjungi sekolah di Yos Sudarso untuk berbagi inspirasi dan materi pendidikan interaktif kepada ratusan siswa, membantu mereka bermimpi lebih besar.',
-                    image: 'img/activity1.jpg',
+                    image: 'https://placehold.co/400x250?text=Activity+1',
                     link: '#',
                     fullStory: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>'
                 },
@@ -482,7 +466,7 @@
                     date: '14 April 2025', 
                     title: 'Instilling Education, Igniting Dreams: Hey Youth\'s Visit to TBM Kolong', 
                     description: 'Kunjungan spesial ke TBM Kolong untuk mendukung literasi di lingkungan sekitar, mendonasikan buku, dan mengadakan sesi membaca bersama anak-anak.',
-                    image: 'img/activity2.jpg',
+                    image: 'https://placehold.co/400x250?text=Activity+2',
                     link: '#',
                     fullStory: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>'
                 }
@@ -492,14 +476,14 @@
                     id: 401,
                     episode: 'Episode 2',
                     title: 'Suicide Is Not The Answer: Here\'s Why',
-                    thumbnail: 'https://picsum.photos/seed/pod1/300/300', 
+                    thumbnail: 'https://placehold.co/300x300?text=Podcast+2', 
                     spotifyLink: 'https://open.spotify.com/episode/5xcQh5HewK3MvIcxkSiWef' 
                 },
                 {
                     id: 402,
                     episode: 'Episode 1',
                     title: 'The Power of Self-Affirmation: Transforming Our Lives',
-                    thumbnail: 'https://picsum.photos/seed/pod2/300/300',
+                    thumbnail: 'https://placehold.co/300x300?text=Podcast+1',
                     spotifyLink: 'https://open.spotify.com/episode/1a0xUotfQZAdD6jtHT4l5g?si=l3nk1yvSSzK7XPMMFLMvHA&nd=1&dlsi=746e34d28eaa4e68'
                 }
             ],
@@ -815,7 +799,7 @@
             container.innerHTML = items.map(function (item) {
                 var imgSrc = item.image || '';
                 var isBase64 = imgSrc && imgSrc.startsWith('data:');
-                var displaySrc = isBase64 ? imgSrc : (imgSrc ? '../' + imgSrc : '');
+                var displaySrc = (isBase64 || imgSrc.startsWith('http')) ? imgSrc : (imgSrc ? '../' + imgSrc : '');
                 var fallback = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.name) + '&size=100&background=random&color=fff';
                 var subtitle = type === 'external' ? item.title : item.role;
                 var badge = isBase64 ? '<span class="text-[9px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-medium">uploaded</span>' : '';
@@ -891,7 +875,7 @@
             container.innerHTML = items.map(function (item) {
                 var imgSrc = item.image || '';
                 var isBase64 = imgSrc && imgSrc.startsWith('data:');
-                var displaySrc = isBase64 ? imgSrc : (imgSrc ? '../' + imgSrc : '');
+                var displaySrc = (isBase64 || imgSrc.startsWith('http')) ? imgSrc : (imgSrc ? '../' + imgSrc : '');
                 var fallback = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.name) + '&size=100&background=random&color=fff';
                 var badge = isBase64 ? '<span class="text-[9px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full font-medium">uploaded</span>' : '';
                 
@@ -917,7 +901,7 @@
                 return;
             }
             container.innerHTML = items.map(function (item) {
-                var imgSrc = item.image ? (item.image.startsWith('data:') ? item.image : '../' + item.image) : 'https://via.placeholder.com/400x250?text=No+Image';
+                var imgSrc = item.image ? (item.image.startsWith('data:') || item.image.startsWith('http') ? item.image : '../' + item.image) : 'https://via.placeholder.com/400x250?text=No+Image';
                 var badgeColor = item.category === 'Education' ? 'bg-primary/90' : 'bg-accent/90';
                 
                 return '<div class="cms-card bg-white rounded-xl border border-gray-200 p-4 flex flex-col">' +
@@ -941,7 +925,7 @@
                 return;
             }
             container.innerHTML = items.map(function (item) {
-                var imgSrc = item.thumbnail ? (item.thumbnail.startsWith('data:') ? item.thumbnail : '../' + item.thumbnail) : 'https://via.placeholder.com/150?text=No+Img';
+                var imgSrc = item.thumbnail ? (item.thumbnail.startsWith('data:') || item.thumbnail.startsWith('http') ? item.thumbnail : '../' + item.thumbnail) : 'https://via.placeholder.com/150?text=No+Img';
                 var fallback = 'https://via.placeholder.com/150?text=No+Img';
                 
                 return '<div class="cms-card bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">' +
@@ -1001,7 +985,7 @@
             if(!el) return;
             el.innerHTML = 
                 '<div class="flex gap-4 mb-4">' +
-                    '<img src="' + (hero.image ? (hero.image.startsWith('data:') ? hero.image : '../'+hero.image) : 'https://via.placeholder.com/150') + '" class="w-24 h-24 object-cover rounded-lg shadow-sm">' +
+                    '<img src="' + (hero.image ? (hero.image.startsWith('data:') || hero.image.startsWith('http') ? hero.image : '../'+hero.image) : 'https://via.placeholder.com/150') + '" class="w-24 h-24 object-cover rounded-lg shadow-sm">' +
                     '<div class="flex-1">' +
                         '<h3 class="text-xl font-bold text-heading mb-1 leading-tight">' + hero.title + '</h3>' +
                         '<p class="text-xs text-gray-500 line-clamp-2">' + hero.subtitle + '</p>' +

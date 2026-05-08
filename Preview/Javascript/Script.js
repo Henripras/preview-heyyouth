@@ -24,14 +24,14 @@ function _avatar(name) {
 /* ------ DEFAULT DATA (sama persis dengan CMS) ------ */
 var _CMS_DEFAULT = {
     externalTestimonials: [
-        { id: 1, name: 'Mr. Rifki Zamzam', title: 'Co-Founder, Qatar HR Forum', quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', image: 'img/Testi/p1.jpg' },
-        { id: 2, name: 'Ms. Rina Nurutami, S.Psi', title: 'Vice Principal, Daarut Tauhid', quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', image: 'img/Testi/p2.jpg' },
-        { id: 3, name: 'Yiwen Xu', title: 'Student, Univ. of Edinburgh', quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', image: 'img/Testi/p3.jpg' }
+        { id: 1, name: 'Mr. Rifki Zamzam', title: 'Co-Founder, Qatar HR Forum', quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', image: 'https://ui-avatars.com/api/?name=Rifki+Zamzam&size=100&background=random&color=fff' },
+        { id: 2, name: 'Ms. Rina Nurutami, S.Psi', title: 'Vice Principal, Daarut Tauhid', quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', image: 'https://ui-avatars.com/api/?name=Rina+Nurutami&size=100&background=random&color=fff' },
+        { id: 3, name: 'Yiwen Xu', title: 'Student, Univ. of Edinburgh', quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', image: 'https://ui-avatars.com/api/?name=Yiwen+Xu&size=100&background=random&color=fff' }
     ],
     internalTestimonials: [
-        { id: 4, name: 'Alya', role: 'Community Coordinator', quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', image: 'img/Testi/Alya.jpg' },
-        { id: 5, name: 'Herza', role: 'Web Developer', quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', image: 'img/Testi/Herza.jpg' },
-        { id: 6, name: 'Karyn', role: 'Teacher', quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', image: 'img/Testi/Karyn.jpg' }
+        { id: 4, name: 'Alya', role: 'Community Coordinator', quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', image: 'https://ui-avatars.com/api/?name=Alya&size=100&background=random&color=fff' },
+        { id: 5, name: 'Herza', role: 'Web Developer', quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', image: 'https://ui-avatars.com/api/?name=Herza&size=100&background=random&color=fff' },
+        { id: 6, name: 'Karyn', role: 'Teacher', quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', image: 'https://ui-avatars.com/api/?name=Karyn&size=100&background=random&color=fff' }
     ],
     faqs: [
         { id: 7, question: "Why don't we recruit people per batch?", answer: 'Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.' },
