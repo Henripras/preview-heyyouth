@@ -368,6 +368,7 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="../javascript/firebase-init.js"></script>
     <script>
@@ -377,10 +378,14 @@
         /* =========================================
            AUTH CHECK
            ========================================= */
-        if (!localStorage.getItem('hey_youth_auth')) {
-            window.location.href = 'login.html';
-            return;
-        }
+        // Listen to Auth State
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                window.location.href = 'Login.html';
+            } else {
+                initDashboard();
+            }
+        });
 
         // ONE-TIME FIX: Clear bad localStorage paths from old default data
         if (!localStorage.getItem('hey_youth_cms_v2_fixed')) {
@@ -1575,8 +1580,11 @@
         };
 
         window.logout = function () {
-            localStorage.removeItem('hey_youth_auth');
-            window.location.href = 'login.html';
+            firebase.auth().signOut().then(function() {
+                window.location.href = 'Login.html';
+            }).catch(function(error) {
+                console.error("Logout error", error);
+            });
         };
 
         /* =========================================
@@ -1632,8 +1640,6 @@
             memoryData = data;
             renderAllLists();
         }
-        initDashboard();
-
     })();
     </script>
 </body>
