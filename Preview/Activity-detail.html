@@ -167,6 +167,107 @@
                         <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-youtube"></i></a>
                         <a href="#" class="w-8 h-8 rounded bg-gray-800 flex items-center justify-center hover:bg-primary hover:text-white transition-all"><i class="fab fa-tiktok"></i></a>
                     </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                <p>&copy; 2025 Hey Youth! All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="javascript/firebase-init.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Navbar mobile toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            if (btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    iconMenu.classList.toggle('hidden');
+                    iconClose.classList.toggle('hidden');
+                });
+            }
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 20) {
+                    nav.classList.add('shadow-sm', 'bg-white/95');
+                    nav.classList.remove('bg-white/90');
+                } else {
+                    nav.classList.remove('shadow-sm', 'bg-white/95');
+                    nav.classList.add('bg-white/90');
+                }
+            });
+
+            // Fetch Data from Firebase
+            try {
+                // Gunakan default fallback data
+                const defaultData = { activityCards: [] };
+                const data = await window.getFirebaseData(defaultData);
+                
+                // Ambil ID dari URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const activityId = urlParams.get('id');
+
+                const loadingState = document.getElementById('loading-state');
+                const articleContainer = document.getElementById('article-container');
+                const errorState = document.getElementById('error-state');
+
+                if (!activityId || !data.activityCards || data.activityCards.length === 0) {
+                    loadingState.classList.add('hidden');
+                    errorState.classList.remove('hidden');
+                    return;
+                }
+
+                // Cari activity yang sesuai dengan ID (bisa int atau string)
+                const activity = data.activityCards.find(a => String(a.id) === String(activityId));
+
+                if (activity) {
+                    // Populate UI
+                    document.getElementById('detail-title').textContent = activity.title;
+                    document.getElementById('detail-category').textContent = activity.category;
+                    document.getElementById('detail-date').textContent = activity.date;
+                    document.getElementById('detail-description').textContent = activity.description;
+                    
+                    // Full story (mendukung HTML dasar seperti <p>, <br>)
+                    const fullContent = document.getElementById('detail-full-content');
+                    if (activity.fullStory && activity.fullStory.trim() !== '') {
+                        fullContent.innerHTML = activity.fullStory;
+                    } else {
+                        fullContent.innerHTML = '<p>' + activity.description + '</p>';
+                    }
+
+                    // Hero Background
+                    const detailHero = document.getElementById('detail-hero');
+                    let imgSrc = activity.image || 'https://images.unsplash.com/photo-1497633762265-9381796906ea?q=80&w=1000&auto=format&fit=crop';
+                    detailHero.style.backgroundImage = 'url("' + imgSrc + '")';
+
+                    // Update Title Browser
+                    document.title = activity.title + ' - Hey Youth!';
+
+                    // Tampilkan Artikel
+                    loadingState.classList.add('hidden');
+                    articleContainer.classList.remove('hidden');
+                } else {
+                    // Jika tidak ditemukan
+                    loadingState.classList.add('hidden');
+                    errorState.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error("Error loading activity details:", err);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('error-state').classList.remove('hidden');
+            }
+        });
     </script>
 </body>
 </html>
