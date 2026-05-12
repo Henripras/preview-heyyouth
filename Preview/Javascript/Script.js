@@ -72,10 +72,10 @@ var _CMS_DEFAULT = {
     ],
 
     partners: [
-        { id: 1, name: 'Qatar HR Forum', description: 'Membangun jaringan profesional HR global.', icon: 'fa-users-cog', color: 'blue', link: 'https://qatarhrforum.com' },
-        { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', color: 'pink', link: 'https://instagram.com' },
-        { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', color: 'purple', link: '#' },
-        { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', color: 'green', link: '#' }
+        { id: 1, name: 'Qatar HR Forum', description: 'Membangun jaringan profesional HR global.', icon: 'fa-users-cog', image: '', color: 'blue', link: 'https://qatarhrforum.com' },
+        { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', image: '', color: 'pink', link: 'https://instagram.com' },
+        { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', image: '', color: 'purple', link: '#' },
+        { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', image: '', color: 'green', link: '#' }
     ],
     
     // DATA DONATION BARU
@@ -181,10 +181,20 @@ function _renderPartners(data) {
         var targetAttr = (targetLink !== '#') ? 'target="_blank" rel="noopener noreferrer"' : '';
         var btnText = (targetLink !== '#') ? 'Visit Website <i class="fas fa-external-link-alt ml-1 text-xs"></i>' : 'Learn More';
 
+        var logoHtml = '';
+        if (p.image) {
+            var imgSrc = p.image.startsWith('data:') || p.image.startsWith('http') ? p.image : p.image;
+            logoHtml = '<div class="w-24 h-24 rounded-2xl overflow-hidden mb-6 bg-white border border-gray-100 shadow-sm flex items-center justify-center p-3 group-hover:scale-105 transition-transform duration-300">' +
+                         '<img src="' + _escA(imgSrc) + '" class="max-w-full max-h-full object-contain">' +
+                       '</div>';
+        } else {
+            logoHtml = '<div class="w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-6 transition-all duration-300 ' + colorClass + '">' +
+                         '<i class="fas ' + (p.icon || 'fa-building') + '"></i>' +
+                       '</div>';
+        }
+
         html += '<div class="bg-white rounded-2xl p-8 shadow-md border border-gray-100 hover:shadow-xl transition-all duration-300 group flex flex-col items-center text-center h-full">' +
-            '<div class="w-24 h-24 rounded-full flex items-center justify-center text-4xl mb-6 transition-all duration-300 ' + colorClass + '">' +
-                '<i class="fas ' + (p.icon || 'fa-building') + '"></i>' +
-            '</div>' +
+            logoHtml +
             '<h3 class="text-xl font-bold text-heading mb-6 leading-tight">' + _esc(p.name) + '</h3>' +
             '<p class="text-sm text-gray-500 mb-6 flex-grow line-clamp-3">' + _esc(p.description) + '</p>' + 
             
