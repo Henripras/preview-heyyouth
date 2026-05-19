@@ -415,37 +415,46 @@ function _initMap() {
 }
 
 /* =============================================
-   INIT ON DOM READY
+   LANGUAGE TOGGLE LOGIC
    ============================================= */
-document.addEventListener('DOMContentLoaded', function() {
+function initLanguageToggle() {
+    var groups = document.querySelectorAll('.lang-toggle-group');
+    if (!groups.length) return;
 
-    /* --- 1. Load CMS data --- */
-    try {
-        var cms = _getCMS();
-
-        _renderExternal(cms.externalTestimonials);
-        _renderInternal(cms.internalTestimonials);
-        _renderFAQ(cms.faqs);
-        _renderPartners(cms.partners);
-        _renderDonation(cms); // RENDER DONATION
-
-        if (cms.locations && cms.locations.length) {
-            _cmsLocations = cms.locations;
-        }
-    } catch (e) {
-        console.error('CMS error:', e);
-    }
+    var currentLang = localStorage.getItem('heyyouth_lang') || 'en';
     
-    /* --- 2. FAQ accordion --- */
-    _initFAQ();
+    function setLang(lang) {
+        document.body.classList.remove('lang-en', 'lang-id');
+        document.body.classList.add('lang-' + lang);
+        localStorage.setItem('heyyouth_lang', lang);
+        
+        groups.forEach(function(group) {
+            var slider = group.querySelector('.lang-slider-bg');
+            if (slider) {
+                if (lang === 'en') {
+                    slider.style.transform = 'translateX(40px)'; // Move to EN
+                } else {
+                    slider.style.transform = 'translateX(0px)';  // Move to ID
+                }
+            }
+        });
+    }
 
-    /* --- 3. Navbar --- */
-    _initNavbar();
+    setLang(currentLang);
 
-    /* --- 4. Mobile menu --- */
-    _initMobile();
+    groups.forEach(function(group) {
+        var btns = group.querySelectorAll('.lang-btn');
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                var lang = e.currentTarget.getAttribute('data-lang');
+                if (lang) {
+                    setLang(lang);
+                }
+            });
+        });
+    });
+}
 
-    /* --- 5. Map (Updated) --- */
-    _initMap();
-
+document.addEventListener('DOMContentLoaded', function() {
+    initLanguageToggle();
 });

@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="Style/Style.css">
 </head>
 
-<body class="bg-bg text-body font-sans antialiased selection:bg-primary selection:text-white">
+<body class="bg-bg text-body font-sans antialiased selection:bg-primary selection:text-white lang-en">
 
     <!-- Navigation Bar -->
     <nav id="navbar"
@@ -54,6 +54,11 @@
                     <a href="https://bit.ly/HYOprec"
                         class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">Join
                         Us!</a>
+                    <div class="btn-group lang-toggle-group ml-2 bg-gray-200 rounded-full p-1 relative flex items-center w-[84px] h-9" role="group" aria-label="Language Switch">
+                        <div class="absolute left-1 bg-white h-7 w-9 rounded-full shadow-sm transition-transform duration-300 lang-slider-bg" style="transform: translateX(0);"></div>
+                        <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="id">ID</button>
+                        <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="en">EN</button>
+                    </div>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-heading hover:text-primary focus:outline-none p-2"
@@ -93,6 +98,13 @@
                     <a href="https://bit.ly/HYOprec"
                         class="block w-full text-center bg-accent text-white px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors shadow-md">Join
                         Us Now!</a>
+                    <div class="flex justify-center mt-4 pt-2">
+                        <div class="btn-group lang-toggle-group bg-gray-200 rounded-full p-1 relative flex items-center w-[84px] h-9 mx-auto" role="group" aria-label="Language Switch">
+                            <div class="absolute left-1 bg-white h-7 w-9 rounded-full shadow-sm transition-transform duration-300 lang-slider-bg" style="transform: translateX(0);"></div>
+                            <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="id">ID</button>
+                            <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,7 +125,7 @@
                                     class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                             </span>
-                            Membangun Masa Depan Pendidikan
+                            <span class="lang-id">Membangun Masa Depan Pendidikan</span><span class="lang-en">Building the Future of Education</span>
                         </div>
                         <h1
                             class="text-4xl md:text-5xl lg:text-7xl font-bold text-heading leading-[1.1] mb-6 sm:mb-8 tracking-tight">
@@ -198,7 +210,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16 max-w-3xl mx-auto">
                     <h2 class="text-base text-accent font-bold tracking-wide uppercase mb-2">Why Join Us?</h2>
-                    <p class="text-3xl lg:text-4xl font-extrabold text-heading">Mengapa Bergabung Bersama Kami?</p>
+                    <p class="text-3xl lg:text-4xl font-extrabold text-heading"><span class="lang-id">Mengapa Bergabung Bersama Kami?</span><span class="lang-en">Why Join Us?</span></p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
                     <div
@@ -330,7 +342,7 @@
                 <div class="text-center mb-12">
                     <h2 class="text-base text-primary font-bold tracking-wide uppercase mb-2">FAQ</h2>
                     <h3 class="text-3xl lg:text-4xl font-extrabold text-heading">Got Questions?</h3>
-                    <p class="mt-4 text-body">Jawaban untuk pertanyaan yang sering diajukan.</p>
+                    <p class="mt-4 text-body"><span class="lang-id">Jawaban untuk pertanyaan yang sering diajukan.</span><span class="lang-en">Answers to frequently asked questions.</span></p>
                 </div>
                 <div id="faq-container" class="space-y-4"></div>
             </div>
@@ -344,7 +356,7 @@
                     <!-- Bagian Kiri: Teks -->
                     <div class="order-2 lg:order-1 space-y-8">
                         <div>
-                            <h2 class="text-base text-accent font-bold tracking-wide uppercase mb-2">Jangkauan Kami</h2>
+                            <h2 class="text-base text-accent font-bold tracking-wide uppercase mb-2"><span class="lang-id">Jangkauan Kami</span><span class="lang-en">Our Reach</span></h2>
                             <h3 class="text-3xl lg:text-4xl font-bold text-heading mb-6">Global Impact,<br>Local Roots
                             </h3>
                         </div>
@@ -363,7 +375,7 @@
                                 </div>
                                 <div>
                                     <span class="block font-bold text-heading text-lg">22 Provinsi</span>
-                                    <span class="text-sm text-gray-500">Tersebar di seluruh Indonesia</span>
+                                    <span class="text-sm text-gray-500"><span class="lang-id">Tersebar di seluruh Indonesia</span><span class="lang-en">Spread across Indonesia</span></span>
                                 </div>
                             </li>
                             <li class="flex items-center group">
@@ -373,7 +385,7 @@
                                 </div>
                                 <div>
                                     <span class="block font-bold text-heading text-lg">20 Negara</span>
-                                    <span class="text-sm text-gray-500">Jaringan kontributor internasional</span>
+                                    <span class="text-sm text-gray-500"><span class="lang-id">Jaringan kontributor internasional</span><span class="lang-en">International contributor network</span></span>
                                 </div>
                             </li>
                         </ul>
