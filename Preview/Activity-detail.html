@@ -257,12 +257,15 @@
                     if (activity.fullStory && activity.fullStory.trim() !== '') {
                         fullContent.innerHTML = activity.fullStory;
                     } else {
-                        fullContent.innerHTML = '<p>' + activity.description + '</p>';
+                        // Mencegah HTML tag di description tereksekusi tanpa sengaja
+                        const safeDesc = document.createElement('div');
+                        safeDesc.textContent = activity.description;
+                        fullContent.innerHTML = '<p>' + safeDesc.innerHTML + '</p>';
                     }
 
                     // Hero Background
                     const detailHero = document.getElementById('detail-hero');
-                    let imgSrc = activity.image || 'https://images.unsplash.com/photo-1497633762265-9381796906ea?q=80&w=1000&auto=format&fit=crop';
+                    let imgSrc = (activity.image && activity.image.trim() !== '') ? activity.image : 'https://images.unsplash.com/photo-1497633762265-9381796906ea?q=80&w=1000&auto=format&fit=crop';
                     detailHero.style.backgroundImage = 'url("' + imgSrc + '")';
 
                     // Update Title Browser

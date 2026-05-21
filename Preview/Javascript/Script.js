@@ -88,7 +88,58 @@ var _CMS_DEFAULT = {
         accountName: 'Yuni Triandini',
         accountNumber: '466 0070 724',
         qrisImage: 'https://via.placeholder.com/200?text=QRIS' 
-    }
+    },
+
+    // DYNAMIC HOME/ABOUT/ACTIVITIES DATA FOR SYNC
+    aboutHero: {
+        title: 'Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span>',
+        subtitle: 'Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.',
+        volunteerCount: '1k+',
+        image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop'
+    },
+    team: [
+        { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'https://ui-avatars.com/api/?name=Yuni+Triandini&size=100&background=random&color=fff', linkedin: '#', instagram: '#' },
+        { id: 202, name: 'Rama', role: 'Head of Marketing', image: 'https://ui-avatars.com/api/?name=Rama&size=100&background=random&color=fff', linkedin: '#', instagram: '#' },
+        { id: 203, name: 'Dzikri', role: 'Head of Graphic Designer', image: 'https://ui-avatars.com/api/?name=Dzikri&size=100&background=random&color=fff', linkedin: '#', instagram: '#' }
+    ],
+    activityCards: [
+        { 
+            id: 301, 
+            category: 'Education', 
+            date: '10 November 2025', 
+            title: 'Dream Big, Learn Bigger: Inspiring the Next Generation at Yos Sudarso', 
+            description: 'Kami mengunjungi sekolah di Yos Sudarso untuk berbagi inspirasi dan materi pendidikan interaktif kepada ratusan siswa, membantu mereka bermimpi lebih besar.',
+            image: 'https://placehold.co/400x250?text=Activity+1',
+            link: '#',
+            fullStory: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>'
+        },
+        { 
+            id: 302, 
+            category: 'Community', 
+            date: '14 April 2025', 
+            title: 'Instilling Education, Igniting Dreams: Hey Youth\'s Visit to TBM Kolong', 
+            description: 'Kunjungan spesial ke TBM Kolong untuk mendukung literasi di lingkungan sekitar, mendonasikan buku, dan mengadakan sesi membaca bersama anak-anak.',
+            image: 'https://placehold.co/400x250?text=Activity+2',
+            link: '#',
+            fullStory: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>'
+        }
+    ],
+    podcasts: [
+        {
+            id: 401,
+            episode: 'Episode 2',
+            title: 'Suicide Is Not The Answer: Here\'s Why',
+            thumbnail: 'https://placehold.co/300x300?text=Podcast+2', 
+            spotifyLink: 'https://open.spotify.com/episode/5xcQh5HewK3MvIcxkSiWef' 
+        },
+        {
+            id: 402,
+            episode: 'Episode 1',
+            title: 'The Power of Self-Affirmation: Transforming Our Lives',
+            thumbnail: 'https://placehold.co/300x300?text=Podcast+1',
+            spotifyLink: 'https://open.spotify.com/episode/1a0xUotfQZAdD6jtHT4l5g?si=l3nk1yvSSzK7XPMMFLMvHA&nd=1&dlsi=746e34d28eaa4e68'
+        }
+    ]
 };
 
 async function _getCMS() {
