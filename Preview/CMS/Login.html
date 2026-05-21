@@ -219,6 +219,14 @@
 
             if (!form) return;
 
+            // Cek jika user sudah login, langsung lempar ke Dashboard
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    setLoading(true);
+                    window.location.href = 'Dashboard.html';
+                }
+            });
+
             toggleBtn.addEventListener('click', function () {
                 var type = passwordInput.type === 'password' ? 'text' : 'password';
                 passwordInput.type = type;

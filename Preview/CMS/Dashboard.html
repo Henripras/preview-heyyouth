@@ -69,7 +69,7 @@
     <link rel="stylesheet" href="../Style/tailwind.css">
 </head>
 
-<body class="bg-bg text-body min-h-screen">
+<body class="bg-bg text-body min-h-screen" style="display: none;">
 
     <!-- ===== MOBILE TOP BAR ===== -->
     <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-heading text-white h-14 flex items-center justify-between px-4 shadow-lg">
@@ -392,6 +392,7 @@
             if (!user) {
                 window.location.href = 'Login.html';
             } else {
+                document.body.style.display = 'block';
                 initDashboard();
             }
         });
@@ -625,14 +626,14 @@
            COUNTS
            ========================================= */
         function updateCounts(data) {
-            var ext = data.externalTestimonials.length;
-            var int = data.internalTestimonials.length;
-            var faq = data.faqs.length;
-            var loc = data.locations.length;
-            var team = data.team.length;
-            var actCards = data.activityCards.length;
-            var pods = data.podcasts.length;
-            var partners = data.partners.length;
+            var ext = (data.externalTestimonials || []).length;
+            var int = (data.internalTestimonials || []).length;
+            var faq = (data.faqs || []).length;
+            var loc = (data.locations || []).length;
+            var team = (data.team || []).length;
+            var actCards = (data.activityCards || []).length;
+            var pods = (data.podcasts || []).length;
+            var partners = (data.partners || []).length;
 
             document.getElementById('count-external').textContent = ext;
             document.getElementById('count-internal').textContent = int;
@@ -857,7 +858,12 @@
                         if (query.length < 3) return;
 
                         searchTimeout = setTimeout(function() {
-                            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query))
+                            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(query), {
+                                headers: {
+                                    // Praktik terbaik Nominatim ToS: Berikan User Agent khusus
+                                    'User-Agent': 'HeyYouthCMS/1.0 (hey.youth.id@gmail.com)'
+                                }
+                            })
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data && data.length > 0) {
@@ -884,6 +890,7 @@
            ========================================= */
         function renderTestimonials(containerId, items, type) {
             var container = document.getElementById(containerId);
+            items = items || [];
             if (items.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data. Klik "Tambah" untuk menambahkan.</p></div>';
                 return;
@@ -917,6 +924,7 @@
 
         function renderFaqs(items) {
             var container = document.getElementById('list-faq');
+            items = items || [];
             if (items.length === 0) {
                 container.innerHTML = '<div class="text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data. Klik "Tambah" untuk menambahkan.</p></div>';
                 return;
@@ -939,6 +947,7 @@
 
         function renderLocations(items) {
             var tbody = document.getElementById('list-locations');
+            items = items || [];
             if (items.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data.</p></td></tr>';
                 return;
@@ -960,6 +969,7 @@
 
         function renderTeam(items) {
             var container = document.getElementById('list-team');
+            items = items || [];
             if (items.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center py-16 text-gray-400"><i class="fas fa-inbox text-4xl mb-3 block"></i><p>Belum ada data tim.</p></div>';
                 return;
@@ -988,6 +998,7 @@
 
         function renderActivityCards(items) {
             var container = document.getElementById('list-activity-cards');
+            items = items || [];
             if (items.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400"><p>Belum ada activity card.</p></div>';
                 return;
@@ -1012,6 +1023,7 @@
 
         function renderPodcasts(items) {
             var container = document.getElementById('list-podcasts');
+            items = items || [];
             if (items.length === 0) {
                 container.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400"><p>Belum ada podcast.</p></div>';
                 return;
@@ -1147,6 +1159,7 @@
                     case 'podcast': list = data.podcasts; break;
                     case 'partner': list = data.partners; break;
                 }
+                list = list || [];
                 item = list.find(function (i) { return i.id === id; });
             }
             
@@ -1289,7 +1302,7 @@
                 html += '<div class="mb-4">' +
                     '<label class="block text-sm font-semibold text-heading mb-1.5">Full Story (Detail Artikel)</label>' +
                     '<p class="text-xs text-gray-400 mb-2">Anda bisa menggunakan tag HTML sederhana seperti &lt;p&gt;, &lt;br&gt;, &lt;b&gt;.</p>' +
-                    '<textarea id="f-full-story" rows="10" placeholder="Tulis cerita lengkap di sini..." class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">' + (item ? (item.fullStory || '') : '') + '</textarea>' +
+                    '<textarea id="f-full-story" rows="10" placeholder="Tulis cerita lengkap di sini..." class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm text-heading focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all">' + escapeHtml(item ? (item.fullStory || '') : '') + '</textarea>' +
                 '</div>';
                 // ---------------------------
 
@@ -1439,6 +1452,7 @@
             var isEdit = !!editingItem;
 
             if (section === 'about-hero') {
+                if (!data.aboutHero) data.aboutHero = {};
                 data.aboutHero.title = document.getElementById('f-title').value.trim();
                 data.aboutHero.subtitle = document.getElementById('f-subtitle').value.trim();
                 data.aboutHero.volunteerCount = document.getElementById('f-volunteer').value.trim();
@@ -1446,7 +1460,7 @@
                 if (uploadedImage) {
                     data.aboutHero.image = uploadedImage;
                 } else if (isEdit) {
-                    if (item && item.image) data.aboutHero.image = item.image;
+                    if (editingItem && editingItem.image) data.aboutHero.image = editingItem.image;
                 } else {
                     if (DEFAULT_DATA.aboutHero && DEFAULT_DATA.aboutHero.image) data.aboutHero.image = DEFAULT_DATA.aboutHero.image;
                 }
@@ -1463,6 +1477,12 @@
                 else if (isEdit && editingItem.image && !editingItem.image.startsWith('data:')) image = editingItem.image;
 
                 var obj = { id: isEdit ? editingItem.id : Date.now(), name: name, quote: quote, image: image };
+                
+                if (section === 'external') {
+                    if (!data.externalTestimonials) data.externalTestimonials = [];
+                } else {
+                    if (!data.internalTestimonials) data.internalTestimonials = [];
+                }
                 var list = (section === 'external') ? data.externalTestimonials : data.internalTestimonials;
 
                 if (section === 'external') obj.title = document.getElementById('f-title').value.trim() || '';
@@ -1481,6 +1501,8 @@
                 if (!question || !answer) { showToast('Pertanyaan dan jawaban wajib diisi.', 'error'); return; }
 
                 var obj = { id: isEdit ? editingItem.id : Date.now(), question: question, answer: answer };
+                
+                if (!data.faqs) data.faqs = [];
                 var list = data.faqs;
                 if (isEdit) {
                     var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
@@ -1497,6 +1519,8 @@
                 if (!name || isNaN(lat) || isNaN(lng)) { showToast('Data lokasi tidak lengkap.', 'error'); return; }
 
                 var obj = { id: isEdit ? editingItem.id : Date.now(), name: name, lat: lat, lng: lng, volunteers: volunteers };
+                
+                if (!data.locations) data.locations = [];
                 var list = data.locations;
                 if (isEdit) {
                     var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
@@ -1521,6 +1545,8 @@
                     instagram: document.getElementById('f-instagram').value.trim() || '#',
                     image: image 
                 };
+                
+                if (!data.team) data.team = [];
                 var list = data.team;
                 if (isEdit) {
                     var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
@@ -1550,6 +1576,8 @@
                     link: '#',
                     fullStory: fullStoryVal
                 };
+                
+                if (!data.activityCards) data.activityCards = [];
                 var list = data.activityCards;
                 if (isEdit) {
                     var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
@@ -1579,6 +1607,8 @@
                     thumbnail: image,
                     spotifyLink: spotifyLink || '#'
                 };
+                
+                if (!data.podcasts) data.podcasts = [];
                 var list = data.podcasts;
                 if (isEdit) {
                     var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
@@ -1606,6 +1636,7 @@
                     link: document.getElementById('f-link').value.trim() || '#'
                 };
                 
+                if (!data.partners) data.partners = [];
                 var list = data.partners;
                 if (isEdit) {
                     var idx = list.findIndex(function (i) { return i.id === editingItem.id; });
@@ -1615,6 +1646,7 @@
                 }
             }
             else if (section === 'donation-settings') {
+                if (!data.donationSettings) data.donationSettings = {};
                 data.donationSettings.heroTitle = document.getElementById('f-hero-title').value.trim();
                 data.donationSettings.heroSubtitle = document.getElementById('f-hero-sub').value.trim();
                 data.donationSettings.stripText = document.getElementById('f-strip-text').value.trim();
@@ -1671,14 +1703,14 @@
             var section = deletingSection;
             var id = deletingId;
             switch (section) {
-                case 'external': data.externalTestimonials = data.externalTestimonials.filter(function (i) { return i.id !== id; }); break;
-                case 'internal': data.internalTestimonials = data.internalTestimonials.filter(function (i) { return i.id !== id; }); break;
-                case 'faq': data.faqs = data.faqs.filter(function (i) { return i.id !== id; }); break;
-                case 'locations': data.locations = data.locations.filter(function (i) { return i.id !== id; }); break;
-                case 'team': data.team = data.team.filter(function (i) { return i.id !== id; }); break;
-                case 'activity-card': data.activityCards = data.activityCards.filter(function (i) { return i.id !== id; }); break;
-                case 'podcast': data.podcasts = data.podcasts.filter(function (i) { return i.id !== id; }); break;
-                case 'partner': data.partners = data.partners.filter(function (i) { return i.id !== id; }); break;
+                case 'external': data.externalTestimonials = (data.externalTestimonials || []).filter(function (i) { return i.id !== id; }); break;
+                case 'internal': data.internalTestimonials = (data.internalTestimonials || []).filter(function (i) { return i.id !== id; }); break;
+                case 'faq': data.faqs = (data.faqs || []).filter(function (i) { return i.id !== id; }); break;
+                case 'locations': data.locations = (data.locations || []).filter(function (i) { return i.id !== id; }); break;
+                case 'team': data.team = (data.team || []).filter(function (i) { return i.id !== id; }); break;
+                case 'activity-card': data.activityCards = (data.activityCards || []).filter(function (i) { return i.id !== id; }); break;
+                case 'podcast': data.podcasts = (data.podcasts || []).filter(function (i) { return i.id !== id; }); break;
+                case 'partner': data.partners = (data.partners || []).filter(function (i) { return i.id !== id; }); break;
             }
             if (!saveData(data)) return;
             closeConfirm();
