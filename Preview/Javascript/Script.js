@@ -21,22 +21,118 @@ function _avatar(name) {
     return 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&size=100&background=random&color=fff';
 }
 
+function _bilingualEsc(idVal, enVal, fallback) {
+    var id = _esc(idVal || fallback || '');
+    var en = _esc(enVal || fallback || '');
+    return '<span class="lang-id">' + id + '</span><span class="lang-en">' + en + '</span>';
+}
+
+function _bilingualHtml(idVal, enVal, fallback) {
+    var id = idVal || fallback || '';
+    var en = enVal || fallback || '';
+    return '<span class="lang-id">' + id + '</span><span class="lang-en">' + en + '</span>';
+}
+
 /* ------ DEFAULT DATA (sama persis dengan CMS) ------ */
 var _CMS_DEFAULT = {
     externalTestimonials: [
-        { id: 1, name: 'Mr. Rifki Zamzam', title: 'Co-Founder, Qatar HR Forum', quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', image: 'https://ui-avatars.com/api/?name=Rifki+Zamzam&size=100&background=random&color=fff' },
-        { id: 2, name: 'Ms. Rina Nurutami, S.Psi', title: 'Vice Principal, Daarut Tauhid', quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', image: 'https://ui-avatars.com/api/?name=Rina+Nurutami&size=100&background=random&color=fff' },
-        { id: 3, name: 'Yiwen Xu', title: 'Student, Univ. of Edinburgh', quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', image: 'https://ui-avatars.com/api/?name=Yiwen+Xu&size=100&background=random&color=fff' }
+        { 
+            id: 1, 
+            name: 'Mr. Rifki Zamzam', 
+            title: 'Co-Founder, Qatar HR Forum', 
+            title_id: 'Co-Founder, Qatar HR Forum',
+            title_en: 'Co-Founder, Qatar HR Forum',
+            quote: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.', 
+            quote_id: 'Kerjasama dengan Hey Youth! memberikan dampak positif yang nyata bagi komunitas kami.',
+            quote_en: 'Collaborating with Hey Youth! brings a real positive impact to our community.',
+            image: 'https://ui-avatars.com/api/?name=Rifki+Zamzam&size=100&background=random&color=fff' 
+        },
+        { 
+            id: 2, 
+            name: 'Ms. Rina Nurutami, S.Psi', 
+            title: 'Vice Principal, Daarut Tauhid', 
+            title_id: 'Wakil Kepala Sekolah, Daarut Tauhid',
+            title_en: 'Vice Principal, Daarut Tauhid',
+            quote: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.', 
+            quote_id: 'Sangat menginspirasi melihat semangat pemuda yang rela berkontribusi untuk pendidikan.',
+            quote_en: 'It is highly inspiring to see the youth passion to contribute to education.',
+            image: 'https://ui-avatars.com/api/?name=Rina+Nurutami&size=100&background=random&color=fff' 
+        },
+        { 
+            id: 3, 
+            name: 'Yiwen Xu', 
+            title: 'Student, Univ. of Edinburgh', 
+            title_id: 'Mahasiswa, Univ. of Edinburgh',
+            title_en: 'Student, Univ. of Edinburgh',
+            quote: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.', 
+            quote_id: 'Hey Youth! adalah jembatan yang menghubungkan antusiasme dengan aksi nyata.',
+            quote_en: 'Hey Youth! is a bridge that connects enthusiasm with real actions.',
+            image: 'https://ui-avatars.com/api/?name=Yiwen+Xu&size=100&background=random&color=fff' 
+        }
     ],
     internalTestimonials: [
-        { id: 4, name: 'Alya', role: 'Community Coordinator', quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', image: 'https://ui-avatars.com/api/?name=Alya&size=100&background=random&color=fff' },
-        { id: 5, name: 'Herza', role: 'Web Developer', quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', image: 'https://ui-avatars.com/api/?name=Herza&size=100&background=random&color=fff' },
-        { id: 6, name: 'Karyn', role: 'Teacher', quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', image: 'https://ui-avatars.com/api/?name=Karyn&size=100&background=random&color=fff' }
+        { 
+            id: 4, 
+            name: 'Alya', 
+            role: 'Community Coordinator', 
+            role_id: 'Koordinator Komunitas',
+            role_en: 'Community Coordinator',
+            quote: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.', 
+            quote_id: 'Sangat bahagia bisa bergabung di Hey Youth! Banyak belajar hal baru setiap hari.',
+            quote_en: 'Extremely happy to join Hey Youth! Learning new things every day.',
+            image: 'https://ui-avatars.com/api/?name=Alya&size=100&background=random&color=fff' 
+        },
+        { 
+            id: 5, 
+            name: 'Herza', 
+            role: 'Web Developer', 
+            role_id: 'Web Developer',
+            role_en: 'Web Developer',
+            quote: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.', 
+            quote_id: 'Hey Youth adalah agent of change. Di sini kita bisa membuat dampak nyata.',
+            quote_en: 'Hey Youth is an agent of change. Here we can make a real difference.',
+            image: 'https://ui-avatars.com/api/?name=Herza&size=100&background=random&color=fff' 
+        },
+        { 
+            id: 6, 
+            name: 'Karyn', 
+            role: 'Teacher', 
+            role_id: 'Guru',
+            role_en: 'Teacher',
+            quote: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.', 
+            quote_id: 'Hey Youth merayakan rasa ingin tahu dan membentuk sistem kepercayaan.',
+            quote_en: 'Hey Youth celebrates curiosity and builds trust systems.',
+            image: 'https://ui-avatars.com/api/?name=Karyn&size=100&background=random&color=fff' 
+        }
     ],
     faqs: [
-        { id: 7, question: "Why don't we recruit people per batch?", answer: 'Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.' },
-        { id: 8, question: 'Do I need to have high English levels to join Hey Youth?', answer: 'Tidak wajib. Meskipun beberapa program internasional membutuhkan kemampuan Bahasa Inggris, kami menyediakan banyak peran di mana Bahasa Indonesia adalah bahasa utama komunikasi. Yang terpenting adalah semangat berkontribusi.' },
-        { id: 9, question: 'How can I donate to foundation?', answer: 'Anda dapat mendukung kami melalui transfer bank atau donasi barang. Silakan kunjungi halaman Donation untuk informasi rekening dan kebutuhan barang terkini.' }
+        { 
+            id: 7, 
+            question: "Why don't we recruit people per batch?", 
+            question_id: 'Mengapa kami tidak merekrut anggota per batch?',
+            question_en: "Why don't we recruit people per batch?",
+            answer: 'Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.', 
+            answer_id: 'Kami membuka pendaftaran secara terbuka (rolling recruitment) agar talenta terbaik dapat bergabung kapan saja tanpa harus menunggu jadwal batch tertentu. Ini memungkinkan fleksibilitas lebih tinggi.',
+            answer_en: 'We open registration through rolling recruitment so that the best talent can join at any time without waiting for a specific batch schedule, allowing higher flexibility.'
+        },
+        { 
+            id: 8, 
+            question: 'Do I need to have high English levels to join Hey Youth?', 
+            question_id: 'Apakah saya perlu memiliki kemampuan Bahasa Inggris tingkat tinggi untuk bergabung dengan Hey Youth?',
+            question_en: 'Do I need to have high English levels to join Hey Youth?',
+            answer: 'Tidak wajib. Meskipun beberapa program internasional membutuhkan kemampuan Bahasa Inggris, kami menyediakan banyak peran di mana Bahasa Indonesia adalah bahasa utama komunikasi. Yang terpenting adalah semangat berkontribusi.', 
+            answer_id: 'Tidak wajib. Meskipun beberapa program internasional membutuhkan kemampuan Bahasa Inggris, kami menyediakan banyak peran di mana Bahasa Indonesia adalah bahasa utama komunikasi. Yang terpenting adalah semangat berkontribusi.',
+            answer_en: 'Not required. Although some international programs require English skills, we provide many roles where Indonesian is the primary language. The most important thing is the spirit to contribute.'
+        },
+        { 
+            id: 9, 
+            question: 'How can I donate to foundation?', 
+            question_id: 'Bagaimana cara berdonasi ke yayasan?',
+            question_en: 'How can I donate to foundation?',
+            answer: 'Anda dapat mendukung kami melalui transfer bank atau donasi barang. Silakan kunjungi halaman Donation untuk informasi rekening dan kebutuhan barang terkini.', 
+            answer_id: 'Anda dapat mendukung kami melalui transfer bank atau donasi barang. Silakan kunjungi halaman Donation untuk informasi rekening dan kebutuhan barang terkini.',
+            answer_en: 'You can support us via bank transfer or item donations. Please visit our Donation page for current bank accounts and item needs.'
+        }
     ],
     locations: [
         { id: 101, name: 'Jakarta', lat: -6.2088, lng: 106.8456, volunteers: 8 },
@@ -72,17 +168,63 @@ var _CMS_DEFAULT = {
     ],
 
     partners: [
-        { id: 1, name: 'Qatar HR Forum', description: 'Membangun jaringan profesional HR global.', icon: 'fa-users-cog', image: '', color: 'blue', link: 'https://qatarhrforum.com' },
-        { id: 2, name: 'The Facial Skin Lab', description: 'Klinik kecantikan terpercaya.', icon: 'fa-spa', image: '', color: 'pink', link: 'https://instagram.com' },
-        { id: 3, name: 'Shadow A Scientist', description: 'Program mentoring ilmiah.', icon: 'fa-flask', image: '', color: 'purple', link: '#' },
-        { id: 4, name: 'SMP Adzkia', description: 'Sekolah Islam terpadu.', icon: 'fa-school', image: '', color: 'green', link: '#' }
+        { 
+            id: 1, 
+            name: 'Qatar HR Forum', 
+            description: 'Membangun jaringan profesional HR global.', 
+            description_id: 'Membangun jaringan profesional HR global.',
+            description_en: 'Building a global professional HR network.',
+            icon: 'fa-users-cog', 
+            image: '', 
+            color: 'blue', 
+            link: 'https://qatarhrforum.com' 
+        },
+        { 
+            id: 2, 
+            name: 'The Facial Skin Lab', 
+            description: 'Klinik kecantikan terpercaya.', 
+            description_id: 'Klinik kecantikan terpercaya.',
+            description_en: 'A trusted beauty clinic.',
+            icon: 'fa-spa', 
+            image: '', 
+            color: 'pink', 
+            link: 'https://instagram.com' 
+        },
+        { 
+            id: 3, 
+            name: 'Shadow A Scientist', 
+            description: 'Program mentoring ilmiah.', 
+            description_id: 'Program mentoring ilmiah.',
+            description_en: 'Scientific mentoring program.',
+            icon: 'fa-flask', 
+            image: '', 
+            color: 'purple', 
+            link: '#' 
+        },
+        { 
+            id: 4, 
+            name: 'SMP Adzkia', 
+            description: 'Sekolah Islam terpadu.', 
+            description_id: 'Sekolah Islam terpadu.',
+            description_en: 'Integrated Islamic School.',
+            icon: 'fa-school', 
+            image: '', 
+            color: 'green', 
+            link: '#' 
+        }
     ],
     
     // DATA DONATION BARU
     donationSettings: {
         heroTitle: 'Support Our Mission',
+        heroTitle_id: 'Dukung Misi Kami',
+        heroTitle_en: 'Support Our Mission',
         heroSubtitle: 'Bantu kami menyediakan akses pendidikan yang layak bagi anak-anak Indonesia. Setiap donasi Anda menjadi jembatan menuju masa depan yang lebih cerah.',
+        heroSubtitle_id: 'Bantu kami menyediakan akses pendidikan yang layak bagi anak-anak Indonesia. Setiap donasi Anda menjadi jembatan menuju masa depan yang lebih cerah.',
+        heroSubtitle_en: 'Help us provide decent access to education for Indonesian children. Every donation you make is a bridge to a brighter future.',
         stripText: 'Together We Can',
+        stripText_id: 'Bersama Kita Bisa',
+        stripText_en: 'Together We Can',
         stripImage: 'img/Front Card.webp',
         bankName: 'Bank Central Asia (BCA)',
         accountName: 'Yuni Triandini',
@@ -93,49 +235,104 @@ var _CMS_DEFAULT = {
     // DYNAMIC HOME/ABOUT/ACTIVITIES DATA FOR SYNC
     aboutHero: {
         title: 'Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span>',
+        title_id: 'Mendidik Untuk <br><span class="text-primary">Masa Depan Indonesia</span>',
+        title_en: 'Educating For <br><span class="text-primary">Indonesia\'s Future</span>',
         subtitle: 'Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.',
+        subtitle_id: 'Hey Youth adalah sebuah komunitas pemuda di Indonesia yang didedikasikan untuk melakukan perubahan melalui pendidikan. Kami menyediakan akses ke pendidikan berkualitas dan peluang mentoring bagi mereka yang membutuhkan.',
+        subtitle_en: 'Hey Youth is a youth community in Indonesia dedicated to making changes through education. We provide access to quality education and mentoring opportunities for those in need.',
         volunteerCount: '1k+',
         image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop'
     },
     team: [
-        { id: 201, name: 'Yuni Triandini', role: 'Founder', image: 'https://ui-avatars.com/api/?name=Yuni+Triandini&size=100&background=random&color=fff', linkedin: '#', instagram: '#' },
-        { id: 202, name: 'Rama', role: 'Head of Marketing', image: 'https://ui-avatars.com/api/?name=Rama&size=100&background=random&color=fff', linkedin: '#', instagram: '#' },
-        { id: 203, name: 'Dzikri', role: 'Head of Graphic Designer', image: 'https://ui-avatars.com/api/?name=Dzikri&size=100&background=random&color=fff', linkedin: '#', instagram: '#' }
+        { 
+            id: 201, 
+            name: 'Yuni Triandini', 
+            role: 'Founder', 
+            role_id: 'Founder',
+            role_en: 'Founder',
+            image: 'https://ui-avatars.com/api/?name=Yuni+Triandini&size=100&background=random&color=fff', 
+            linkedin: '#', 
+            instagram: '#' 
+        },
+        { 
+            id: 202, 
+            name: 'Rama', 
+            role: 'Head of Marketing', 
+            role_id: 'Kepala Pemasaran',
+            role_en: 'Head of Marketing',
+            image: 'https://ui-avatars.com/api/?name=Rama&size=100&background=random&color=fff', 
+            linkedin: '#', 
+            instagram: '#' 
+        },
+        { 
+            id: 203, 
+            name: 'Dzikri', 
+            role: 'Head of Graphic Designer', 
+            role_id: 'Kepala Desainer Grafis',
+            role_en: 'Head of Graphic Designer',
+            image: 'https://ui-avatars.com/api/?name=Dzikri&size=100&background=random&color=fff', 
+            linkedin: '#', 
+            instagram: '#' 
+        }
     ],
     activityCards: [
         { 
             id: 301, 
             category: 'Education', 
+            category_id: 'Pendidikan',
+            category_en: 'Education',
             date: '10 November 2025', 
             title: 'Dream Big, Learn Bigger: Inspiring the Next Generation at Yos Sudarso', 
+            title_id: 'Dream Big, Learn Bigger: Menginspirasi Generasi Penerus di Yos Sudarso',
+            title_en: 'Dream Big, Learn Bigger: Inspiring the Next Generation at Yos Sudarso',
             description: 'Kami mengunjungi sekolah di Yos Sudarso untuk berbagi inspirasi dan materi pendidikan interaktif kepada ratusan siswa, membantu mereka bermimpi lebih besar.',
+            description_id: 'Kami mengunjungi sekolah di Yos Sudarso untuk berbagi inspirasi dan materi pendidikan interaktif kepada ratusan siswa, membantu mereka bermimpi lebih besar.',
+            description_en: 'We visited a school in Yos Sudarso to share inspiration and interactive educational materials with hundreds of students, helping them dream bigger.',
             image: 'https://placehold.co/400x250?text=Activity+1',
             link: '#',
-            fullStory: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>'
+            fullStory: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>',
+            fullStory_id: '<p>Pada hari yang cerah, tim Hey Youth berkunjung ke SD Yos Sudarso. Antusiasme siswa-siswi sangat luar biasa ketika kami memperkenalkan program mentoring kami.</p><p>Kegiatan ini diawali dengan sesi ice breaking yang diikuti oleh seluruh siswa kelas 5 dan 6. Dilanjutkan dengan materi tentang "Membangun Mimpi Sejak Dini".</p><br><p>Kami berharap kunjungan ini dapat menjadi inspirasi bagi mereka untuk terus belajar dan giat meraih cita-cita.</p>',
+            fullStory_en: '<p>On a bright day, the Hey Youth team visited SD Yos Sudarso. The enthusiasm of the students was extraordinary when we introduced our mentoring program.</p><p>This activity started with an ice-breaking session followed by all 5th and 6th grade students, followed by material on "Building Dreams from an Early Age".</p><br><p>We hope this visit can serve as an inspiration for them to keep learning and striving to achieve their dreams.</p>'
         },
         { 
             id: 302, 
             category: 'Community', 
+            category_id: 'Komunitas',
+            category_en: 'Community',
             date: '14 April 2025', 
             title: 'Instilling Education, Igniting Dreams: Hey Youth\'s Visit to TBM Kolong', 
+            title_id: 'Menanamkan Pendidikan, Menyalakan Impian: Kunjungan Hey Youth ke TBM Kolong',
+            title_en: 'Instilling Education, Igniting Dreams: Hey Youth\'s Visit to TBM Kolong',
             description: 'Kunjungan spesial ke TBM Kolong untuk mendukung literasi di lingkungan sekitar, mendonasikan buku, dan mengadakan sesi membaca bersama anak-anak.',
+            description_id: 'Kunjungan spesial ke TBM Kolong untuk mendukung literasi di lingkungan sekitar, mendonasikan buku, dan mengadakan sesi membaca bersama anak-anak.',
+            description_en: 'A special visit to TBM Kolong to support local literacy, donating books, and hosting a reading session with children.',
             image: 'https://placehold.co/400x250?text=Activity+2',
             link: '#',
-            fullStory: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>'
+            fullStory: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>',
+            fullStory_id: '<p>TBM Kolong adalah salah satu tempat baca yang sangat bersemangat di daerah kami. Kami mendonasikan 100 eksemplar buku cerita dan ensiklopedia anak.</p><p>Selain donasi buku, relawan kami juga membacakan cerita rakyat Nusantara kepada anak-anak dengan penuh ekspresi.</p>',
+            fullStory_en: '<p>TBM Kolong is a very vibrant reading shelter in our area. We donated 100 copies of children storybooks and encyclopedias.</p><p>Along with book donation, our volunteers read Indonesian folklores to children with rich expressions.</p>'
         }
     ],
     podcasts: [
         {
             id: 401,
             episode: 'Episode 2',
+            episode_id: 'Episode 2',
+            episode_en: 'Episode 2',
             title: 'Suicide Is Not The Answer: Here\'s Why',
+            title_id: 'Suicide Is Not The Answer: Ini Alasannya',
+            title_en: 'Suicide Is Not The Answer: Here\'s Why',
             thumbnail: 'https://placehold.co/300x300?text=Podcast+2', 
             spotifyLink: 'https://open.spotify.com/episode/5xcQh5HewK3MvIcxkSiWef' 
         },
         {
             id: 402,
             episode: 'Episode 1',
+            episode_id: 'Episode 1',
+            episode_en: 'Episode 1',
             title: 'The Power of Self-Affirmation: Transforming Our Lives',
+            title_id: 'Kekuatan Afirmasi Diri: Mengubah Hidup Kita',
+            title_en: 'The Power of Self-Affirmation: Transforming Our Lives',
             thumbnail: 'https://placehold.co/300x300?text=Podcast+1',
             spotifyLink: 'https://open.spotify.com/episode/1a0xUotfQZAdD6jtHT4l5g?si=l3nk1yvSSzK7XPMMFLMvHA&nd=1&dlsi=746e34d28eaa4e68'
         }
@@ -154,14 +351,14 @@ function _renderExternal(data) {
     for (var i = 0; i < data.length; i++) {
         var t = data[i];
         html += '<div class="bg-white p-8 rounded-2xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow flex flex-col h-full">'
-            + '<p class="text-body italic mb-6 flex-grow">"' + _esc(t.quote) + '"</p>'
+            + '<p class="text-body italic mb-6 flex-grow">"' + _bilingualEsc(t.quote_id, t.quote_en, t.quote) + '"</p>'
             + '<div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-50 mt-auto">'
             + '<div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">'
             + '<img src="' + _escA(t.image) + '" alt="' + _escA(t.name) + '" class="w-full h-full object-cover" onerror="this.src=\'' + _avatar(t.name) + '\'">'
             + '</div>'
             + '<div class="flex-grow min-w-[120px]">'
             + '<h4 class="font-bold text-heading text-sm leading-tight">' + _esc(t.name) + '</h4>'
-            + '<p class="text-xs text-primary font-semibold leading-tight mt-0.5">' + _esc(t.title) + '</p>'
+            + '<p class="text-xs text-primary font-semibold leading-tight mt-0.5">' + _bilingualEsc(t.title_id, t.title_en, t.title) + '</p>'
             + '</div></div></div>';
     }
     el.innerHTML = html;
@@ -175,14 +372,14 @@ function _renderInternal(data) {
     for (var i = 0; i < data.length; i++) {
         var t = data[i];
         html += '<div class="bg-surface p-8 rounded-2xl border border-blue-100 flex flex-col h-full">'
-            + '<p class="text-body italic mb-6 flex-grow">"' + _esc(t.quote) + '"</p>'
+            + '<p class="text-body italic mb-6 flex-grow">"' + _bilingualEsc(t.quote_id, t.quote_en, t.quote) + '"</p>'
             + '<div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-50 mt-auto">'
             + '<div class="w-12 h-12 bg-white rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">'
             + '<img src="' + _escA(t.image) + '" alt="' + _escA(t.name) + '" class="w-full h-full object-cover" onerror="this.src=\'' + _avatar(t.name) + '\'">'
             + '</div>'
             + '<div class="flex-grow min-w-[120px]">'
             + '<h4 class="font-bold text-heading text-sm leading-tight">' + _esc(t.name) + '</h4>'
-            + '<p class="text-xs text-gray-500 leading-tight mt-0.5">' + _esc(t.role) + '</p>'
+            + '<p class="text-xs text-gray-500 leading-tight mt-0.5">' + _bilingualEsc(t.role_id, t.role_en, t.role) + '</p>'
             + '</div></div></div>';
     }
     el.innerHTML = html;
@@ -197,10 +394,10 @@ function _renderFAQ(data) {
         var f = data[i];
         html += '<div class="faq-item bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">'
             + '<button class="faq-header w-full text-left p-6 flex justify-between items-center focus:outline-none hover:bg-gray-50 transition-colors">'
-            + '<span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">' + _esc(f.question) + '</span>'
+            + '<span class="faq-header-text text-heading font-medium text-lg pr-4 transition-colors">' + _bilingualEsc(f.question_id, f.question_en, f.question) + '</span>'
             + '<div class="faq-icon bg-gray-100 text-gray-500 p-1.5 rounded-full flex-shrink-0 transition-transform duration-300"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" width="20"><path d="M6 9l6 6 6-6"></path></svg></div>'
             + '</button>'
-            + '<div class="faq-content"><div class="faq-inner overflow-hidden"><div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">' + _esc(f.answer) + '</div></div></div>'
+            + '<div class="faq-content"><div class="faq-inner overflow-hidden"><div class="px-6 pb-6 pt-2 text-body text-gray-600 leading-relaxed border-t border-transparent">' + _bilingualEsc(f.answer_id, f.answer_en, f.answer) + '</div></div></div>'
             + '</div>';
     }
     el.innerHTML = html;
@@ -230,7 +427,9 @@ function _renderPartners(data) {
         
         var targetLink = p.link && p.link !== '#' ? p.link : '#';
         var targetAttr = (targetLink !== '#') ? 'target="_blank" rel="noopener noreferrer"' : '';
-        var btnText = (targetLink !== '#') ? 'Visit Website <i class="fas fa-external-link-alt ml-1 text-xs"></i>' : 'Learn More';
+        var btnText = (targetLink !== '#') ? 
+            _bilingualHtml('Kunjungi Website <i class="fas fa-external-link-alt ml-1 text-xs"></i>', 'Visit Website <i class="fas fa-external-link-alt ml-1 text-xs"></i>') : 
+            _bilingualHtml('Pelajari Selengkapnya', 'Learn More');
 
         var logoHtml = '';
         if (p.image) {
@@ -247,7 +446,7 @@ function _renderPartners(data) {
         html += '<div class="bg-white rounded-2xl p-8 shadow-md border border-gray-100 hover:shadow-xl transition-all duration-300 group flex flex-col items-center text-center h-full">' +
             logoHtml +
             '<h3 class="text-xl font-bold text-heading mb-6 leading-tight">' + _esc(p.name) + '</h3>' +
-            '<p class="text-sm text-gray-500 mb-6 flex-grow line-clamp-3">' + _esc(p.description) + '</p>' + 
+            '<p class="text-sm text-gray-500 mb-6 flex-grow line-clamp-3">' + _bilingualEsc(p.description_id, p.description_en, p.description) + '</p>' + 
             
             '<div class="mt-auto w-full">' +
                 '<a href="' + _escA(targetLink) + '" ' + targetAttr + ' class="block w-full py-2.5 px-4 rounded-lg bg-accent/10 text-accent font-bold text-sm hover:bg-accent hover:text-white transition-colors border border-accent/20 text-center">' +
@@ -265,8 +464,14 @@ function _renderDonation(data) {
     var s = data.donationSettings;
 
     // 1. Update Hero Text
+    var heroTitleEl = document.getElementById('hero-title-donation');
+    if (heroTitleEl) {
+        heroTitleEl.innerHTML = _bilingualHtml(s.heroTitle_id, s.heroTitle_en, s.heroTitle || 'Support Our <span class="text-primary">Mission</span>');
+    }
     var heroSubEl = document.querySelector('#hero-donation p.text-lg');
-    if (heroSubEl) heroSubEl.textContent = s.heroSubtitle;
+    if (heroSubEl) {
+        heroSubEl.innerHTML = _bilingualHtml(s.heroSubtitle_id, s.heroSubtitle_en, s.heroSubtitle);
+    }
 
     // 2. Update Image Strip
     var stripImgEl = document.getElementById('strip-img-display');
@@ -274,7 +479,9 @@ function _renderDonation(data) {
     if (stripImgEl && s.stripImage) {
         stripImgEl.src = s.stripImage.startsWith('data:') ? s.stripImage : s.stripImage;
     }
-    if (stripTextEl) stripTextEl.textContent = s.stripText;
+    if (stripTextEl) {
+        stripTextEl.innerHTML = _bilingualHtml(s.stripText_id, s.stripText_en, s.stripText);
+    }
 
     // 3. Update Payment Details
     var bankNameEl = document.getElementById('bank-name-display');
@@ -353,6 +560,80 @@ function _initNavbar() {
     });
 }
 
+/* =============================================
+   VISITOR TRACKING
+   ============================================= */
+function getPageName() {
+    var path = window.location.pathname;
+    var page = path.split("/").pop().toLowerCase();
+    
+    if (page === "index.html" || page === "") {
+        return "Home";
+    } else if (page.includes("about")) {
+        return "About Us";
+    } else if (page.includes("activities")) {
+        return "Activities";
+    } else if (page.includes("activity-detail")) {
+        return "Activities";
+    } else if (page.includes("partner")) {
+        return "Partners";
+    } else if (page.includes("donation")) {
+        return "Donation";
+    } else if (page.includes("gallery")) {
+        return "Gallery";
+    }
+    return null;
+}
+
+async function trackVisitor() {
+    try {
+        if (window.location.pathname.toLowerCase().includes('/cms/')) {
+            return;
+        }
+
+        var pageName = getPageName();
+        if (!pageName) return;
+
+        var sessionKey = 'tracked_' + pageName;
+        if (sessionStorage.getItem(sessionKey)) {
+            return;
+        }
+
+        sessionStorage.setItem(sessionKey, 'true');
+
+        if (typeof db === 'undefined' || typeof firebase === 'undefined') {
+            console.error("Firebase/Firestore is not initialized.");
+            return;
+        }
+
+        var docRef = db.collection('heyyouth').doc('visitor_stats');
+        var docSnap = await docRef.get();
+        var now = new Date();
+        var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+        if (!docSnap.exists) {
+            var initialStats = {
+                total: 1,
+                pages: {},
+                daily: {}
+            };
+            initialStats.pages[pageName] = 1;
+            initialStats.daily[todayStr] = 1;
+            await docRef.set(initialStats);
+        } else {
+            var updates = {
+                total: firebase.firestore.FieldValue.increment(1)
+            };
+            updates['pages.' + pageName] = firebase.firestore.FieldValue.increment(1);
+            updates['daily.' + todayStr] = firebase.firestore.FieldValue.increment(1);
+            await docRef.update(updates);
+        }
+        console.log("Visitor tracked successfully for: " + pageName);
+    } catch (error) {
+        console.error("Error tracking visitor:", error);
+    }
+}
+
 /* ------ INIT (MAIN SITES) ------ */
 document.addEventListener('DOMContentLoaded', async function () {
     // 1. Mobile Menu
@@ -405,6 +686,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /* --- 5. Map (Updated) --- */
     _initMap();
+
+    /* --- 6. Visitor Tracking --- */
+    trackVisitor();
 
 });
 
