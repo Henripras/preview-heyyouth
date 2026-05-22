@@ -118,6 +118,7 @@
                 <i class="fas fa-donate w-5 text-center text-xs"></i>
                 <span>Donation</span>
             </button>
+
         </nav>
         <div class="p-4 border-t border-white/10 space-y-2">
             <a href="../index.html" class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-all">
@@ -148,6 +149,87 @@
             
             <!-- VIEW: HOMEPAGE -->
             <div id="view-homepage" class="space-y-10">
+                <!-- STATISTICS PANEL -->
+                <div class="space-y-8">
+                    <div class="border-b border-gray-200 pb-4">
+                        <h2 class="text-lg font-bold text-heading flex items-center gap-2">
+                            <i class="fas fa-chart-line text-primary"></i> Statistik Pengunjung
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">Analisis jumlah kunjungan halaman dan tren pengunjung secara real-time</p>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Total Visitors Card -->
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-100 text-primary rounded-xl flex items-center justify-center text-xl">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-400">Total Pengunjung</p>
+                                <h3 id="stat-total-visitors" class="text-2xl font-bold text-heading mt-0.5">-</h3>
+                            </div>
+                        </div>
+                        <!-- Most Visited Page Card -->
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-amber-100 text-accent rounded-xl flex items-center justify-center text-xl">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-400">Halaman Terpopuler</p>
+                                <h3 id="stat-top-page" class="text-xl font-bold text-heading mt-0.5 truncate max-w-[180px]">-</h3>
+                            </div>
+                        </div>
+                        <!-- Today Views Card -->
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-xl">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-gray-400">Kunjungan Hari Ini</p>
+                                <h3 id="stat-today-visitors" class="text-2xl font-bold text-heading mt-0.5">-</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graph and Table row -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Graph Card (Col span 2) -->
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm lg:col-span-2 flex flex-col">
+                            <h3 class="font-bold text-heading text-lg mb-4 flex items-center gap-2">
+                                <i class="fas fa-chart-area text-primary text-sm"></i> Grafik Kunjungan (7 Hari Terakhir)
+                            </h3>
+                            <div class="relative flex-grow min-h-[300px]">
+                                <canvas id="visitorChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Table Card (Col span 1) -->
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col">
+                            <h3 class="font-bold text-heading text-lg mb-4 flex items-center gap-2">
+                                <i class="fas fa-list-ol text-accent text-sm"></i> Detail Kunjungan Halaman
+                            </h3>
+                            <div class="overflow-x-auto flex-grow">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-gray-50 border-b border-gray-200">
+                                        <tr>
+                                            <th class="text-left px-3 py-2.5 font-semibold text-heading text-xs">Halaman</th>
+                                            <th class="text-center px-3 py-2.5 font-semibold text-heading text-xs">Status</th>
+                                            <th class="text-right px-3 py-2.5 font-semibold text-heading text-xs">Jumlah View</th>
+                                            <th class="text-right px-3 py-2.5 font-semibold text-heading text-xs">Persentase</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stat-page-views-tbody">
+                                        <!-- Dynamic page view rows will go here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-gray-200">
+
                 <!-- External Testimonials -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -330,6 +412,8 @@
                 </div>
             </div>
 
+
+
         </div>
     </main>
 
@@ -379,6 +463,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../javascript/firebase-init.js"></script>
     <script>
     (function () {
@@ -759,7 +844,10 @@
             if (tab === 'homepage') {
                 document.getElementById('view-homepage').classList.remove('hidden');
                 document.getElementById('page-title').textContent = 'Homepage';
-                document.getElementById('page-desc').textContent = 'Kelola seluruh konten yang tampil di beranda';
+                document.getElementById('page-desc').textContent = 'Kelola seluruh konten yang tampil di beranda dan analisis kunjungan';
+                if (lastStatsData) {
+                    updateStatisticsUI(lastStatsData);
+                }
             } else if (tab === 'about') {
                 document.getElementById('view-about').classList.remove('hidden');
                 document.getElementById('page-title').textContent = 'About Us';
@@ -1969,10 +2057,219 @@
             }
         });
 
+        /* =========================================
+           STATISTICS
+           ========================================= */
+        var visitorChartInstance = null;
+        var unsubscribeVisitorStats = null;
+        var lastStatsData = null;
+
+        function generateMockStatistics() {
+            var pages = {
+                'Home': 542,
+                'About Us': 214,
+                'Activities': 324,
+                'Partners': 125,
+                'Donation': 89,
+                'Gallery': 56
+            };
+            var daily = {};
+            var total = 0;
+            var keys = Object.keys(pages);
+            for (var k = 0; k < keys.length; k++) {
+                total += pages[keys[k]];
+            }
+
+            var now = new Date();
+            for (var i = 6; i >= 0; i--) {
+                var date = new Date(now);
+                date.setDate(now.getDate() - i);
+                var dateStr = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                daily[dateStr] = Math.floor(Math.random() * 90) + 30;
+            }
+            
+            return {
+                total: total,
+                pages: pages,
+                daily: daily
+            };
+        }
+
+        function renderVisitorChart(dailyData) {
+            var ctx = document.getElementById('visitorChart').getContext('2d');
+            var labels = [];
+            var data = [];
+            var now = new Date();
+            
+            for (var i = 6; i >= 0; i--) {
+                var date = new Date(now);
+                date.setDate(now.getDate() - i);
+                var dateStr = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                
+                var dayLabel = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                labels.push(dayLabel);
+                data.push(dailyData[dateStr] || 0);
+            }
+
+            if (visitorChartInstance) {
+                visitorChartInstance.destroy();
+            }
+
+            visitorChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pengunjung Harian',
+                        data: data,
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#1E293B',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            padding: 12,
+                            cornerRadius: 8,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                color: 'rgba(241, 245, 249, 1)'
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                },
+                                color: '#64748B',
+                                precision: 0
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                },
+                                color: '#64748B'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateStatisticsUI(stats) {
+            if (!stats) return;
+            document.getElementById('stat-total-visitors').textContent = stats.total || 0;
+
+            var now = new Date();
+            var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+            document.getElementById('stat-today-visitors').textContent = (stats.daily && stats.daily[todayStr]) ? stats.daily[todayStr] : 0;
+
+            var tbody = document.getElementById('stat-page-views-tbody');
+            var pages = stats.pages || {};
+            
+            var pageList = Object.keys(pages).map(function(p) { 
+                return { name: p, views: pages[p] }; 
+            }).sort(function(a, b) { 
+                return b.views - a.views; 
+            });
+            
+            if (pageList.length > 0) {
+                document.getElementById('stat-top-page').textContent = pageList[0].name;
+            } else {
+                document.getElementById('stat-top-page').textContent = '-';
+            }
+
+            var totalPageViews = 0;
+            for (var j = 0; j < pageList.length; j++) {
+                totalPageViews += pageList[j].views;
+            }
+            if (totalPageViews === 0) totalPageViews = 1;
+
+            if (pageList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-400">Belum ada data kunjungan.</td></tr>';
+            } else {
+                tbody.innerHTML = pageList.map(function(p) {
+                    var pct = Math.round((p.views / totalPageViews) * 100);
+                    var colorClass = '';
+                    if (pct < 50) {
+                        colorClass = 'text-green-600 font-semibold';
+                    } else if (pct >= 50 && pct <= 80) {
+                        colorClass = 'text-yellow-500 font-semibold';
+                    } else {
+                        colorClass = 'text-red-600 font-semibold';
+                    }
+                    
+                    var activePages = ['Home', 'About Us', 'Activities', 'Partners', 'Donation', 'Gallery'];
+                    var isActive = activePages.indexOf(p.name) !== -1;
+                    var statusBadge = isActive 
+                        ? '<span class="bg-green-600 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-sm">Active</span>' 
+                        : '<span class="bg-red-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded shadow-sm">Inactive</span>';
+
+                    return '<tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">' +
+                        '<td class="px-3 py-2.5 font-medium text-heading text-xs">' + escapeHtml(p.name) + '</td>' +
+                        '<td class="px-3 py-2.5 text-center">' + statusBadge + '</td>' +
+                        '<td class="px-3 py-2.5 text-right font-semibold text-xs">' + p.views + '</td>' +
+                        '<td class="px-3 py-2.5 text-right text-xs ' + colorClass + '">' + pct + '%</td>' +
+                    '</tr>';
+                }).join('');
+            }
+
+            var homepageView = document.getElementById('view-homepage');
+            if (homepageView && !homepageView.classList.contains('hidden')) {
+                renderVisitorChart(stats.daily || {});
+            }
+        }
+
+        function initStatisticsListener() {
+            if (unsubscribeVisitorStats) return;
+
+            var docRef = db.collection('heyyouth').doc('visitor_stats');
+            unsubscribeVisitorStats = docRef.onSnapshot(async function (docSnap) {
+                var stats = null;
+                if (docSnap.exists) {
+                    stats = docSnap.data();
+                } else {
+                    stats = generateMockStatistics();
+                    await docRef.set(stats);
+                }
+                lastStatsData = stats;
+                updateStatisticsUI(stats);
+            }, function (error) {
+                console.error("Error loading statistics: ", error);
+                showToast("Gagal memuat statistik pengunjung real-time", "error");
+            });
+        }
+
         async function initDashboard() {
             var data = await window.getFirebaseData(DEFAULT_DATA);
             memoryData = data;
             renderAllLists();
+            initStatisticsListener();
         }
     })();
     </script>

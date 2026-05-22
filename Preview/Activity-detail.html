@@ -193,35 +193,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     <script src="javascript/firebase-init.js"></script>
+    <script src="javascript/Script.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
-            // Navbar mobile toggle
-            const btn = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
-            const iconMenu = document.getElementById('icon-menu');
-            const iconClose = document.getElementById('icon-close');
-
-            if (btn && menu) {
-                btn.addEventListener('click', () => {
-                    menu.classList.toggle('hidden');
-                    iconMenu.classList.toggle('hidden');
-                    iconClose.classList.toggle('hidden');
-                });
-            }
-
-            // Navbar scroll effect
-            window.addEventListener('scroll', () => {
-                const nav = document.getElementById('navbar');
-                if (window.scrollY > 20) {
-                    nav.classList.add('shadow-sm', 'bg-white/95');
-                    nav.classList.remove('bg-white/90');
-                } else {
-                    nav.classList.remove('shadow-sm', 'bg-white/95');
-                    nav.classList.add('bg-white/90');
-                }
-            });
-
             // Fetch Data from Firebase
             try {
                 // Gunakan default fallback data

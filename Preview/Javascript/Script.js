@@ -560,6 +560,80 @@ function _initNavbar() {
     });
 }
 
+/* =============================================
+   VISITOR TRACKING
+   ============================================= */
+function getPageName() {
+    var path = window.location.pathname;
+    var page = path.split("/").pop().toLowerCase();
+    
+    if (page === "index.html" || page === "") {
+        return "Home";
+    } else if (page.includes("about")) {
+        return "About Us";
+    } else if (page.includes("activities")) {
+        return "Activities";
+    } else if (page.includes("activity-detail")) {
+        return "Activities";
+    } else if (page.includes("partner")) {
+        return "Partners";
+    } else if (page.includes("donation")) {
+        return "Donation";
+    } else if (page.includes("gallery")) {
+        return "Gallery";
+    }
+    return null;
+}
+
+async function trackVisitor() {
+    try {
+        if (window.location.pathname.toLowerCase().includes('/cms/')) {
+            return;
+        }
+
+        var pageName = getPageName();
+        if (!pageName) return;
+
+        var sessionKey = 'tracked_' + pageName;
+        if (sessionStorage.getItem(sessionKey)) {
+            return;
+        }
+
+        sessionStorage.setItem(sessionKey, 'true');
+
+        if (typeof db === 'undefined' || typeof firebase === 'undefined') {
+            console.error("Firebase/Firestore is not initialized.");
+            return;
+        }
+
+        var docRef = db.collection('heyyouth').doc('visitor_stats');
+        var docSnap = await docRef.get();
+        var now = new Date();
+        var todayStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+        if (!docSnap.exists) {
+            var initialStats = {
+                total: 1,
+                pages: {},
+                daily: {}
+            };
+            initialStats.pages[pageName] = 1;
+            initialStats.daily[todayStr] = 1;
+            await docRef.set(initialStats);
+        } else {
+            var updates = {
+                total: firebase.firestore.FieldValue.increment(1)
+            };
+            updates['pages.' + pageName] = firebase.firestore.FieldValue.increment(1);
+            updates['daily.' + todayStr] = firebase.firestore.FieldValue.increment(1);
+            await docRef.update(updates);
+        }
+        console.log("Visitor tracked successfully for: " + pageName);
+    } catch (error) {
+        console.error("Error tracking visitor:", error);
+    }
+}
+
 /* ------ INIT (MAIN SITES) ------ */
 document.addEventListener('DOMContentLoaded', async function () {
     // 1. Mobile Menu
@@ -612,6 +686,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /* --- 5. Map (Updated) --- */
     _initMap();
+
+    /* --- 6. Visitor Tracking --- */
+    trackVisitor();
 
 });
 
