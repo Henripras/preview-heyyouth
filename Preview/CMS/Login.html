@@ -2,6 +2,16 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('heyyouth_theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Login - Hey Youth!</title>
     <meta name="robots" content="noindex, nofollow">
@@ -51,6 +61,19 @@
             90% { transform: translateX(3px); }
         }
         .shake { animation: shake 0.5s ease-in-out; }
+
+        /* ===== CMS LOGIN DARK MODE ===== */
+        html.dark input {
+            background-color: #111827 !important;
+            color: #f8fafc !important;
+            border-color: #1e293b !important;
+        }
+        html.dark input::placeholder {
+            color: #64748b !important;
+        }
+        html.dark #toggle-password {
+            color: #64748b !important;
+        }
     </style>
 </head>
 
@@ -100,6 +123,10 @@
 
         <!-- Right: Login Form -->
         <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-10 relative">
+            <button type="button" class="theme-toggle-btn absolute top-6 right-6 p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all focus:outline-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-yellow-400 w-9 h-9 flex items-center justify-center z-50" aria-label="Toggle Theme">
+                <i class="fas fa-sun theme-icon-sun text-sm hidden"></i>
+                <i class="fas fa-moon theme-icon-moon text-sm"></i>
+            </button>
             <div class="lg:hidden absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
             <div class="lg:hidden absolute bottom-0 left-0 w-48 h-48 bg-yellow-100 rounded-full blur-3xl opacity-30"></div>
 
@@ -284,6 +311,46 @@
                         console.error("Login error:", error);
                     });
             });
+            function initThemeToggle() {
+                var toggles = document.querySelectorAll('.theme-toggle-btn');
+                if (!toggles.length) return;
+
+                var currentTheme = localStorage.getItem('heyyouth_theme') || 'light';
+                
+                function setTheme(theme) {
+                    if (theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    localStorage.setItem('heyyouth_theme', theme);
+                    
+                    toggles.forEach(function(btn) {
+                        var iconSun = btn.querySelector('.theme-icon-sun');
+                        var iconMoon = btn.querySelector('.theme-icon-moon');
+                        if (iconSun && iconMoon) {
+                            if (theme === 'dark') {
+                                iconSun.classList.remove('hidden');
+                                iconMoon.classList.add('hidden');
+                            } else {
+                                iconSun.classList.add('hidden');
+                                iconMoon.classList.remove('hidden');
+                            }
+                        }
+                    });
+                }
+
+                setTheme(currentTheme);
+
+                toggles.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        var theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+                        setTheme(theme);
+                    });
+                });
+            }
+
+            initThemeToggle();
         })();
     </script>
 </body>

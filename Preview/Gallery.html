@@ -2,6 +2,16 @@
 <html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
+    <script>
+        (function() {
+            var savedTheme = localStorage.getItem('heyyouth_theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Hey Youth!</title>
     <meta name="description" content="Kumpulan semua kegiatan dan podcast dari Hey Youth!">
@@ -35,10 +45,14 @@
                     <a href="CMS/Login.html" class="text-body hover:text-primary px-3 py-2.5 rounded-lg font-medium transition-colors text-sm flex items-center gap-1.5"><i class="fas fa-lock text-xs"></i> Dashboard</a>
                     <a href="https://bit.ly/HYOprec" class="bg-primary hover:bg-primaryDark text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 focus:ring-2 focus:ring-offset-2 focus:ring-primary">Join Us!</a>
                 
-                    <div class="btn-group lang-toggle-group ml-2 bg-gray-200 rounded-full p-1 relative flex items-center w-[84px] h-9" role="group" aria-label="Language Switch">
-                        <div class="absolute left-1 bg-white h-7 w-9 rounded-full shadow-sm transition-transform duration-300 lang-slider-bg" style="transform: translateX(0);"></div>
-                        <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="id">ID</button>
-                        <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="en">EN</button>
+                    <button type="button" class="theme-toggle-btn ml-2 p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all focus:outline-none dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-yellow-400 w-9 h-9 flex items-center justify-center" aria-label="Toggle Theme">
+                        <i class="fas fa-sun theme-icon-sun text-sm hidden"></i>
+                        <i class="fas fa-moon theme-icon-moon text-sm"></i>
+                    </button>
+                    <div class="btn-group lang-toggle-group ml-2 bg-gray-200 rounded-full p-1 relative flex items-center w-[84px] h-9 dark:bg-slate-800" role="group" aria-label="Language Switch">
+                        <div class="absolute left-1 bg-white h-7 w-9 rounded-full shadow-sm transition-transform duration-300 lang-slider-bg dark:bg-slate-900" style="transform: translateX(0);"></div>
+                        <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn dark:text-slate-200" data-lang="id">ID</button>
+                        <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn dark:text-slate-200" data-lang="en">EN</button>
                     </div>
                 </div>
                 <div class="md:hidden flex items-center">
@@ -60,12 +74,16 @@
                     <a href="CMS/Login.html" class="block w-full text-center border-2 border-gray-200 text-heading font-semibold px-4 py-3 rounded-xl hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2"><i class="fas fa-lock text-sm"></i> Dashboard</a>
                     <a href="https://bit.ly/HYOprec" class="block w-full text-center bg-accent text-white px-4 py-3 rounded-xl font-bold hover:bg-yellow-600 transition-colors shadow-md">Join Us Now!</a>
                 
-                    <div class="flex justify-center mt-4 pt-2">
-                        <div class="btn-group lang-toggle-group bg-gray-200 rounded-full p-1 relative flex items-center w-[84px] h-9 mx-auto" role="group" aria-label="Language Switch">
-                            <div class="absolute left-1 bg-white h-7 w-9 rounded-full shadow-sm transition-transform duration-300 lang-slider-bg" style="transform: translateX(0);"></div>
-                            <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="id">ID</button>
-                            <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn" data-lang="en">EN</button>
+                    <div class="flex justify-center mt-4 pt-2 gap-3 items-center">
+                        <div class="btn-group lang-toggle-group bg-gray-200 rounded-full p-1 relative flex items-center w-[84px] h-9 dark:bg-slate-800" role="group" aria-label="Language Switch">
+                            <div class="absolute left-1 bg-white h-7 w-9 rounded-full shadow-sm transition-transform duration-300 lang-slider-bg dark:bg-slate-900" style="transform: translateX(0);"></div>
+                            <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn dark:text-slate-200" data-lang="id">ID</button>
+                            <button type="button" class="btn btn-secondary flex-1 text-xs font-bold text-gray-800 relative z-10 lang-btn dark:text-slate-200" data-lang="en">EN</button>
                         </div>
+                        <button type="button" class="theme-toggle-btn p-2.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all focus:outline-none dark:bg-slate-800 dark:text-yellow-400 w-9 h-9 flex items-center justify-center" aria-label="Toggle Theme">
+                            <i class="fas fa-sun theme-icon-sun text-sm hidden"></i>
+                            <i class="fas fa-moon theme-icon-moon text-sm"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -255,11 +273,17 @@
             }).join('');
         }
 
-        document.addEventListener('DOMContentLoaded', async function () {
+        async function initGallery() {
             var data = await window.getFirebaseData(DEFAULT_DATA);
             renderActivityCards(data.activityCards || DEFAULT_DATA.activityCards);
             renderPodcasts(data.podcasts || DEFAULT_DATA.podcasts);
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGallery);
+        } else {
+            initGallery();
+        }
     })();
     </script>
 </body>

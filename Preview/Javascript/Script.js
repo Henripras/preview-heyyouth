@@ -635,7 +635,7 @@ async function trackVisitor() {
 }
 
 /* ------ INIT (MAIN SITES) ------ */
-document.addEventListener('DOMContentLoaded', async function () {
+async function _initMain() {
     // 1. Mobile Menu
     var btn = document.getElementById('mobile-menu-btn');
     var menu = document.getElementById('mobile-menu');
@@ -689,8 +689,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /* --- 6. Visitor Tracking --- */
     trackVisitor();
+}
 
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _initMain);
+} else {
+    _initMain();
+}
 
 /* =============================================
    LEAFLET MAP (FINAL PRODUCTION VERSION)
@@ -790,6 +795,55 @@ function initLanguageToggle() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+/* =============================================
+   DARK MODE TOGGLE LOGIC
+   ============================================= */
+function initThemeToggle() {
+    var toggles = document.querySelectorAll('.theme-toggle-btn');
+    if (!toggles.length) return;
+
+    var currentTheme = localStorage.getItem('heyyouth_theme') || 'light';
+    
+    function setTheme(theme) {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        localStorage.setItem('heyyouth_theme', theme);
+        
+        toggles.forEach(function(btn) {
+            var iconSun = btn.querySelector('.theme-icon-sun');
+            var iconMoon = btn.querySelector('.theme-icon-moon');
+            if (iconSun && iconMoon) {
+                if (theme === 'dark') {
+                    iconSun.classList.remove('hidden');
+                    iconMoon.classList.add('hidden');
+                } else {
+                    iconSun.classList.add('hidden');
+                    iconMoon.classList.remove('hidden');
+                }
+            }
+        });
+    }
+
+    setTheme(currentTheme);
+
+    toggles.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var theme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            setTheme(theme);
+        });
+    });
+}
+
+function _initToggles() {
     initLanguageToggle();
-});
+    initThemeToggle();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _initToggles);
+} else {
+    _initToggles();
+}
